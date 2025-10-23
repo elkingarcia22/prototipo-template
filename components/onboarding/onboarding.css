@@ -1,0 +1,314 @@
+/**
+ * Estilos para el Sistema de Onboarding
+ * Componente modular y reutilizable
+ */
+
+/* Overlay principal */
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.onboarding-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Spotlight para destacar elementos */
+.onboarding-spotlight {
+    position: absolute;
+    border: 3px solid #667eea;
+    border-radius: 8px;
+    background: transparent;
+    z-index: 10001;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+    display: none;
+}
+
+/* Tooltip principal */
+.onboarding-tooltip {
+    position: absolute;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 10002;
+    max-width: 400px;
+    animation: fadeIn 0.3s ease-out;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Encabezado del tooltip */
+.onboarding-tooltip h3 {
+    color: #667eea;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 8px 0;
+}
+
+.onboarding-tooltip h4 {
+    color: #1f2937;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+}
+
+.onboarding-tooltip p {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+}
+
+/* Acciones del tooltip */
+.tooltip-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+/* Botones del tooltip */
+.btn-next,
+.btn-skip {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.btn-next {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-next:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-next:active {
+    transform: translateY(0);
+}
+
+.btn-skip {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.btn-skip:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* Estados del onboarding */
+.onboarding-overlay.disabled {
+    pointer-events: none;
+}
+
+.onboarding-tooltip.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Efectos especiales */
+.onboarding-spotlight.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 0 0 rgba(102, 126, 234, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 0 10px rgba(102, 126, 234, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 0 0 rgba(102, 126, 234, 0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .onboarding-tooltip {
+        max-width: 90vw;
+        margin: 0 5vw;
+        padding: 16px;
+    }
+    
+    .onboarding-tooltip h4 {
+        font-size: 16px;
+    }
+    
+    .onboarding-tooltip p {
+        font-size: 13px;
+    }
+    
+    .tooltip-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-next,
+    .btn-skip {
+        width: 100%;
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .onboarding-tooltip {
+        max-width: 95vw;
+        margin: 0 2.5vw;
+        padding: 12px;
+    }
+    
+    .onboarding-tooltip h4 {
+        font-size: 14px;
+    }
+    
+    .onboarding-tooltip p {
+        font-size: 12px;
+    }
+}
+
+/* Temas personalizables */
+.onboarding-tooltip.theme-dark {
+    background: #1f2937;
+    color: #f9fafb;
+}
+
+.onboarding-tooltip.theme-dark h3 {
+    color: #60a5fa;
+}
+
+.onboarding-tooltip.theme-dark h4 {
+    color: #f9fafb;
+}
+
+.onboarding-tooltip.theme-dark p {
+    color: #d1d5db;
+}
+
+.onboarding-tooltip.theme-dark .btn-skip {
+    background: #374151;
+    color: #d1d5db;
+}
+
+.onboarding-tooltip.theme-dark .btn-skip:hover {
+    background: #4b5563;
+    color: #f9fafb;
+}
+
+/* Variantes de color */
+.onboarding-tooltip.primary {
+    border-left: 4px solid #667eea;
+}
+
+.onboarding-tooltip.success {
+    border-left: 4px solid #10b981;
+}
+
+.onboarding-tooltip.warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.onboarding-tooltip.error {
+    border-left: 4px solid #ef4444;
+}
+
+/* Indicadores de progreso */
+.onboarding-progress {
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.onboarding-progress-bar {
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Tooltip con flecha */
+.onboarding-tooltip.arrow::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid white;
+}
+
+.onboarding-tooltip.arrow-bottom::before {
+    top: auto;
+    bottom: -8px;
+    border-bottom: none;
+    border-top: 8px solid white;
+}
+
+/* Efectos de entrada */
+.onboarding-tooltip.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+.onboarding-tooltip.bounce-in {
+    animation: bounce 0.6s ease-out;
+}
