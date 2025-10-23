@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBITS Icons & Typography System Showcase</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Estilos UBITS -->
+    <link rel="stylesheet" href="../styles/ubits-tokens.css">
+    <link rel="stylesheet" href="../styles/globals.css">
+    
+    <style>
+        .showcase-container {
+            background: var(--ubits-bg-1);
+            color: var(--ubits-fg-1-high);
+            min-height: 100vh;
+            font-family: 'Noto Sans', sans-serif;
+        }
+        
+        .showcase-header {
+            background: var(--ubits-bg-1);
+            border-bottom: 1px solid var(--ubits-border-1);
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .showcase-section {
+            background: var(--ubits-bg-1);
+            border: 1px solid var(--ubits-border-1);
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .showcase-title {
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .showcase-subtitle {
+            color: var(--ubits-fg-1-medium);
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        
+        .icon-item {
+            background: var(--ubits-bg-2);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-md);
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .icon-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--ubits-shadow-md);
+            background: var(--ubits-bg-3);
+        }
+        
+        .icon-preview {
+            font-size: 24px;
+            color: var(--ubits-accent-brand);
+            margin-bottom: 8px;
+        }
+        
+        .icon-name {
+            font-size: 12px;
+            color: var(--ubits-fg-1-medium);
+            font-weight: 500;
+        }
+        
+        .typography-demo {
+            background: var(--ubits-bg-2);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-md);
+            padding: 20px;
+            margin: 16px 0;
+        }
+        
+        .typography-item {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: var(--ubits-bg-1);
+            border-radius: var(--ubits-radius-sm);
+            border-left: 4px solid var(--ubits-accent-brand);
+        }
+        
+        .typography-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .typography-class {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 12px;
+            background: var(--ubits-bg-3);
+            color: var(--ubits-fg-1-high);
+            padding: 4px 8px;
+            border-radius: var(--ubits-radius-sm);
+        }
+        
+        .typography-size {
+            font-size: 12px;
+            color: var(--ubits-fg-1-medium);
+            font-weight: 500;
+        }
+        
+        .search-input {
+            background: var(--ubits-bg-2);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-sm);
+            padding: 12px 16px;
+            color: var(--ubits-fg-1-high);
+            font-size: 14px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--ubits-accent-brand);
+            box-shadow: 0 0 0 3px var(--ubits-button-focus-ring);
+        }
+        
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        
+        .category-button {
+            background: var(--ubits-bg-2);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-sm);
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            color: var(--ubits-fg-1-medium);
+        }
+        
+        .category-button:hover {
+            background: var(--ubits-bg-3);
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .category-button.active {
+            background: var(--ubits-accent-brand);
+            color: white;
+            border-color: var(--ubits-accent-brand);
+        }
+        
+        .copy-button {
+            background: var(--ubits-accent-brand);
+            color: white;
+            border: none;
+            border-radius: var(--ubits-radius-sm);
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-button:hover {
+            background: var(--ubits-button-primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--ubits-accent-brand);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--ubits-radius-sm);
+            font-weight: 600;
+            z-index: 1000;
+            font-size: 12px;
+        }
+        
+        .demo-section {
+            background: var(--ubits-bg-2);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-md);
+            padding: 20px;
+            margin: 16px 0;
+        }
+        
+        .demo-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ubits-fg-1-high);
+            margin-bottom: 16px;
+        }
+        
+        .demo-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .demo-item {
+            background: var(--ubits-bg-1);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-sm);
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .demo-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ubits-fg-1-high);
+            margin-bottom: 8px;
+        }
+        
+        .demo-item-content {
+            color: var(--ubits-fg-1-medium);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="showcase-container" x-data="iconsTypographyShowcase()">
+    <!-- Status Indicator -->
+    <div class="status-indicator" x-text="`Font Awesome: ${fontAwesomeLoaded ? '✅' : '❌'} | Google Fonts: ${googleFontsLoaded ? '✅' : '❌'}`"></div>
+
+    <!-- Header -->
+    <header class="showcase-header shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-semibold showcase-title">UBITS Icons & Typography System</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Theme Toggle -->
+                    <button 
+                        @click="toggleTheme()"
+                        class="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+                        :title="isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+                    >
+                        <i :class="isDark ? 'fa-sun' : 'fa-moon'" class="mr-2"></i>
+                        {{ isDark ? 'Claro' : 'Oscuro' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold showcase-title mb-4">
+                Sistema de Iconos y Tipografía UBITS
+            </h2>
+            <p class="text-xl showcase-subtitle mb-8">
+                Font Awesome + Google Fonts + Tokens UBITS oficiales
+            </p>
+        </div>
+
+        <!-- Icons Section -->
+        <div class="showcase-section p-8 rounded-lg mb-8">
+            <h3 class="text-2xl font-bold showcase-title mb-6">Sistema de Iconos</h3>
+            
+            <!-- Search -->
+            <div class="mb-6">
+                <input 
+                    type="text" 
+                    placeholder="Buscar iconos..." 
+                    class="search-input"
+                    x-model="iconSearch"
+                    @input="filterIcons()"
+                >
+            </div>
+            
+            <!-- Category Filters -->
+            <div class="category-filter">
+                <button 
+                    @click="setIconCategory('all')"
+                    :class="iconCategory === 'all' ? 'category-button active' : 'category-button'"
+                >
+                    Todos
+                </button>
+                <button 
+                    @click="setIconCategory('navigation')"
+                    :class="iconCategory === 'navigation' ? 'category-button active' : 'category-button'"
+                >
+                    Navegación
+                </button>
+                <button 
+                    @click="setIconCategory('user')"
+                    :class="iconCategory === 'user' ? 'category-button active' : 'category-button'"
+                >
+                    Usuario
+                </button>
+                <button 
+                    @click="setIconCategory('actions')"
+                    :class="iconCategory === 'actions' ? 'category-button active' : 'category-button'"
+                >
+                    Acciones
+                </button>
+                <button 
+                    @click="setIconCategory('communication')"
+                    :class="iconCategory === 'communication' ? 'category-button active' : 'category-button'"
+                >
+                    Comunicación
+                </button>
+                <button 
+                    @click="setIconCategory('business')"
+                    :class="iconCategory === 'business' ? 'category-button active' : 'category-button'"
+                >
+                    Negocio
+                </button>
+                <button 
+                    @click="setIconCategory('learning')"
+                    :class="iconCategory === 'learning' ? 'category-button active' : 'category-button'"
+                >
+                    Aprendizaje
+                </button>
+                <button 
+                    @click="setIconCategory('technology')"
+                    :class="iconCategory === 'technology' ? 'category-button active' : 'category-button'"
+                >
+                    Tecnología
+                </button>
+            </div>
+            
+            <!-- Icons Grid -->
+            <div class="icon-grid">
+                <template x-for="icon in filteredIcons" :key="icon.name">
+                    <div 
+                        class="icon-item"
+                        @click="selectIcon(icon)"
+                        :title="`${icon.name} - ${icon.style}`"
+                    >
+                        <div class="icon-preview">
+                            <i :class="`${icon.style} fa-${icon.name}`"></i>
+                        </div>
+                        <div class="icon-name" x-text="icon.name"></div>
+                    </div>
+                </template>
+            </div>
+            
+            <!-- Selected Icon Info -->
+            <div x-show="selectedIcon" class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 class="font-semibold text-blue-800 mb-2">Icono Seleccionado:</h4>
+                <div class="flex items-center gap-4">
+                    <div class="text-2xl text-blue-600">
+                        <i :class="`${selectedIcon?.style} fa-${selectedIcon?.name}`"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-blue-800" x-text="selectedIcon?.name"></div>
+                        <div class="text-sm text-blue-600" x-text="selectedIcon?.style"></div>
+                    </div>
+                    <button 
+                        @click="copyIconCode()"
+                        class="copy-button"
+                    >
+                        Copiar Código
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typography Section -->
+        <div class="showcase-section p-8 rounded-lg mb-8">
+            <h3 class="text-2xl font-bold showcase-title mb-6">Sistema de Tipografía</h3>
+            
+            <!-- Typography Categories -->
+            <div class="mb-6">
+                <div class="category-filter">
+                    <button 
+                        @click="setTypographyCategory('all')"
+                        :class="typographyCategory === 'all' ? 'category-button active' : 'category-button'"
+                    >
+                        Todos
+                    </button>
+                    <button 
+                        @click="setTypographyCategory('display')"
+                        :class="typographyCategory === 'display' ? 'category-button active' : 'category-button'"
+                    >
+                        Display
+                    </button>
+                    <button 
+                        @click="setTypographyCategory('heading')"
+                        :class="typographyCategory === 'heading' ? 'category-button active' : 'category-button'"
+                    >
+                        Heading
+                    </button>
+                    <button 
+                        @click="setTypographyCategory('body')"
+                        :class="typographyCategory === 'body' ? 'category-button active' : 'category-button'"
+                    >
+                        Body
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Typography Examples -->
+            <div class="typography-demo">
+                <template x-for="variant in filteredTypography" :key="variant">
+                    <div class="typography-item">
+                        <div class="typography-info">
+                            <span class="typography-class" x-text="`ubits-${variant}`"></span>
+                            <span class="typography-size" x-text="getVariantInfo(variant).size"></span>
+                        </div>
+                        <div :class="`ubits-${variant}`" x-text="getVariantInfo(variant).description"></div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Demo Section -->
+        <div class="showcase-section p-8 rounded-lg mb-8">
+            <h3 class="text-2xl font-bold showcase-title mb-6">Demo de Componentes</h3>
+            
+            <div class="demo-content">
+                <!-- Button Demo -->
+                <div class="demo-item">
+                    <div class="demo-item-title">Botón con Icono</div>
+                    <div class="demo-item-content">
+                        <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-2">
+                            <i class="far fa-save"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Card Demo -->
+                <div class="demo-item">
+                    <div class="demo-item-title">Card con Icono</div>
+                    <div class="demo-item-content">
+                        <div class="p-4 border rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="far fa-user text-blue-500"></i>
+                                <span class="font-semibold">Usuario</span>
+                            </div>
+                            <p class="text-sm text-gray-600">Información del usuario</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Demo -->
+                <div class="demo-item">
+                    <div class="demo-item-title">Navegación</div>
+                    <div class="demo-item-content">
+                        <div class="flex gap-2">
+                            <button class="p-2 border rounded hover:bg-gray-50">
+                                <i class="far fa-home"></i>
+                            </button>
+                            <button class="p-2 border rounded hover:bg-gray-50">
+                                <i class="far fa-user"></i>
+                            </button>
+                            <button class="p-2 border rounded hover:bg-gray-50">
+                                <i class="far fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Typography Demo -->
+                <div class="demo-item">
+                    <div class="demo-item-title">Tipografía</div>
+                    <div class="demo-item-content">
+                        <div class="space-y-2">
+                            <div class="ubits-heading-h1">Título Principal</div>
+                            <div class="ubits-body-md-regular">Texto normal</div>
+                            <div class="ubits-body-sm-regular">Texto pequeño</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="showcase-header border-t mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center">
+                <p class="showcase-subtitle">
+                    🎨 UBITS Icons & Typography System - Font Awesome + Google Fonts
+                </p>
+                <p class="text-sm showcase-subtitle mt-2">
+                    Iconos: {{ filteredIcons.length }} | Tipografía: {{ filteredTypography.length }} | Tema: {{ currentTheme }}
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Data -->
+    <script>
+        function iconsTypographyShowcase() {
+            return {
+                // Theme
+                currentTheme: 'light',
+                isDark: false,
+                
+                // Font Status
+                fontAwesomeLoaded: false,
+                googleFontsLoaded: false,
+                
+                // Icons
+                iconSearch: '',
+                iconCategory: 'all',
+                selectedIcon: null,
+                filteredIcons: [],
+                
+                // Typography
+                typographyCategory: 'all',
+                filteredTypography: [],
+                
+                // Icon Data
+                icons: [
+                    // Navigation
+                    { name: 'home', style: 'far', category: 'navigation' },
+                    { name: 'menu', style: 'far', category: 'navigation' },
+                    { name: 'bars', style: 'far', category: 'navigation' },
+                    { name: 'grid-2', style: 'far', category: 'navigation' },
+                    { name: 'grid-3', style: 'far', category: 'navigation' },
+                    { name: 'list', style: 'far', category: 'navigation' },
+                    { name: 'th-list', style: 'far', category: 'navigation' },
+                    
+                    // User
+                    { name: 'user', style: 'far', category: 'user' },
+                    { name: 'users', style: 'far', category: 'user' },
+                    { name: 'user-circle', style: 'far', category: 'user' },
+                    { name: 'user-friends', style: 'far', category: 'user' },
+                    { name: 'user-cog', style: 'far', category: 'user' },
+                    
+                    // Actions
+                    { name: 'plus', style: 'far', category: 'actions' },
+                    { name: 'minus', style: 'far', category: 'actions' },
+                    { name: 'edit', style: 'far', category: 'actions' },
+                    { name: 'trash', style: 'far', category: 'actions' },
+                    { name: 'save', style: 'far', category: 'actions' },
+                    { name: 'download', style: 'far', category: 'actions' },
+                    { name: 'upload', style: 'far', category: 'actions' },
+                    
+                    // Communication
+                    { name: 'envelope', style: 'far', category: 'communication' },
+                    { name: 'phone', style: 'far', category: 'communication' },
+                    { name: 'comment', style: 'far', category: 'communication' },
+                    { name: 'comments', style: 'far', category: 'communication' },
+                    { name: 'chat', style: 'far', category: 'communication' },
+                    { name: 'message', style: 'far', category: 'communication' },
+                    
+                    // Business
+                    { name: 'briefcase', style: 'far', category: 'business' },
+                    { name: 'building', style: 'far', category: 'business' },
+                    { name: 'chart-line', style: 'far', category: 'business' },
+                    { name: 'chart-bar', style: 'far', category: 'business' },
+                    { name: 'chart-pie', style: 'far', category: 'business' },
+                    { name: 'chart-mixed', style: 'far', category: 'business' },
+                    
+                    // Learning
+                    { name: 'graduation-cap', style: 'far', category: 'learning' },
+                    { name: 'book', style: 'far', category: 'learning' },
+                    { name: 'books', style: 'far', category: 'learning' },
+                    { name: 'certificate', style: 'far', category: 'learning' },
+                    { name: 'award', style: 'far', category: 'learning' },
+                    { name: 'trophy', style: 'far', category: 'learning' },
+                    
+                    // Technology
+                    { name: 'laptop', style: 'far', category: 'technology' },
+                    { name: 'desktop', style: 'far', category: 'technology' },
+                    { name: 'mobile', style: 'far', category: 'technology' },
+                    { name: 'tablet', style: 'far', category: 'technology' },
+                    { name: 'server', style: 'far', category: 'technology' },
+                    { name: 'database', style: 'far', category: 'technology' }
+                ],
+                
+                // Typography Data
+                typography: [
+                    // Display
+                    'display-d1-regular', 'display-d1-semibold', 'display-d1-bold',
+                    'display-d2-regular', 'display-d2-semibold', 'display-d2-bold',
+                    'display-d3-regular', 'display-d3-semibold', 'display-d3-bold',
+                    'display-d4-regular', 'display-d4-semibold', 'display-d4-bold',
+                    
+                    // Heading
+                    'heading-h1', 'heading-h2',
+                    
+                    // Body
+                    'body-md-regular', 'body-md-semibold', 'body-md-bold',
+                    'body-sm-regular', 'body-sm-semibold', 'body-sm-bold',
+                    'body-lg-regular'
+                ],
+                
+                // Methods
+                init() {
+                    // Cargar tema guardado
+                    const savedTheme = localStorage.getItem('ubits-theme');
+                    if (savedTheme === 'dark' || savedTheme === 'light') {
+                        this.currentTheme = savedTheme;
+                        this.isDark = savedTheme === 'dark';
+                        this.applyTheme(savedTheme);
+                    }
+                    
+                    // Verificar fuentes
+                    this.checkFonts();
+                    
+                    // Inicializar filtros
+                    this.filterIcons();
+                    this.filterTypography();
+                },
+                
+                checkFonts() {
+                    // Verificar Font Awesome
+                    this.fontAwesomeLoaded = document.querySelector('link[href*="fontawesome"]') !== null;
+                    
+                    // Verificar Google Fonts
+                    this.googleFontsLoaded = document.querySelector('link[href*="fonts.googleapis.com"]') !== null;
+                },
+                
+                setTheme(theme, save = true) {
+                    this.currentTheme = theme;
+                    this.isDark = theme === 'dark';
+                    
+                    this.applyTheme(theme);
+                    
+                    if (save) {
+                        localStorage.setItem('ubits-theme', theme);
+                    }
+                },
+                
+                toggleTheme() {
+                    const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+                    this.setTheme(newTheme);
+                },
+                
+                applyTheme(theme) {
+                    const root = document.documentElement;
+                    root.classList.remove('light', 'dark');
+                    root.classList.add(theme);
+                    root.setAttribute('data-theme', theme);
+                    document.body.setAttribute('data-theme', theme);
+                },
+                
+                setIconCategory(category) {
+                    this.iconCategory = category;
+                    this.filterIcons();
+                },
+                
+                filterIcons() {
+                    let filtered = this.icons;
+                    
+                    // Filtrar por categoría
+                    if (this.iconCategory !== 'all') {
+                        filtered = filtered.filter(icon => icon.category === this.iconCategory);
+                    }
+                    
+                    // Filtrar por búsqueda
+                    if (this.iconSearch) {
+                        filtered = filtered.filter(icon => 
+                            icon.name.toLowerCase().includes(this.iconSearch.toLowerCase())
+                        );
+                    }
+                    
+                    this.filteredIcons = filtered;
+                },
+                
+                selectIcon(icon) {
+                    this.selectedIcon = icon;
+                },
+                
+                copyIconCode() {
+                    if (this.selectedIcon) {
+                        const code = `<i class="${this.selectedIcon.style} fa-${this.selectedIcon.name}"></i>`;
+                        navigator.clipboard.writeText(code);
+                        alert('Código copiado al portapapeles');
+                    }
+                },
+                
+                setTypographyCategory(category) {
+                    this.typographyCategory = category;
+                    this.filterTypography();
+                },
+                
+                filterTypography() {
+                    let filtered = this.typography;
+                    
+                    // Filtrar por categoría
+                    if (this.typographyCategory !== 'all') {
+                        filtered = filtered.filter(variant => {
+                            if (this.typographyCategory === 'display') {
+                                return variant.startsWith('display-');
+                            } else if (this.typographyCategory === 'heading') {
+                                return variant.startsWith('heading-');
+                            } else if (this.typographyCategory === 'body') {
+                                return variant.startsWith('body-');
+                            }
+                            return true;
+                        });
+                    }
+                    
+                    this.filteredTypography = filtered;
+                },
+                
+                getVariantInfo(variant) {
+                    const info = {
+                        'display-d1-regular': { size: '40px', description: 'Display D1 Regular' },
+                        'display-d1-semibold': { size: '40px', description: 'Display D1 Semibold' },
+                        'display-d1-bold': { size: '40px', description: 'Display D1 Bold' },
+                        'display-d2-regular': { size: '32px', description: 'Display D2 Regular' },
+                        'display-d2-semibold': { size: '32px', description: 'Display D2 Semibold' },
+                        'display-d2-bold': { size: '32px', description: 'Display D2 Bold' },
+                        'display-d3-regular': { size: '28px', description: 'Display D3 Regular' },
+                        'display-d3-semibold': { size: '28px', description: 'Display D3 Semibold' },
+                        'display-d3-bold': { size: '28px', description: 'Display D3 Bold' },
+                        'display-d4-regular': { size: '24px', description: 'Display D4 Regular' },
+                        'display-d4-semibold': { size: '24px', description: 'Display D4 Semibold' },
+                        'display-d4-bold': { size: '24px', description: 'Display D4 Bold' },
+                        'heading-h1': { size: '20px', description: 'Heading H1' },
+                        'heading-h2': { size: '18px', description: 'Heading H2' },
+                        'body-md-regular': { size: '16px', description: 'Body Medium Regular' },
+                        'body-md-semibold': { size: '16px', description: 'Body Medium Semibold' },
+                        'body-md-bold': { size: '16px', description: 'Body Medium Bold' },
+                        'body-sm-regular': { size: '14px', description: 'Body Small Regular' },
+                        'body-sm-semibold': { size: '14px', description: 'Body Small Semibold' },
+                        'body-sm-bold': { size: '14px', description: 'Body Small Bold' },
+                        'body-lg-regular': { size: '20px', description: 'Body Large Regular' }
+                    };
+                    
+                    return info[variant] || { size: 'unknown', description: 'Unknown variant' };
+                }
+            }
+        }
+    </script>
+</body>
+</html>
