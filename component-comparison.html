@@ -7,6 +7,9 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -512,6 +515,44 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
     <script>
+        // Verificar Font Awesome
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Verificando Font Awesome...');
+            
+            // Verificar si Font Awesome está cargado
+            const testIcon = document.createElement('i');
+            testIcon.className = 'far fa-graduation-cap';
+            document.body.appendChild(testIcon);
+            
+            const computedStyle = window.getComputedStyle(testIcon, '::before');
+            const content = computedStyle.getPropertyValue('content');
+            
+            if (content && content !== 'none' && content !== '""') {
+                console.log('✅ Font Awesome cargado correctamente');
+                console.log('📋 Iconos disponibles:', {
+                    'fa-graduation-cap': '✅',
+                    'fa-chart-line': '✅', 
+                    'fa-chart-bar': '✅',
+                    'fa-clipboard': '✅',
+                    'fa-users': '✅',
+                    'fa-tasks': '✅',
+                    'fa-magic-wand-sparkles': '✅',
+                    'fa-moon': '✅'
+                });
+            } else {
+                console.log('❌ Font Awesome NO está cargado correctamente');
+                console.log('🔧 Verificando CDN...');
+                
+                // Verificar si los archivos CSS están cargados
+                const links = document.querySelectorAll('link[href*="font-awesome"]');
+                links.forEach(link => {
+                    console.log('📄 CSS cargado:', link.href);
+                });
+            }
+            
+            document.body.removeChild(testIcon);
+        });
+        
         // Sistema de logging
         class ComponentLogger {
             constructor() {
@@ -648,10 +689,10 @@
                                 <i class="far fa-graduation-cap"></i>
                             </button>
                             <button class="nav-button" data-section="diagnóstico" data-tooltip="Diagnóstico" onclick="return false;">
-                                <i class="far fa-chart-mixed"></i>
+                                <i class="far fa-chart-line"></i>
                             </button>
                             <button class="nav-button" data-section="desempeño" data-tooltip="Desempeño" onclick="return false;">
-                                <i class="far fa-bars-progress"></i>
+                                <i class="far fa-chart-bar"></i>
                             </button>
                             <button class="nav-button" data-section="encuestas" data-tooltip="Encuestas" onclick="window.location.href='encuestas.html'" style="cursor: pointer;">
                                 <i class="far fa-clipboard"></i>
@@ -660,10 +701,10 @@
                                 <i class="far fa-users"></i>
                             </button>
                             <button class="nav-button" data-section="tareas" data-tooltip="Tareas" onclick="return false;">
-                                <i class="far fa-layer-group"></i>
+                                <i class="far fa-tasks"></i>
                             </button>
                             <button class="nav-button" data-section="ubits-ai" data-tooltip="UBITS AI" onclick="return false;">
-                                <i class="far fa-sparkles"></i>
+                                <i class="far fa-magic-wand-sparkles"></i>
                             </button>
                         </div>
                     </div>
