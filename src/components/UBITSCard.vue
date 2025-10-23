@@ -40,11 +40,11 @@
     <!-- Overlay para estados -->
     <div v-if="loading || disabled" class="ubits-card__overlay">
       <div v-if="loading" class="ubits-card__loading">
-        <i class="far fa-spinner fa-spin"></i>
+        <i class="far spinner spin"></i>
         <span>Cargando...</span>
       </div>
       <div v-if="disabled" class="ubits-card__disabled">
-        <i class="far fa-lock"></i>
+        <i class="far lock"></i>
         <span>No disponible</span>
       </div>
     </div>
@@ -52,7 +52,35 @@
 </template>
 
 <script setup lang="ts">
+import { useIcons } from '../utils/icons';
+import { useFontAwesomeAPI } from '../utils/fontawesome-api';
+
 import { computed, defineProps } from 'vue'
+import { useResponsive } from '../utils/responsive'
+
+// Sistema de iconos Font Awesome
+const { generateIcon, isIconAvailable } = useIcons();
+const { searchIcons, generateIconHTML } = useFontAwesomeAPI({
+
+// Función helper para obtener clases de iconos
+const getIconClass = (iconName, style = 'far') => {
+  if (isIconAvailable(iconName)) {
+    return [style, `fa-${iconName}`];
+  }
+  return [style, `fa-${iconName}`]; // Fallback
+};
+
+// Función helper para generar HTML de iconos
+const getIconHTML = (iconName, style = 'far', size = 'md') => {
+  if (isIconAvailable(iconName)) {
+    return generateIcon(iconName, style, size);
+  }
+  return `<i class="${style} fa-${iconName} fa-${size}"></i>`; // Fallback
+};
+  apiToken: '15ACD43C-4C0F-44D2-AE1C-6E8646841B1F',
+  autoLoad: true,
+  cache: true
+});
 
 // Props del componente
 interface Props {

@@ -37,14 +37,26 @@
         :aria-label="closeLabel"
         type="button"
       >
-        <i class="far fa-times"></i>
+        <i class="far times"></i>
       </button>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
+import { useIcons } from '../utils/icons';
+import { useFontAwesomeAPI } from '../utils/fontawesome-api';
+
 import { computed, ref, onMounted, onUnmounted, defineProps, defineEmits } from 'vue'
+import { useResponsive } from '../utils/responsive'
+
+// Sistema de iconos Font Awesome
+const { generateIcon, isIconAvailable } = useIcons();
+const { searchIcons, generateIconHTML } = useFontAwesomeAPI({
+  apiToken: '15ACD43C-4C0F-44D2-AE1C-6E8646841B1F',
+  autoLoad: true,
+  cache: true
+});
 
 // Props del componente
 interface Props {
@@ -99,10 +111,10 @@ const alertClasses = computed(() => [
 
 const iconClasses = computed(() => {
   const icons = {
-    success: 'fa-check-circle',
-    info: 'fa-info-circle',
-    warning: 'fa-exclamation-triangle',
-    error: 'fa-times-circle'
+    success: getIconClass('check-circle'),
+    info: getIconClass('info-circle'),
+    warning: getIconClass('exclamation-triangle'),
+    error: getIconClass('times-circle')
   }
   return ['far', icons[props.type]]
 })
@@ -185,6 +197,23 @@ defineExpose({
   hide,
   visible: computed(() => visible.value)
 })
+
+// Función helper para obtener clases de iconos
+const getIconClass = (iconName, style = 'far') => {
+  if (isIconAvailable(iconName)) {
+    return [style, `fa-${iconName}`];
+  }
+  return [style, `fa-${iconName}`]; // Fallback
+};
+
+// Función helper para generar HTML de iconos
+const getIconHTML = (iconName, style = 'far', size = 'md') => {
+  if (isIconAvailable(iconName)) {
+    return generateIcon(iconName, style, size);
+  }
+  return `<i class="${style} fa-${iconName} fa-${size}"></i>`; // Fallback
+};
+
 </script>
 
 <style scoped>

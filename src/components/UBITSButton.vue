@@ -29,7 +29,35 @@
 </template>
 
 <script setup lang="ts">
+import { useIcons } from '../utils/icons';
+import { useFontAwesomeAPI } from '../utils/fontawesome-api';
+
 import { computed, defineProps, defineEmits, useSlots } from 'vue'
+import { useResponsive } from '../utils/responsive'
+
+// Sistema de iconos Font Awesome
+const { generateIcon, isIconAvailable } = useIcons();
+const { searchIcons, generateIconHTML } = useFontAwesomeAPI({
+
+// Función helper para obtener clases de iconos
+const getIconClass = (iconName, style = 'far') => {
+  if (isIconAvailable(iconName)) {
+    return [style, `fa-${iconName}`];
+  }
+  return [style, `fa-${iconName}`]; // Fallback
+};
+
+// Función helper para generar HTML de iconos
+const getIconHTML = (iconName, style = 'far', size = 'md') => {
+  if (isIconAvailable(iconName)) {
+    return generateIcon(iconName, style, size);
+  }
+  return `<i class="${style} fa-${iconName} fa-${size}"></i>`; // Fallback
+};
+  apiToken: '15ACD43C-4C0F-44D2-AE1C-6E8646841B1F',
+  autoLoad: true,
+  cache: true
+});
 
 // Props del componente
 interface Props {
@@ -98,13 +126,13 @@ const buttonClasses = computed(() => {
 
 const leftIconClasses = computed(() => {
   const classes = ['far', props.leftIcon]
-  if (props.loading) classes.push('fa-spin')
+  if (props.loading) classes.push('spin')
   return classes
 })
 
 const rightIconClasses = computed(() => {
   const classes = ['far', props.rightIcon]
-  if (props.loading) classes.push('fa-spin')
+  if (props.loading) classes.push('spin')
   return classes
 })
 
@@ -351,7 +379,7 @@ const handleClick = (event: MouseEvent) => {
   }
 }
 
-.ubits-button--loading i.fa-spin {
+.ubits-button--loading i.spin {
   animation: spin 1s linear infinite;
 }
 

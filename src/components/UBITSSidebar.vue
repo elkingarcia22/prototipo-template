@@ -25,7 +25,7 @@
         :data-tooltip="item.tooltip"
         @click="handleNavClick(item)"
       >
-        <i :class="['far', item.icon]"></i>
+        <i :class="getIconClass(item.icon)"></i>
         <span v-if="showLabels" class="ubits-sidebar__nav-label">{{ item.label }}</span>
       </button>
     </div>
@@ -40,15 +40,26 @@
         :data-tooltip="themeToggleTooltip"
         @click="handleThemeToggle"
       >
-        <i :class="['far', themeIcon]"></i>
+        <i :class="getIconClass(themeIcon)"></i>
       </button>
     </div>
   </aside>
 </template>
 
 <script setup lang="ts">
+import { useIcons } from '../utils/icons';
+import { useFontAwesomeAPI } from '../utils/fontawesome-api';
+
 import { computed, defineProps, defineEmits } from 'vue'
 import { useResponsive } from '../utils/responsive'
+
+// Sistema de iconos Font Awesome
+const { generateIcon, isIconAvailable } = useIcons();
+const { searchIcons, generateIconHTML } = useFontAwesomeAPI({
+  apiToken: '15ACD43C-4C0F-44D2-AE1C-6E8646841B1F',
+  autoLoad: true,
+  cache: true
+});
 
 // Props del componente
 interface NavigationItem {
@@ -90,13 +101,13 @@ const props = withDefaults(defineProps<Props>(), {
   logoUrl: '/images/Ubits-logo.svg',
   logoAlt: 'UBITS Logo',
   navigationItems: () => [
-    { id: 'aprendizaje', label: 'Aprendizaje', icon: 'fa-graduation-cap', tooltip: 'Aprendizaje' },
-    { id: 'diagnostico', label: 'Diagnóstico', icon: 'fa-chart-mixed', tooltip: 'Diagnóstico' },
-    { id: 'desempeno', label: 'Desempeño', icon: 'fa-bars-progress', tooltip: 'Desempeño' },
-    { id: 'encuestas', label: 'Encuestas', icon: 'fa-clipboard', tooltip: 'Encuestas', href: 'encuestas.html' },
-    { id: 'reclutamiento', label: 'Reclutamiento', icon: 'fa-users', tooltip: 'Reclutamiento' },
-    { id: 'tareas', label: 'Tareas', icon: 'fa-layer-group', tooltip: 'Tareas' },
-    { id: 'ubits-ai', label: 'UBITS AI', icon: 'fa-sparkles', tooltip: 'UBITS AI' }
+    { id: 'aprendizaje', label: 'Aprendizaje', icon: 'graduation-cap', tooltip: 'Aprendizaje' },
+    { id: 'diagnostico', label: 'Diagnóstico', icon: 'chart-line', tooltip: 'Diagnóstico' },
+    { id: 'desempeno', label: 'Desempeño', icon: 'chart-bar', tooltip: 'Desempeño' },
+    { id: 'encuestas', label: 'Encuestas', icon: 'clipboard', tooltip: 'Encuestas', href: 'encuestas.html' },
+    { id: 'reclutamiento', label: 'Reclutamiento', icon: 'users', tooltip: 'Reclutamiento' },
+    { id: 'tareas', label: 'Tareas', icon: 'layer-group', tooltip: 'Tareas' },
+    { id: 'ubits-ai', label: 'UBITS AI', icon: 'sparkles', tooltip: 'UBITS AI' }
   ],
   activeItem: '',
   userAvatar: '/images/Profile-image.jpg',
@@ -158,7 +169,7 @@ const sidebarStyles = computed(() => {
 })
 
 const themeIcon = computed(() => {
-  return props.currentTheme === 'light' ? 'fa-moon' : 'fa-sun'
+  return props.currentTheme === 'light' ? getIconClass('moon') : getIconClass('sun')
 })
 
 const themeToggleTooltip = computed(() => {
@@ -200,6 +211,22 @@ const handleThemeToggle = () => {
   emit('themeToggle')
   props.onThemeToggle?.()
 }
+
+// Función helper para obtener clases de iconos
+const getIconClass = (iconName, style = 'far') => {
+  if (isIconAvailable(iconName)) {
+    return [style, `fa-${iconName}`];
+  }
+  return [style, `fa-${iconName}`]; // Fallback
+};
+
+// Función helper para generar HTML de iconos
+const getIconHTML = (iconName, style = 'far', size = 'md') => {
+  if (isIconAvailable(iconName)) {
+    return generateIcon(iconName, style, size);
+  }
+  return `<i class="${style} fa-${iconName} fa-${size}"></i>`; // Fallback
+};
 </script>
 
 <style scoped>

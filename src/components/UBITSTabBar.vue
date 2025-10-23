@@ -36,8 +36,19 @@
 </template>
 
 <script setup lang="ts">
+import { useIcons } from '../utils/icons';
+import { useFontAwesomeAPI } from '../utils/fontawesome-api';
+
 import { computed, defineProps, defineEmits } from 'vue'
 import { useResponsive } from '../utils/responsive'
+
+// Sistema de iconos Font Awesome
+const { generateIcon, isIconAvailable } = useIcons();
+const { searchIcons, generateIconHTML } = useFontAwesomeAPI({
+  apiToken: '15ACD43C-4C0F-44D2-AE1C-6E8646841B1F',
+  autoLoad: true,
+  cache: true
+});
 
 // Props del componente
 interface TabItem {
@@ -70,7 +81,7 @@ const props = withDefaults(defineProps<Props>(), {
     { 
       id: 'modulos', 
       label: 'Módulos', 
-      icon: 'fa-grid-2',
+      icon: getIconClass('grid-2'),
       href: 'index.html'
     },
     { 
@@ -84,7 +95,7 @@ const props = withDefaults(defineProps<Props>(), {
     { 
       id: 'modo-oscuro', 
       label: 'Modo oscuro', 
-      icon: 'fa-moon',
+      icon: getIconClass('moon'),
       href: '#'
     }
   ],
@@ -160,6 +171,23 @@ const handleTabClick = (item: TabItem) => {
     window.location.href = item.href
   }
 }
+
+// Función helper para obtener clases de iconos
+const getIconClass = (iconName, style = 'far') => {
+  if (isIconAvailable(iconName)) {
+    return [style, `fa-${iconName}`];
+  }
+  return [style, `fa-${iconName}`]; // Fallback
+};
+
+// Función helper para generar HTML de iconos
+const getIconHTML = (iconName, style = 'far', size = 'md') => {
+  if (isIconAvailable(iconName)) {
+    return generateIcon(iconName, style, size);
+  }
+  return `<i class="${style} fa-${iconName} fa-${size}"></i>`; // Fallback
+};
+
 </script>
 
 <style scoped>

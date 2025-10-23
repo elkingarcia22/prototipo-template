@@ -24,7 +24,7 @@
           :data-tab="tab.id"
           @click="handleTabClick(tab)"
         >
-          <i :class="['far', tab.icon]"></i>
+          <i :class="getIconClass(tab.icon)"></i>
           <span>{{ tab.label }}</span>
         </button>
       </div>
@@ -36,7 +36,7 @@
           :data-tooltip="themeToggleTooltip"
           @click="handleThemeToggle"
         >
-          <i :class="['far', themeIcon]"></i>
+          <i :class="getIconClass(themeIcon)"></i>
         </button>
         
         <div class="ubits-top-nav__user-menu" @click="handleUserClick">
@@ -49,8 +49,19 @@
 </template>
 
 <script setup lang="ts">
+import { useIcons } from '../utils/icons';
+import { useFontAwesomeAPI } from '../utils/fontawesome-api';
+
 import { computed, defineProps, defineEmits } from 'vue'
 import { useResponsive } from '../utils/responsive'
+
+// Sistema de iconos Font Awesome
+const { generateIcon, isIconAvailable } = useIcons();
+const { searchIcons, generateIconHTML } = useFontAwesomeAPI({
+  apiToken: '15ACD43C-4C0F-44D2-AE1C-6E8646841B1F',
+  autoLoad: true,
+  cache: true
+});
 
 // Props del componente
 interface NavigationTab {
@@ -97,10 +108,10 @@ const props = withDefaults(defineProps<Props>(), {
   brandText: 'UBITS',
   showBrandText: true,
   navigationTabs: () => [
-    { id: 'dashboard', label: 'Dashboard', icon: 'fa-home' },
-    { id: 'aprendizaje', label: 'Aprendizaje', icon: 'fa-graduation-cap' },
-    { id: 'diagnostico', label: 'Diagnóstico', icon: 'fa-chart-mixed' },
-    { id: 'desempeno', label: 'Desempeño', icon: 'fa-bars-progress' }
+    { id: 'dashboard', label: 'Dashboard', icon: getIconClass('home') },
+    { id: 'aprendizaje', label: 'Aprendizaje', icon: getIconClass('graduation-cap') },
+    { id: 'diagnostico', label: 'Diagnóstico', icon: getIconClass('chart-line') },
+    { id: 'desempeno', label: 'Desempeño', icon: getIconClass('chart-bar') }
   ],
   activeTab: '',
   userAvatar: '/images/Profile-image.jpg',
@@ -161,7 +172,7 @@ const topNavStyles = computed(() => {
 })
 
 const themeIcon = computed(() => {
-  return props.currentTheme === 'light' ? 'fa-moon' : 'fa-sun'
+  return props.currentTheme === 'light' ? getIconClass('moon') : getIconClass('sun')
 })
 
 const themeToggleTooltip = computed(() => {
@@ -198,6 +209,23 @@ const handleThemeToggle = () => {
   emit('themeToggle')
   props.onThemeToggle?.()
 }
+
+// Función helper para obtener clases de iconos
+const getIconClass = (iconName, style = 'far') => {
+  if (isIconAvailable(iconName)) {
+    return [style, `fa-${iconName}`];
+  }
+  return [style, `fa-${iconName}`]; // Fallback
+};
+
+// Función helper para generar HTML de iconos
+const getIconHTML = (iconName, style = 'far', size = 'md') => {
+  if (isIconAvailable(iconName)) {
+    return generateIcon(iconName, style, size);
+  }
+  return `<i class="${style} fa-${iconName} fa-${size}"></i>`; // Fallback
+};
+
 </script>
 
 <style scoped>

@@ -94,7 +94,7 @@
         @click="handleClear"
         aria-label="Limpiar campo"
       >
-        <i class="far fa-times"></i>
+        <i class="far times"></i>
       </button>
       
       <!-- Password Toggle -->
@@ -119,14 +119,26 @@
     
     <!-- Error Message -->
     <div v-if="errorMessage" class="ubits-input__error">
-      <i class="far fa-exclamation-circle"></i>
+      <i class="far exclamation-circle"></i>
       <span>{{ errorMessage }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useIcons } from '../utils/icons';
+import { useFontAwesomeAPI } from '../utils/fontawesome-api';
+
 import { computed, ref, watch, defineProps, defineEmits, nextTick } from 'vue'
+import { useResponsive } from '../utils/responsive'
+
+// Sistema de iconos Font Awesome
+const { generateIcon, isIconAvailable } = useIcons();
+const { searchIcons, generateIconHTML } = useFontAwesomeAPI({
+  apiToken: '15ACD43C-4C0F-44D2-AE1C-6E8646841B1F',
+  autoLoad: true,
+  cache: true
+});
 
 // Props del componente
 interface SelectOption {
@@ -248,7 +260,7 @@ const leftIconClasses = computed(() => ['far', props.leftIcon])
 
 const rightIconClasses = computed(() => ['far', props.rightIcon])
 
-const passwordToggleIcon = computed(() => showPassword.value ? 'fa-eye-slash' : 'fa-eye')
+const passwordToggleIcon = computed(() => showPassword.value ? getIconClass('eye-slash') : getIconClass('eye'))
 
 const characterCount = computed(() => {
   if (typeof props.modelValue === 'string') {
@@ -301,6 +313,23 @@ const validateEmail = (email: string) => {
     console.warn('Email inválido:', email)
   }
 }
+
+// Función helper para obtener clases de iconos
+const getIconClass = (iconName, style = 'far') => {
+  if (isIconAvailable(iconName)) {
+    return [style, `fa-${iconName}`];
+  }
+  return [style, `fa-${iconName}`]; // Fallback
+};
+
+// Función helper para generar HTML de iconos
+const getIconHTML = (iconName, style = 'far', size = 'md') => {
+  if (isIconAvailable(iconName)) {
+    return generateIcon(iconName, style, size);
+  }
+  return `<i class="${style} fa-${iconName} fa-${size}"></i>`; // Fallback
+};
+
 </script>
 
 <style scoped>
