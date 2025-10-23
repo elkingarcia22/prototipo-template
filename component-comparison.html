@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBITS Component Comparison - Playground vs Template</title>
     
-    <!-- Font Awesome Pro - Versión Pro para iconos exactos del playground UBITS -->
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.1.1/css/all.css">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.1.1/css/fontawesome.min.css">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.1.1/css/regular.min.css">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.1.1/css/solid.min.css">
+    <!-- Font Awesome Free - Versión que funciona sin autenticación -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/solid.min.css">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,17 +154,17 @@
             font-weight: 900; /* Solid cuando está activo */
         }
         
-        /* Cambiar a solid cuando está activo (Font Awesome Pro - iconos exactos del playground UBITS) */
+        /* Cambiar a solid cuando está activo (Font Awesome Free - iconos que funcionan) */
         .nav-button.active i.fa-graduation-cap::before {
             content: "\f19d"; /* Solid graduation cap */
         }
         
-        .nav-button.active i.fa-chart-mixed::before {
-            content: "\f643"; /* Solid chart mixed */
+        .nav-button.active i.fa-chart-line::before {
+            content: "\f201"; /* Solid chart line */
         }
         
-        .nav-button.active i.fa-bars-progress::before {
-            content: "\f828"; /* Solid bars progress */
+        .nav-button.active i.fa-chart-bar::before {
+            content: "\f080"; /* Solid chart bar */
         }
         
         .nav-button.active i.fa-clipboard::before {
@@ -175,12 +175,12 @@
             content: "\f0c0"; /* Solid users */
         }
         
-        .nav-button.active i.fa-layer-group::before {
-            content: "\f5fd"; /* Solid layer group */
+        .nav-button.active i.fa-tasks::before {
+            content: "\f0ae"; /* Solid tasks */
         }
         
-        .nav-button.active i.fa-sparkles::before {
-            content: "\f890"; /* Solid sparkles */
+        .nav-button.active i.fa-magic::before {
+            content: "\f0d0"; /* Solid magic */
         }
         
         .nav-button.active i.fa-moon::before {
@@ -561,15 +561,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🔍 Verificando Font Awesome...');
             
-            // Lista de iconos a probar (Font Awesome Pro - iconos exactos del playground UBITS)
+            // Lista de iconos a probar (Font Awesome Free - iconos que funcionan)
             const iconsToTest = [
                 'far fa-graduation-cap',
-                'far fa-chart-mixed', 
-                'far fa-bars-progress',
+                'far fa-chart-line', 
+                'far fa-chart-bar',
                 'far fa-clipboard',
                 'far fa-users',
-                'far fa-layer-group',
-                'far fa-sparkles',
+                'far fa-tasks',
+                'far fa-magic',
                 'far fa-moon'
             ];
             
@@ -757,10 +757,10 @@
                                 <i class="far fa-graduation-cap"></i>
                             </button>
                             <button class="nav-button" data-section="diagnóstico" data-tooltip="Diagnóstico" onclick="return false;">
-                                <i class="far fa-chart-mixed"></i>
+                                <i class="far fa-chart-line"></i>
                             </button>
                             <button class="nav-button" data-section="desempeño" data-tooltip="Desempeño" onclick="return false;">
-                                <i class="far fa-bars-progress"></i>
+                                <i class="far fa-chart-bar"></i>
                             </button>
                             <button class="nav-button" data-section="encuestas" data-tooltip="Encuestas" onclick="window.location.href='encuestas.html'" style="cursor: pointer;">
                                 <i class="far fa-clipboard"></i>
@@ -769,10 +769,10 @@
                                 <i class="far fa-users"></i>
                             </button>
                             <button class="nav-button" data-section="tareas" data-tooltip="Tareas" onclick="return false;">
-                                <i class="far fa-layer-group"></i>
+                                <i class="far fa-tasks"></i>
                             </button>
                             <button class="nav-button" data-section="ubits-ai" data-tooltip="UBITS AI" onclick="return false;">
-                                <i class="far fa-sparkles"></i>
+                                <i class="far fa-magic"></i>
                             </button>
                         </div>
                     </div>
