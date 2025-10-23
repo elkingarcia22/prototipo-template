@@ -1,0 +1,270 @@
+/**
+ * Estilos para Microsoft Clarity Integration
+ * Componente modular para analytics
+ */
+
+/* Indicador de debug de Clarity */
+.clarity-debug-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #10b981;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.clarity-debug-indicator::before {
+    content: '📊';
+    margin-right: 6px;
+}
+
+/* Estados del indicador */
+.clarity-debug-indicator.loading {
+    background: #f59e0b;
+    animation: pulse 2s infinite;
+}
+
+.clarity-debug-indicator.error {
+    background: #ef4444;
+}
+
+.clarity-debug-indicator.disabled {
+    background: #6b7280;
+    opacity: 0.6;
+}
+
+/* Panel de debug de Clarity */
+.clarity-debug-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    max-height: 400px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 12px;
+    overflow-y: auto;
+    display: none;
+}
+
+.clarity-debug-panel.show {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+}
+
+.clarity-debug-panel-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clarity-debug-panel-title {
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+}
+
+.clarity-debug-panel-close {
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.clarity-debug-panel-close:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.clarity-debug-panel-content {
+    padding: 16px;
+}
+
+.clarity-debug-item {
+    margin-bottom: 12px;
+    padding: 8px;
+    background: #f9fafb;
+    border-radius: 4px;
+    border-left: 3px solid #10b981;
+}
+
+.clarity-debug-item.error {
+    border-left-color: #ef4444;
+    background: #fef2f2;
+}
+
+.clarity-debug-item.warning {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.clarity-debug-item-title {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.clarity-debug-item-content {
+    color: #6b7280;
+    font-size: 11px;
+    word-break: break-all;
+}
+
+/* Botón para mostrar/ocultar debug */
+.clarity-debug-toggle {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9998;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.clarity-debug-toggle:hover {
+    background: #059669;
+    transform: scale(1.1);
+}
+
+.clarity-debug-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Estados del botón */
+.clarity-debug-toggle.active {
+    background: #ef4444;
+}
+
+.clarity-debug-toggle.disabled {
+    background: #6b7280;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .clarity-debug-panel {
+        width: 90vw;
+        right: 5vw;
+        left: 5vw;
+    }
+    
+    .clarity-debug-indicator {
+        bottom: 80px;
+        left: 10px;
+        right: 10px;
+        text-align: center;
+    }
+    
+    .clarity-debug-toggle {
+        bottom: 80px;
+        left: 10px;
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Utilidades para debugging */
+.clarity-debug-hidden {
+    display: none !important;
+}
+
+.clarity-debug-visible {
+    display: block !important;
+}
+
+/* Estilos para elementos trackeados */
+[data-clarity-track] {
+    position: relative;
+}
+
+[data-clarity-track]::after {
+    content: '📊';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+[data-clarity-track]:hover::after {
+    opacity: 1;
+}
+
+/* Debug mode styles */
+body.clarity-debug [data-clarity-track] {
+    outline: 2px dashed #10b981;
+    outline-offset: 2px;
+}
+
+body.clarity-debug [data-clarity-track]::before {
+    content: attr(data-clarity-track);
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: #10b981;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 1000;
+}
