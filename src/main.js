@@ -165,43 +165,49 @@ const app = createApp({
       <div class="dashboard-container">
         <!-- Sidebar Container -->
         <div id="sidebar-container" v-if="isDesktop">
-          <div class="sidebar">
-            <!-- Header -->
-            <div class="sidebar-header">
-              <div class="logo" @click="handleLogoClick">
-                <img :src="logoUrl" :alt="logoAlt" />
+          <aside class="sidebar" id="sidebar">
+            <!-- Contenedor principal para header y body -->
+            <div class="sidebar-main">
+              <!-- Header -->
+              <div class="sidebar-header">
+                <div class="logo" @click="handleLogoClick" style="cursor: pointer;">
+                  <img :src="logoUrl" :alt="logoAlt" />
+                </div>
               </div>
-            </div>
-            
-            <!-- Navigation -->
-            <div class="sidebar-body">
-              <button 
-                v-for="item in navigationItems"
-                :key="item.id"
-                :class="['sidebar-nav-button', { 'active': activeItem === item.id }]"
-                :data-section="item.id"
-                :data-tooltip="item.tooltip"
-                @click="handleNavClick(item)"
-              >
-                <i :class="['far', 'fa-' + item.icon]"></i>
-                <span class="sidebar-nav-label">{{ item.label }}</span>
-              </button>
+              
+              <!-- Body -->
+              <div class="sidebar-body">
+                <button 
+                  v-for="item in navigationItems"
+                  :key="item.id"
+                  :class="['nav-button', { 'active': activeItem === item.id }]"
+                  :data-section="item.id"
+                  :data-tooltip="item.tooltip"
+                  @click="handleNavClick(item)"
+                >
+                  <i :class="['far', 'fa-' + item.icon]"></i>
+                </button>
+              </div>
             </div>
             
             <!-- Footer -->
             <div class="sidebar-footer">
-              <div class="sidebar-user-avatar" @click="handleUserClick">
-                <img :src="userAvatar" :alt="userName" class="sidebar-avatar-image">
+              <div class="user-avatar-container">
+                <div class="user-avatar" @click="handleUserClick">
+                  <img :src="userAvatar" :alt="userName" class="avatar-image">
+                </div>
               </div>
               <button 
-                class="sidebar-theme-toggle"
-                :data-tooltip="currentTheme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
+                class="nav-button"
+                id="darkmode-toggle"
+                :data-tooltip="currentTheme === 'light' ? 'Modo oscuro' : 'Modo claro'"
+                :data-theme="currentTheme"
                 @click="handleThemeToggle"
               >
                 <i :class="['far', currentTheme === 'light' ? 'fa-moon' : 'fa-sun']"></i>
               </button>
             </div>
-          </div>
+          </aside>
         </div>
 
         <!-- Main Content -->
