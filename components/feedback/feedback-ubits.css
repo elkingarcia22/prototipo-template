@@ -151,17 +151,17 @@
     box-shadow: 0 0 0 3px var(--ubits-button-focus-ring);
 }
 
+.feedback-form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
 .feedback-form-group select:disabled,
 .feedback-form-group textarea:disabled {
     background: var(--ubits-bg-disabled);
     color: var(--ubits-fg-disabled);
     border-color: var(--ubits-border-disabled);
     cursor: not-allowed;
-}
-
-.feedback-form-group textarea {
-    min-height: 100px;
-    resize: vertical;
 }
 
 /* Acciones del formulario */
@@ -191,7 +191,7 @@
 
 .feedback-cancel:hover {
     background: var(--ubits-btn-secondary-bg-hover);
-    border-color: var(--ubits-btn-secondary-border);
+    color: var(--ubits-btn-secondary-fg-default);
 }
 
 .feedback-cancel:active {
