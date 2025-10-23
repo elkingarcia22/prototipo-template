@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Completo - Prototipo Funcional</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Componentes CSS -->
+    <link rel="stylesheet" href="../components/onboarding/onboarding.css">
+    <link rel="stylesheet" href="../components/clarity/clarity.css">
+    <link rel="stylesheet" href="../components/feedback/feedback.css">
+    <link rel="stylesheet" href="../styles/globals.css">
+    
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "tuefzltpon");
+    </script>
+</head>
+<body class="prototype-container">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-semibold text-gray-900">Template Completo</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="prototype-button prototype-button-secondary" id="debugToggle">
+                        🔧 Debug
+                    </button>
+                    <button class="prototype-button prototype-button-primary" data-prototype-start>
+                        🚀 Iniciar Prototipo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                Template Completo de Prototipo Funcional
+            </h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Este template incluye todos los componentes: Onboarding, Clarity y Feedback
+            </p>
+        </div>
+
+        <!-- Demo Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Card 1 - Onboarding -->
+            <div class="prototype-card" data-clarity-track="onboarding_card">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">🎭</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Sistema de Onboarding</h3>
+                    <p class="text-gray-600">
+                        Guía interactiva para usuarios
+                    </p>
+                    <button class="prototype-button prototype-button-primary mt-4" data-clarity-track="onboarding_button">
+                        Iniciar Onboarding
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Card 2 - Analytics -->
+            <div class="prototype-card" data-clarity-track="analytics_card">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">📊</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Microsoft Clarity</h3>
+                    <p class="text-gray-600">
+                        Analytics y tracking de usuarios
+                    </p>
+                    <button class="prototype-button prototype-button-primary mt-4" data-clarity-track="analytics_button">
+                        Ver Analytics
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Card 3 - Feedback -->
+            <div class="prototype-card" data-clarity-track="feedback_card">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">💬</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Sistema de Feedback</h3>
+                    <p class="text-gray-600">
+                        Recolección de comentarios híbrida
+                    </p>
+                    <button class="prototype-button prototype-button-primary mt-4" data-clarity-track="feedback_button">
+                        Dar Feedback
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="prototype-card mb-8">
+            <h3 class="text-2xl font-semibold text-gray-900 mb-6">Características del Template</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-4">Componentes Incluidos</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Sistema de Onboarding modular
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Microsoft Clarity integration
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Sistema de Feedback híbrido
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Responsive y accesible
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-4">Funcionalidades</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Deploy automático
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Variables de entorno
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Sistema de GATES
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Documentación completa
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Buttons -->
+        <div class="text-center">
+            <button class="prototype-button prototype-button-primary mr-4" id="demoOnboarding">
+                🎭 Demo Onboarding
+            </button>
+            <button class="prototype-button prototype-button-secondary mr-4" id="demoClarity">
+                📊 Demo Clarity
+            </button>
+            <button class="prototype-button prototype-button-secondary" id="demoFeedback">
+                💬 Demo Feedback
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-gray-600">
+                <p>Template Completo - Creado con ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../components/onboarding/onboarding.js"></script>
+    <script src="../components/clarity/clarity.js"></script>
+    <script src="../components/feedback/feedback.js"></script>
+    
+    <script>
+        // Configuración de componentes
+        console.log('🚀 Inicializando template completo...');
+
+        // 1. Sistema de Onboarding
+        const onboardingSteps = [
+            {
+                title: "Bienvenido al Template Completo",
+                content: "Este template incluye todos los componentes: Onboarding, Clarity y Feedback. Te guiaremos a través de cada uno.",
+                target: null
+            },
+            {
+                title: "Sistema de Onboarding",
+                content: "Este es el sistema de onboarding que guía a los usuarios a través del prototipo con pasos interactivos.",
+                target: "[data-clarity-track='onboarding_card']"
+            },
+            {
+                title: "Microsoft Clarity",
+                content: "Clarity trackea automáticamente el comportamiento de los usuarios y genera analytics detallados.",
+                target: "[data-clarity-track='analytics_card']"
+            },
+            {
+                title: "Sistema de Feedback",
+                content: "El sistema de feedback permite a los usuarios enviar comentarios de forma anónima con respaldo local.",
+                target: "[data-clarity-track='feedback_card']"
+            },
+            {
+                title: "Sistema de Feedback",
+                content: "Usa el botón de feedback para compartir tus comentarios y sugerencias sobre el prototipo.",
+                target: "#feedbackTrigger"
+            }
+        ];
+
+        const onboarding = createOnboarding({
+            steps: onboardingSteps,
+            onComplete: () => {
+                console.log('🎉 Onboarding completado');
+                clarity.trackEvent('onboarding_completed', { template: 'complete' });
+            },
+            onSkip: () => {
+                console.log('⏭️ Onboarding saltado');
+                clarity.trackEvent('onboarding_skipped', { template: 'complete' });
+            }
+        });
+
+        // 2. Microsoft Clarity
+        const clarity = createClarity({
+            projectId: 'tuefzltpon', // Demo project ID
+            enabled: true,
+            debug: true,
+            customEvents: {
+                'prototype_start': {
+                    selector: '[data-prototype-start]',
+                    eventType: 'click',
+                    data: { template: 'complete' }
+                },
+                'onboarding_interaction': {
+                    selector: '[data-clarity-track="onboarding_button"]',
+                    eventType: 'click',
+                    data: { component: 'onboarding' }
+                },
+                'analytics_interaction': {
+                    selector: '[data-clarity-track="analytics_button"]',
+                    eventType: 'click',
+                    data: { component: 'analytics' }
+                },
+                'feedback_interaction': {
+                    selector: '[data-clarity-track="feedback_button"]',
+                    eventType: 'click',
+                    data: { component: 'feedback' }
+                }
+            }
+        });
+
+        // 3. Sistema de Feedback
+        const feedback = createFeedback({
+            webhookUrl: 'https://demo-webhook.com/feedback', // Demo webhook
+            hybridMode: true,
+            developmentMode: true,
+            autoDetectSection: true,
+            onSubmit: (data) => {
+                console.log('📤 Feedback enviado:', data);
+                clarity.trackEvent('feedback_submitted', data);
+            },
+            onSuccess: (data) => {
+                console.log('✅ Feedback exitoso:', data);
+                clarity.trackEvent('feedback_success', data);
+            },
+            onError: (error) => {
+                console.error('❌ Error en feedback:', error);
+                clarity.trackEvent('feedback_error', { error: error.message });
+            }
+        });
+
+        // Event listeners
+        document.getElementById('demoOnboarding').addEventListener('click', () => {
+            onboarding.start();
+            clarity.trackEvent('demo_onboarding_started');
+        });
+
+        document.getElementById('demoClarity').addEventListener('click', () => {
+            clarity.trackEvent('demo_clarity_clicked');
+            alert('Clarity está trackeando este evento. Revisa la consola para ver los logs.');
+        });
+
+        document.getElementById('demoFeedback').addEventListener('click', () => {
+            feedback.openModal();
+            clarity.trackEvent('demo_feedback_opened');
+        });
+
+        document.getElementById('debugToggle').addEventListener('click', () => {
+            const panel = document.querySelector('.clarity-debug-panel');
+            if (panel) {
+                panel.classList.toggle('show');
+            }
+        });
+
+        // Trackear vista de página
+        clarity.trackPageView('complete_template', {
+            template: 'complete',
+            components: ['onboarding', 'clarity', 'feedback'],
+            timestamp: new Date().toISOString()
+        });
+
+        // Trackear interacciones adicionales
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.prototype-button')) {
+                clarity.trackUserAction('button_click', {
+                    button: e.target.textContent.trim(),
+                    element: e.target.tagName,
+                    template: 'complete'
+                });
+            }
+        });
+
+        // Trackear scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                clarity.trackEvent('page_scroll', {
+                    scroll_percentage: Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100),
+                    template: 'complete'
+                });
+            }, 1000);
+        });
+
+        // Inicialización completa
+        console.log('✅ Template completo inicializado');
+        console.log('📊 Componentes disponibles:', {
+            onboarding: typeof window.OnboardingSystem,
+            clarity: typeof window.ClarityIntegration,
+            feedback: typeof window.FeedbackSystem
+        });
+    </script>
+</body>
+</html>

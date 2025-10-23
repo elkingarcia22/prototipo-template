@@ -98,10 +98,22 @@ El template incluye un sistema de validaciones automáticas:
 
 ## 📚 Documentación
 
-- [Guía de Configuración](docs/setup-guide.md)
-- [Guía de Deploy](docs/deployment-guide.md)
-- [Troubleshooting](docs/troubleshooting.md)
-- [Componentes](components/README.md)
+### Guías Principales
+- [**Setup Guide**](docs/setup-guide.md) - Configuración inicial del proyecto
+- [**GitHub Cursor Setup**](docs/github-cursor-setup.md) - Configuración de GitHub y Cursor
+- [**Deployment Guide**](docs/deployment-guide.md) - Guía para desplegar en Vercel o Render
+- [**Troubleshooting**](docs/troubleshooting.md) - Solución de problemas comunes
+
+### Componentes
+- [**Onboarding**](components/onboarding/README.md) - Sistema de onboarding modular
+- [**Clarity**](components/clarity/README.md) - Integración de Microsoft Clarity
+- [**Feedback**](components/feedback/README.md) - Sistema de feedback híbrido
+
+### Templates de Ejemplo
+- [**Onboarding Template**](templates/onboarding.html) - Template con sistema de onboarding
+- [**Clarity Template**](templates/clarity.html) - Template con Microsoft Clarity
+- [**Feedback Template**](templates/feedback.html) - Template con sistema de feedback
+- [**Complete Template**](templates/complete.html) - Template completo con todos los componentes
 
 ## 🤝 Contribuir
 
