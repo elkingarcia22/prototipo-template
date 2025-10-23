@@ -51,7 +51,6 @@ import { useIcons } from '../utils/icons';
 import { useFontAwesomeAPI } from '../utils/fontawesome-api';
 
 import { computed, defineProps, defineEmits } from 'vue'
-import { useResponsive } from '../utils/responsive'
 
 // Sistema de iconos Font Awesome
 const { generateIcon, isIconAvailable } = useIcons();
@@ -60,6 +59,7 @@ const { searchIcons, generateIconHTML } = useFontAwesomeAPI({
   autoLoad: true,
   cache: true
 });
+import { useResponsive } from '../utils/responsive'
 
 // Props del componente
 interface NavigationItem {

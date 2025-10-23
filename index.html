@@ -1,9 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prototipo Template</title>
+    <title>UBITS Template - Prototipo Robusto</title>
+    
+    <!-- Meta tags -->
+    <meta name="description" content="Template robusto para prototipos funcionales con tecnologías modernas">
+    <meta name="keywords" content="ubits, template, prototipo, vue, typescript, tailwind">
+    <meta name="author" content="UBITS">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/images/Ubits-logo.svg">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,197 +23,116 @@
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "CLARITY_PROJECT_ID");
-    </script>
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="./styles/globals.css">
+    <!-- Estilos UBITS -->
+    <link rel="stylesheet" href="./src/styles/ubits-tokens.css">
+    <link rel="stylesheet" href="./src/styles/globals.css">
+    
+    <style>
+        /* Estilos críticos para evitar FOUC */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans', sans-serif;
+            background: var(--ubits-bg-1, #ffffff);
+            color: var(--ubits-fg-1-high, #1a1a1a);
+            transition: all 0.3s ease;
+        }
+        
+        #app {
+            min-height: 100vh;
+        }
+        
+        /* Loading spinner */
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--ubits-border-1, #e5e7eb);
+            border-top: 4px solid var(--ubits-accent-brand, #3b82f6);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Ocultar loading cuando la app esté lista */
+        .app-loaded .loading-spinner {
+            display: none;
+        }
+    </style>
 </head>
-<body class="prototype-container">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <h1 class="text-xl font-semibold text-gray-900">Prototipo Template</h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button class="prototype-button prototype-button-secondary">
-                        Configuración
-                    </button>
-                    <button class="prototype-button prototype-button-primary">
-                        Iniciar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Hero Section -->
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">
-                Template para Prototipos Funcionales
-            </h2>
-            <p class="text-xl text-gray-600 mb-8">
-                Sistema completo con onboarding, analytics y feedback
-            </p>
-            <div class="flex justify-center space-x-4">
-                <button class="prototype-button prototype-button-primary text-lg px-8 py-3">
-                    Comenzar Prototipo
-                </button>
-                <button class="prototype-button prototype-button-secondary text-lg px-8 py-3">
-                    Ver Documentación
-                </button>
-            </div>
-        </div>
-
-        <!-- Features Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div class="prototype-card">
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <span class="text-2xl">🎭</span>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Onboarding</h3>
-                    <p class="text-gray-600">
-                        Sistema de pasos guiados con enmascaramiento y tooltips
-                    </p>
-                </div>
-            </div>
-            
-            <div class="prototype-card">
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <span class="text-2xl">📊</span>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Analytics</h3>
-                    <p class="text-gray-600">
-                        Microsoft Clarity integrado para análisis de comportamiento
-                    </p>
-                </div>
-            </div>
-            
-            <div class="prototype-card">
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <span class="text-2xl">💬</span>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Feedback</h3>
-                    <p class="text-gray-600">
-                        Sistema híbrido con n8n y localStorage para recopilar feedback
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Demo Section -->
-        <div class="prototype-card">
-            <h3 class="text-2xl font-semibold text-gray-900 mb-6">Demo del Template</h3>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="text-lg font-medium text-gray-900 mb-4">Características Incluidas</h4>
-                    <ul class="space-y-2 text-gray-600">
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-2">✓</span>
-                            Sistema de onboarding modular
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-2">✓</span>
-                            Microsoft Clarity integrado
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-2">✓</span>
-                            Sistema de feedback híbrido
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-2">✓</span>
-                            Deploy automático
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-2">✓</span>
-                            Validaciones automáticas
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-medium text-gray-900 mb-4">Templates Disponibles</h4>
-                    <div class="space-y-2">
-                        <a href="./templates/basic.html" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <div class="font-medium">Template Básico</div>
-                            <div class="text-sm text-gray-600">HTML/CSS/JS básico</div>
-                        </a>
-                        <a href="./templates/onboarding.html" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <div class="font-medium">Con Onboarding</div>
-                            <div class="text-sm text-gray-600">Sistema de pasos guiados</div>
-                        </a>
-                        <a href="./templates/full-featured.html" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <div class="font-medium">Completo</div>
-                            <div class="text-sm text-gray-600">Todas las características</div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-50 border-t border-gray-200 mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="text-center text-gray-600">
-                <p>Template para Prototipos Funcionales - Creado con ❤️</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Feedback Button -->
-    <div class="feedback-trigger" id="feedbackTrigger" onclick="openFeedbackModal()">
-        💬
+<body>
+    <!-- Loading spinner -->
+    <div class="loading-spinner" id="loading-spinner"></div>
+    
+    <!-- Vue App -->
+    <div id="app">
+        <!-- La aplicación Vue se montará aquí -->
     </div>
-
-    <!-- Feedback Modal -->
-    <div class="feedback-modal" id="feedbackModal">
-        <div class="feedback-modal-content">
-            <div class="feedback-modal-header">
-                <h3>Feedback</h3>
-                <button class="feedback-close" onclick="closeFeedbackModal()">&times;</button>
-            </div>
-            <div class="feedback-modal-body">
-                <form id="feedbackForm">
-                    <div class="feedback-form-group">
-                        <label for="feedbackSection">Sección actual:</label>
-                        <select id="feedbackSection" name="section" required>
-                            <option value="">Selecciona una sección</option>
-                            <option value="Home">Home</option>
-                            <option value="Onboarding">Onboarding</option>
-                            <option value="Analytics">Analytics</option>
-                            <option value="Feedback">Feedback</option>
-                            <option value="Otra">Otra</option>
-                        </select>
-                    </div>
-                    <div class="feedback-form-group">
-                        <label for="feedbackComment">Tu comentario:</label>
-                        <textarea id="feedbackComment" name="comment" placeholder="¿Qué funciona bien? ¿Qué falta? ¿Qué mejorarías?" required></textarea>
-                    </div>
-                    <div class="feedback-form-actions">
-                        <button type="button" class="feedback-cancel" onclick="closeFeedbackModal()">Cancelar</button>
-                        <button type="submit" class="feedback-submit">Enviar Feedback</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Scripts -->
-    <script src="./components/feedback/feedback.js"></script>
-    <script src="./components/clarity/clarity.js"></script>
-    <script src="./components/onboarding/onboarding.js"></script>
+    <script type="module" src="./src/main.ts"></script>
+    
+    <!-- Script para ocultar loading -->
+    <script>
+        // Ocultar loading cuando la app esté lista
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.body.classList.add('app-loaded');
+                const spinner = document.getElementById('loading-spinner');
+                if (spinner) {
+                    spinner.style.display = 'none';
+                }
+            }, 1000);
+        });
+        
+        // Configurar Tailwind con tokens UBITS
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ubits-brand': 'var(--ubits-accent-brand)',
+                        'ubits-bg-1': 'var(--ubits-bg-1)',
+                        'ubits-bg-2': 'var(--ubits-bg-2)',
+                        'ubits-bg-3': 'var(--ubits-bg-3)',
+                        'ubits-fg-1-high': 'var(--ubits-fg-1-high)',
+                        'ubits-fg-1-medium': 'var(--ubits-fg-1-medium)',
+                        'ubits-fg-1-low': 'var(--ubits-fg-1-low)',
+                        'ubits-border-1': 'var(--ubits-border-1)',
+                        'ubits-border-2': 'var(--ubits-border-2)',
+                    },
+                    fontFamily: {
+                        'ubits': ['Noto Sans', 'sans-serif'],
+                    },
+                    spacing: {
+                        'ubits-xs': 'var(--ubits-spacing-xs)',
+                        'ubits-sm': 'var(--ubits-spacing-sm)',
+                        'ubits-md': 'var(--ubits-spacing-md)',
+                        'ubits-lg': 'var(--ubits-spacing-lg)',
+                        'ubits-xl': 'var(--ubits-spacing-xl)',
+                    },
+                    borderRadius: {
+                        'ubits-sm': 'var(--ubits-radius-sm)',
+                        'ubits-md': 'var(--ubits-radius-md)',
+                        'ubits-lg': 'var(--ubits-radius-lg)',
+                    },
+                    boxShadow: {
+                        'ubits-sm': 'var(--ubits-shadow-sm)',
+                        'ubits-md': 'var(--ubits-shadow-md)',
+                        'ubits-lg': 'var(--ubits-shadow-lg)',
+                    }
+                }
+            }
+        };
+    </script>
 </body>
 </html>
