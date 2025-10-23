@@ -1,281 +1,366 @@
+<!--
+  UBITS Button Component - Versión Moderna
+  Recreación del componente Button del playground UBITS con tecnologías de punta
+-->
 <template>
-  <button
-    :class="buttonClasses"
+  <button 
+    :class="buttonClasses" 
     :disabled="disabled"
     :type="type"
     @click="handleClick"
-    @focus="handleFocus"
-    @blur="handleBlur"
+    v-bind="$attrs"
   >
-    <i v-if="leftIcon" :class="leftIconClasses" />
-    <span v-if="$slots.default" class="ubits-button-content">
-      <slot />
+    <!-- Icono izquierdo -->
+    <i v-if="leftIcon" :class="leftIconClasses"></i>
+    
+    <!-- Contenido del botón -->
+    <span v-if="$slots.default || text" class="ubits-button__text">
+      <slot>{{ text }}</slot>
     </span>
-    <i v-if="rightIcon" :class="rightIconClasses" />
+    
+    <!-- Icono derecho -->
+    <i v-if="rightIcon" :class="rightIconClasses"></i>
+    
+    <!-- Badge de notificación -->
+    <span v-if="badge" class="ubits-button__badge" :class="badgeClasses">
+      {{ badge }}
+    </span>
   </button>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { ubitsTheme } from '../utils/theme';
+import { computed, defineProps, defineEmits, useSlots } from 'vue'
 
-export interface UBITSButtonProps {
-  variant?: 'primary' | 'secondary' | 'tertiary';
-  size?: 'sm' | 'md' | 'lg';
-  state?: 'default' | 'hover' | 'focus' | 'active' | 'disabled';
-  type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
-  leftIcon?: string;
-  rightIcon?: string;
-  loading?: boolean;
-  fullWidth?: boolean;
+// Props del componente
+interface Props {
+  // Variantes UBITS
+  variant?: 'primary' | 'secondary' | 'tertiary'
+  
+  // Tamaños UBITS
+  size?: 'sm' | 'md' | 'lg'
+  
+  // Estados
+  disabled?: boolean
+  
+  // Tipo de botón HTML
+  type?: 'button' | 'submit' | 'reset'
+  
+  // Contenido
+  text?: string
+  
+  // Iconos FontAwesome
+  leftIcon?: string
+  rightIcon?: string
+  
+  // Badge de notificación
+  badge?: string | number
+  
+  // Modificadores
+  iconOnly?: boolean
+  fullWidth?: boolean
+  loading?: boolean
 }
 
-const props = withDefaults(defineProps<UBITSButtonProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   variant: 'primary',
   size: 'md',
-  state: 'default',
-  type: 'button',
   disabled: false,
-  loading: false,
-  fullWidth: false
-});
+  type: 'button',
+  iconOnly: false,
+  fullWidth: false,
+  loading: false
+})
 
+// Emits
 const emit = defineEmits<{
-  click: [event: MouseEvent];
-  focus: [event: FocusEvent];
-  blur: [event: FocusEvent];
-}>();
+  click: [event: MouseEvent]
+}>()
 
-const isFocused = ref(false);
-const isHovered = ref(false);
+// Slots
+const slots = useSlots()
 
+// Clases computadas
 const buttonClasses = computed(() => {
   const classes = [
     'ubits-button',
     `ubits-button--${props.variant}`,
-    `ubits-button--${props.size}`,
-    `ubits-button--${props.state}`
-  ];
-
-  if (props.disabled) {
-    classes.push('ubits-button--disabled');
-  }
-
-  if (props.loading) {
-    classes.push('ubits-button--loading');
-  }
-
-  if (props.fullWidth) {
-    classes.push('ubits-button--full-width');
-  }
-
-  if (isFocused.value) {
-    classes.push('ubits-button--focused');
-  }
-
-  if (isHovered.value) {
-    classes.push('ubits-button--hovered');
-  }
-
-  return classes;
-});
+    `ubits-button--${props.size}`
+  ]
+  
+  // Modificadores
+  if (props.iconOnly) classes.push('ubits-button--icon-only')
+  if (props.fullWidth) classes.push('ubits-button--full-width')
+  if (props.loading) classes.push('ubits-button--loading')
+  if (props.disabled) classes.push('ubits-button--disabled')
+  
+  return classes
+})
 
 const leftIconClasses = computed(() => {
-  if (!props.leftIcon) return '';
-  
-  const baseClasses = props.leftIcon.startsWith('fa-') 
-    ? `far ${props.leftIcon}` 
-    : props.leftIcon;
-    
-  return `${baseClasses} ubits-button-icon ubits-button-icon--left`;
-});
+  const classes = ['far', props.leftIcon]
+  if (props.loading) classes.push('fa-spin')
+  return classes
+})
 
 const rightIconClasses = computed(() => {
-  if (!props.rightIcon) return '';
-  
-  const baseClasses = props.rightIcon.startsWith('fa-') 
-    ? `far ${props.rightIcon}` 
-    : props.rightIcon;
-    
-  return `${baseClasses} ubits-button-icon ubits-button-icon--right`;
-});
+  const classes = ['far', props.rightIcon]
+  if (props.loading) classes.push('fa-spin')
+  return classes
+})
 
+const badgeClasses = computed(() => {
+  return {
+    'ubits-button__badge--number': typeof props.badge === 'number',
+    'ubits-button__badge--text': typeof props.badge === 'string'
+  }
+})
+
+// Handlers
 const handleClick = (event: MouseEvent) => {
   if (props.disabled || props.loading) {
-    event.preventDefault();
-    return;
+    event.preventDefault()
+    return
   }
   
-  emit('click', event);
-};
-
-const handleFocus = (event: FocusEvent) => {
-  isFocused.value = true;
-  emit('focus', event);
-};
-
-const handleBlur = (event: FocusEvent) => {
-  isFocused.value = false;
-  emit('blur', event);
-};
-
-// Exponer métodos para uso externo
-defineExpose({
-  focus: () => {
-    // Implementar focus si es necesario
-  },
-  blur: () => {
-    // Implementar blur si es necesario
-  }
-});
+  emit('click', event)
+}
 </script>
 
 <style scoped>
+/* Importar tokens UBITS */
+@import '../styles/ubits-tokens.css';
+
+/* Base del botón UBITS */
 .ubits-button {
-  @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer;
-  background-color: var(--ubits-button-primary-bg-default);
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  /* Box Model */
+  border: 1px solid transparent;
+  border-radius: var(--ubits-radius-sm);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  
+  /* Transitions */
+  transition: all 0.2s ease;
+  
+  /* Focus */
+  outline: none;
+  position: relative;
+}
+
+/* Tamaños UBITS */
+.ubits-button--sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.ubits-button--md {
+  height: 40px;
+  padding: 0 16px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.ubits-button--lg {
+  height: 48px;
+  padding: 0 20px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Variantes UBITS */
+.ubits-button--primary {
+  background: var(--ubits-button-primary-bg-default);
   color: var(--ubits-btn-primary-fg);
-  border: 1px solid var(--ubits-button-primary-bg-default);
+  border-color: var(--ubits-button-primary-bg-default);
 }
 
-.ubits-button:hover:not(:disabled) {
-  background-color: var(--ubits-button-primary-hover);
+.ubits-button--primary:hover:not(:disabled) {
+  background: var(--ubits-button-primary-hover);
   border-color: var(--ubits-button-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--ubits-shadow-md);
 }
 
-.ubits-button:active:not(:disabled) {
-  background-color: var(--ubits-button-primary-pressed);
+.ubits-button--primary:active:not(:disabled) {
+  background: var(--ubits-button-primary-pressed);
   border-color: var(--ubits-button-primary-pressed);
+  transform: translateY(0);
 }
 
-.ubits-button:focus {
-  outline: 2px solid var(--ubits-button-focus-ring);
-  outline-offset: 2px;
-}
-
-.ubits-button:disabled {
-  background-color: var(--ubits-bg-disabled-button);
-  color: var(--ubits-fg-on-disabled-button);
-  border-color: var(--ubits-border-disabled-button);
-  cursor: not-allowed;
-}
-
-/* Variantes */
 .ubits-button--secondary {
-  background-color: var(--ubits-btn-secondary-bg-default);
+  background: var(--ubits-btn-secondary-bg-default);
   color: var(--ubits-btn-secondary-fg-default);
   border-color: var(--ubits-btn-secondary-border);
 }
 
 .ubits-button--secondary:hover:not(:disabled) {
-  background-color: var(--ubits-btn-secondary-bg-hover);
+  background: var(--ubits-btn-secondary-bg-hover);
+  border-color: var(--ubits-btn-secondary-border);
 }
 
 .ubits-button--secondary:active:not(:disabled) {
-  background-color: var(--ubits-btn-secondary-bg-pressed);
+  background: var(--ubits-btn-secondary-bg-pressed);
 }
 
 .ubits-button--tertiary {
-  background-color: transparent;
-  color: var(--ubits-btn-tertiary-fg);
-  border-color: transparent;
+  background: transparent;
+  color: var(--ubits-fg-1-high);
+  border-color: var(--ubits-border-1);
 }
 
 .ubits-button--tertiary:hover:not(:disabled) {
-  background-color: var(--ubits-btn-tertiary-bg-hover);
+  background: var(--ubits-bg-2);
+  border-color: var(--ubits-border-2);
 }
 
 .ubits-button--tertiary:active:not(:disabled) {
-  background-color: var(--ubits-btn-tertiary-bg-pressed);
-}
-
-/* Tamaños */
-.ubits-button--sm {
-  @apply px-3 py-1.5 text-sm;
-}
-
-.ubits-button--md {
-  @apply px-4 py-2 text-base;
-}
-
-.ubits-button--lg {
-  @apply px-6 py-3 text-lg;
+  background: var(--ubits-bg-3);
 }
 
 /* Estados */
-.ubits-button--loading {
-  position: relative;
-  color: transparent;
+.ubits-button--disabled {
+  background: var(--ubits-bg-disabled-button);
+  color: var(--ubits-fg-on-disabled-button);
+  border-color: var(--ubits-border-disabled-button);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-.ubits-button--loading::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 16px;
-  height: 16px;
-  margin: -8px 0 0 -8px;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: ubits-spin 1s linear infinite;
+.ubits-button--loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+/* Modificadores */
+.ubits-button--icon-only {
+  padding: 0;
+  width: var(--ubits-button-height);
+}
+
+.ubits-button--icon-only.ubits-button--sm {
+  width: 32px;
+}
+
+.ubits-button--icon-only.ubits-button--lg {
+  width: 48px;
 }
 
 .ubits-button--full-width {
-  @apply w-full;
+  width: 100%;
 }
 
-/* Iconos */
-.ubits-button-icon {
-  @apply flex-shrink-0;
-  color: inherit;
-}
-
-.ubits-button-icon--left {
-  @apply mr-1;
-}
-
-.ubits-button-icon--right {
-  @apply ml-1;
-}
-
-.ubits-button-content {
-  @apply flex-1;
-}
-
-/* Animaciones */
-@keyframes ubits-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Estados de foco y hover */
-.ubits-button--focused {
+/* Focus ring UBITS */
+.ubits-button:focus-visible {
   outline: 2px solid var(--ubits-button-focus-ring);
   outline-offset: 2px;
 }
 
-.ubits-button--hovered {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Texto del botón */
+.ubits-button__text {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* Badge de notificación */
+.ubits-button__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+  background: var(--ubits-feedback-accent-error);
+  color: white;
+  border: 2px solid var(--ubits-bg-1);
+}
+
+.ubits-button__badge--number {
+  min-width: 18px;
+}
+
+.ubits-button__badge--text {
+  min-width: auto;
+  padding: 0 6px;
+}
+
+/* Iconos */
+.ubits-button i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: inherit;
+  line-height: 1;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .ubits-button--sm {
-    @apply px-2 py-1 text-xs;
+    height: 28px;
+    padding: 0 10px;
+    font-size: 13px;
   }
   
   .ubits-button--md {
-    @apply px-3 py-1.5 text-sm;
+    height: 36px;
+    padding: 0 14px;
+    font-size: 15px;
   }
   
   .ubits-button--lg {
-    @apply px-4 py-2 text-base;
+    height: 44px;
+    padding: 0 18px;
+    font-size: 17px;
   }
 }
-</style>
 
+/* Modo oscuro */
+[data-theme="dark"] .ubits-button--tertiary {
+  color: var(--ubits-fg-1-high);
+  border-color: var(--ubits-border-1);
+}
+
+[data-theme="dark"] .ubits-button--tertiary:hover:not(:disabled) {
+  background: var(--ubits-bg-2);
+  border-color: var(--ubits-border-2);
+}
+
+[data-theme="dark"] .ubits-button--tertiary:active:not(:disabled) {
+  background: var(--ubits-bg-3);
+}
+
+/* Animaciones */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ubits-button--loading i.fa-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Utilidades */
+.ubits-button--hidden {
+  display: none !important;
+}
+
+.ubits-button--visible {
+  display: inline-flex !important;
+}
+</style>

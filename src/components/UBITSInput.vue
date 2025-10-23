@@ -1,461 +1,571 @@
+<!--
+  UBITS Input Component - Versión Moderna
+  Recreación del componente Input del playground UBITS con tecnologías de punta
+-->
 <template>
-  <div class="ubits-input-container">
+  <div class="ubits-input-group" :class="inputGroupClasses">
     <!-- Label -->
-    <label v-if="label" :for="inputId" class="ubits-input-label">
+    <label v-if="label" :for="inputId" class="ubits-input__label">
       {{ label }}
-      <span v-if="mandatory" class="ubits-input-mandatory">
-        ({{ mandatoryType }})
-      </span>
+      <span v-if="required" class="ubits-input__required">*</span>
+      <span v-if="optional" class="ubits-input__optional">(Opcional)</span>
     </label>
-
-    <!-- Input Wrapper -->
-    <div class="ubits-input-wrapper" :class="wrapperClasses">
+    
+    <!-- Input Container -->
+    <div class="ubits-input__container" :class="containerClasses">
       <!-- Left Icon -->
-      <i v-if="leftIcon" :class="leftIconClasses" />
+      <i v-if="leftIcon" :class="leftIconClasses" class="ubits-input__icon ubits-input__icon--left"></i>
       
       <!-- Input Element -->
       <input
+        v-if="type !== 'select' && type !== 'textarea'"
         :id="inputId"
-        ref="inputRef"
-        v-model="inputValue"
         :type="inputType"
+        :value="modelValue"
         :placeholder="placeholder"
         :disabled="disabled"
+        :readonly="readonly"
+        :required="required"
         :maxlength="maxLength"
+        :min="min"
+        :max="max"
+        :step="step"
+        :pattern="pattern"
         :autocomplete="autocomplete"
         :class="inputClasses"
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"
         @keydown="handleKeydown"
+        v-bind="$attrs"
       />
       
-      <!-- Right Icon -->
-      <i v-if="rightIcon" :class="rightIconClasses" />
+      <!-- Textarea -->
+      <textarea
+        v-else-if="type === 'textarea'"
+        :id="inputId"
+        :value="modelValue"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :readonly="readonly"
+        :required="required"
+        :maxlength="maxLength"
+        :rows="rows"
+        :class="inputClasses"
+        @input="handleInput"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        @keydown="handleKeydown"
+        v-bind="$attrs"
+      ></textarea>
       
-      <!-- Clear Button (for search type) -->
-      <button
-        v-if="showClearButton"
-        type="button"
-        class="ubits-input-clear"
-        @click="clearInput"
+      <!-- Select -->
+      <select
+        v-else-if="type === 'select'"
+        :id="inputId"
+        :value="modelValue"
+        :disabled="disabled"
+        :required="required"
+        :class="inputClasses"
+        @change="handleInput"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        v-bind="$attrs"
       >
-        <i class="far fa-times" />
+        <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
+        <option 
+          v-for="option in selectOptions" 
+          :key="option.value" 
+          :value="option.value"
+          :disabled="option.disabled"
+        >
+          {{ option.text }}
+        </option>
+      </select>
+      
+      <!-- Right Icon -->
+      <i v-if="rightIcon" :class="rightIconClasses" class="ubits-input__icon ubits-input__icon--right"></i>
+      
+      <!-- Clear Button -->
+      <button 
+        v-if="clearable && modelValue && !disabled" 
+        type="button" 
+        class="ubits-input__clear"
+        @click="handleClear"
+        aria-label="Limpiar campo"
+      >
+        <i class="far fa-times"></i>
+      </button>
+      
+      <!-- Password Toggle -->
+      <button 
+        v-if="type === 'password' && !disabled" 
+        type="button" 
+        class="ubits-input__toggle"
+        @click="togglePassword"
+        aria-label="Mostrar/ocultar contraseña"
+      >
+        <i :class="passwordToggleIcon"></i>
       </button>
     </div>
-
-    <!-- Helper Text and Counter -->
-    <div v-if="showHelper || showCounter" class="ubits-input-helper">
-      <span v-if="showHelper && helperText" class="ubits-input-helper-text">
-        {{ helperText }}
-      </span>
-      <span v-if="showCounter" class="ubits-input-counter">
-        {{ currentLength }}/{{ maxLength }}
+    
+    <!-- Helper Text -->
+    <div v-if="showHelper" class="ubits-input__helper">
+      <span v-if="helperText" class="ubits-input__helper-text">{{ helperText }}</span>
+      <span v-if="showCounter && maxLength" class="ubits-input__counter">
+        {{ characterCount }}/{{ maxLength }}
       </span>
     </div>
-
+    
     <!-- Error Message -->
-    <div v-if="errorMessage" class="ubits-input-error">
-      {{ errorMessage }}
+    <div v-if="errorMessage" class="ubits-input__error">
+      <i class="far fa-exclamation-circle"></i>
+      <span>{{ errorMessage }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from 'vue';
-import { ubitsTheme } from '../utils/theme';
+import { computed, ref, watch, defineProps, defineEmits, nextTick } from 'vue'
 
-export interface UBITSInputProps {
-  modelValue?: string | number;
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
-  label?: string;
-  placeholder?: string;
-  helperText?: string;
-  errorMessage?: string;
-  size?: 'sm' | 'md' | 'lg';
-  state?: 'default' | 'focus' | 'error' | 'disabled';
-  disabled?: boolean;
-  required?: boolean;
-  mandatory?: boolean;
-  mandatoryType?: 'obligatorio' | 'opcional';
-  leftIcon?: string;
-  rightIcon?: string;
-  showHelper?: boolean;
-  showCounter?: boolean;
-  maxLength?: number;
-  autocomplete?: string;
-  validateOnInput?: boolean;
-  validationRules?: Array<(value: string) => string | null>;
+// Props del componente
+interface SelectOption {
+  value: string | number
+  text: string
+  disabled?: boolean
 }
 
-const props = withDefaults(defineProps<UBITSInputProps>(), {
+interface Props {
+  // Identificación
+  id?: string
+  label?: string
+  
+  // Contenido
+  modelValue?: string | number
+  placeholder?: string
+  
+  // Tipo de input
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'select' | 'textarea' | 'search' | 'autocomplete' | 'calendar'
+  
+  // Estados
+  disabled?: boolean
+  readonly?: boolean
+  required?: boolean
+  optional?: boolean
+  
+  // Validación
+  errorMessage?: string
+  pattern?: string
+  
+  // Configuración
+  size?: 'sm' | 'md' | 'lg'
+  maxLength?: number
+  min?: number
+  max?: number
+  step?: number
+  rows?: number
+  
+  // Iconos
+  leftIcon?: string
+  rightIcon?: string
+  
+  // Opciones para select
+  selectOptions?: SelectOption[]
+  
+  // Helper text
+  helperText?: string
+  showHelper?: boolean
+  showCounter?: boolean
+  clearable?: boolean
+  
+  // Autocomplete
+  autocomplete?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   size: 'md',
-  state: 'default',
   disabled: false,
+  readonly: false,
   required: false,
-  mandatory: false,
-  mandatoryType: 'obligatorio',
+  optional: false,
   showHelper: false,
   showCounter: false,
-  maxLength: 50,
-  validateOnInput: true,
-  validationRules: () => []
-});
+  clearable: false,
+  rows: 3,
+  selectOptions: () => []
+})
 
+// Emits
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number];
-  'input': [value: string | number];
-  'focus': [event: FocusEvent];
-  'blur': [event: FocusEvent];
-  'keydown': [event: KeyboardEvent];
-  'validate': [isValid: boolean, errors: string[]];
-}>();
+  'update:modelValue': [value: string | number]
+  focus: [event: FocusEvent]
+  blur: [event: FocusEvent]
+  keydown: [event: KeyboardEvent]
+  clear: []
+}>()
 
-const inputRef = ref<HTMLInputElement>();
-const inputValue = ref(props.modelValue || '');
-const isFocused = ref(false);
-const isHovered = ref(false);
-const validationErrors = ref<string[]>([]);
+// Estado interno
+const isFocused = ref(false)
+const showPassword = ref(false)
 
-const inputId = computed(() => `ubits-input-${Math.random().toString(36).substr(2, 9)}`);
-
-const currentLength = computed(() => String(inputValue.value).length);
-
-const showClearButton = computed(() => 
-  props.type === 'search' && inputValue.value && !props.disabled
-);
+// Computed
+const inputId = computed(() => props.id || `ubits-input-${Math.random().toString(36).substr(2, 9)}`)
 
 const inputType = computed(() => {
   if (props.type === 'password') {
-    return 'password';
+    return showPassword.value ? 'text' : 'password'
   }
-  return props.type;
-});
+  return props.type
+})
 
-const wrapperClasses = computed(() => {
-  const classes = ['ubits-input-wrapper'];
-  
-  if (props.size) {
-    classes.push(`ubits-input-wrapper--${props.size}`);
-  }
-  
-  if (props.state === 'error' || validationErrors.value.length > 0) {
-    classes.push('ubits-input-wrapper--error');
-  }
-  
-  if (props.disabled) {
-    classes.push('ubits-input-wrapper--disabled');
-  }
-  
-  if (isFocused.value) {
-    classes.push('ubits-input-wrapper--focused');
-  }
-  
-  if (isHovered.value) {
-    classes.push('ubits-input-wrapper--hovered');
-  }
-  
-  return classes;
-});
+const inputGroupClasses = computed(() => ({
+  'ubits-input-group--error': !!props.errorMessage,
+  'ubits-input-group--disabled': props.disabled,
+  'ubits-input-group--focused': isFocused.value,
+  'ubits-input-group--has-value': !!props.modelValue
+}))
 
-const inputClasses = computed(() => {
-  const classes = ['ubits-input'];
-  
-  if (props.size) {
-    classes.push(`ubits-input--${props.size}`);
-  }
-  
-  if (props.state === 'error' || validationErrors.value.length > 0) {
-    classes.push('ubits-input--error');
-  }
-  
-  if (props.disabled) {
-    classes.push('ubits-input--disabled');
-  }
-  
-  if (isFocused.value) {
-    classes.push('ubits-input--focused');
-  }
-  
-  return classes;
-});
+const containerClasses = computed(() => ({
+  'ubits-input__container--has-left-icon': !!props.leftIcon,
+  'ubits-input__container--has-right-icon': !!props.rightIcon,
+  'ubits-input__container--has-clear': props.clearable && !!props.modelValue && !props.disabled,
+  'ubits-input__container--has-toggle': props.type === 'password' && !props.disabled
+}))
 
-const leftIconClasses = computed(() => {
-  if (!props.leftIcon) return '';
-  
-  const baseClasses = props.leftIcon.startsWith('fa-') 
-    ? `far ${props.leftIcon}` 
-    : props.leftIcon;
-    
-  return `${baseClasses} ubits-input-icon ubits-input-icon--left`;
-});
+const inputClasses = computed(() => [
+  'ubits-input',
+  `ubits-input--${props.size}`,
+  {
+    'ubits-input--error': !!props.errorMessage,
+    'ubits-input--disabled': props.disabled,
+    'ubits-input--readonly': props.readonly,
+    'ubits-input--focused': isFocused.value
+  }
+])
 
-const rightIconClasses = computed(() => {
-  if (!props.rightIcon) return '';
-  
-  const baseClasses = props.rightIcon.startsWith('fa-') 
-    ? `far ${props.rightIcon}` 
-    : props.rightIcon;
-    
-  return `${baseClasses} ubits-input-icon ubits-input-icon--right`;
-});
+const leftIconClasses = computed(() => ['far', props.leftIcon])
 
+const rightIconClasses = computed(() => ['far', props.rightIcon])
+
+const passwordToggleIcon = computed(() => showPassword.value ? 'fa-eye-slash' : 'fa-eye')
+
+const characterCount = computed(() => {
+  if (typeof props.modelValue === 'string') {
+    return props.modelValue.length
+  }
+  return 0
+})
+
+// Handlers
 const handleInput = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const value = target.value;
-  
-  inputValue.value = value;
-  emit('update:modelValue', value);
-  emit('input', value);
-  
-  if (props.validateOnInput) {
-    validateInput(value);
-  }
-};
+  const target = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  emit('update:modelValue', target.value)
+}
 
 const handleFocus = (event: FocusEvent) => {
-  isFocused.value = true;
-  emit('focus', event);
-};
+  isFocused.value = true
+  emit('focus', event)
+}
 
 const handleBlur = (event: FocusEvent) => {
-  isFocused.value = false;
-  emit('blur', event);
-  
-  // Validar al perder el foco
-  validateInput(inputValue.value);
-};
+  isFocused.value = false
+  emit('blur', event)
+}
 
 const handleKeydown = (event: KeyboardEvent) => {
-  emit('keydown', event);
-};
+  emit('keydown', event)
+}
 
-const clearInput = () => {
-  inputValue.value = '';
-  emit('update:modelValue', '');
-  emit('input', '');
-  
-  if (inputRef.value) {
-    inputRef.value.focus();
-  }
-};
+const handleClear = () => {
+  emit('update:modelValue', '')
+  emit('clear')
+}
 
-const validateInput = (value: string) => {
-  const errors: string[] = [];
-  
-  if (props.required && !value.trim()) {
-    errors.push('Este campo es obligatorio');
-  }
-  
-  if (props.maxLength && value.length > props.maxLength) {
-    errors.push(`Máximo ${props.maxLength} caracteres`);
-  }
-  
-  // Aplicar reglas de validación personalizadas
-  props.validationRules.forEach(rule => {
-    const error = rule(value);
-    if (error) {
-      errors.push(error);
-    }
-  });
-  
-  validationErrors.value = errors;
-  emit('validate', errors.length === 0, errors);
-};
+const togglePassword = () => {
+  showPassword.value = !showPassword.value
+}
 
-// Watchers
+// Watch para validación automática
 watch(() => props.modelValue, (newValue) => {
-  inputValue.value = newValue || '';
-});
-
-watch(() => props.state, (newState) => {
-  if (newState === 'error') {
-    validationErrors.value = ['Error de validación'];
+  if (props.type === 'email' && newValue) {
+    validateEmail(newValue as string)
   }
-});
+})
 
-// Exponer métodos para uso externo
-defineExpose({
-  focus: () => {
-    if (inputRef.value) {
-      inputRef.value.focus();
-    }
-  },
-  blur: () => {
-    if (inputRef.value) {
-      inputRef.value.blur();
-    }
-  },
-  clear: clearInput,
-  validate: () => validateInput(inputValue.value),
-  getValue: () => inputValue.value,
-  setValue: (value: string) => {
-    inputValue.value = value;
-    emit('update:modelValue', value);
+// Validación de email
+const validateEmail = (email: string) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    // Emitir evento de validación si es necesario
+    console.warn('Email inválido:', email)
   }
-});
+}
 </script>
 
 <style scoped>
-.ubits-input-container {
-  @apply w-full;
+/* Importar tokens UBITS */
+@import '../styles/ubits-tokens.css';
+
+/* Grupo de input */
+.ubits-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
 }
 
-.ubits-input-label {
-  @apply block text-sm font-medium mb-2;
+/* Label */
+.ubits-input__label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--ubits-fg-1-high);
+  line-height: 1.4;
 }
 
-.ubits-input-mandatory {
-  @apply text-xs font-normal;
+.ubits-input__required {
+  color: var(--ubits-feedback-accent-error);
+  font-weight: 600;
+}
+
+.ubits-input__optional {
   color: var(--ubits-fg-1-medium);
+  font-size: 12px;
+  font-weight: 400;
 }
 
-.ubits-input-wrapper {
-  @apply relative flex items-center;
+/* Container del input */
+.ubits-input__container {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
+/* Input base */
 .ubits-input {
-  @apply w-full rounded-lg border transition-all duration-200;
-  background-color: var(--ubits-bg-1);
+  width: 100%;
+  border: 1px solid var(--ubits-border-1);
+  border-radius: var(--ubits-radius-sm);
+  background: var(--ubits-bg-1);
   color: var(--ubits-fg-1-high);
-  border-color: var(--ubits-border-1);
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+  outline: none;
 }
 
 .ubits-input:focus {
   border-color: var(--ubits-accent-brand);
-  outline: 2px solid var(--ubits-button-focus-ring);
-  outline-offset: 0;
+  box-shadow: 0 0 0 3px var(--ubits-button-focus-ring);
 }
 
-.ubits-input:disabled {
-  background-color: var(--ubits-bg-disabled);
-  color: var(--ubits-fg-disabled);
-  border-color: var(--ubits-border-disabled);
-  cursor: not-allowed;
+.ubits-input::placeholder {
+  color: var(--ubits-fg-1-medium);
 }
 
+/* Tamaños */
+.ubits-input--sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+.ubits-input--md {
+  height: 40px;
+  padding: 0 16px;
+  font-size: 16px;
+}
+
+.ubits-input--lg {
+  height: 48px;
+  padding: 0 20px;
+  font-size: 18px;
+}
+
+/* Ajustes de padding para iconos */
+.ubits-input__container--has-left-icon .ubits-input {
+  padding-left: 40px;
+}
+
+.ubits-input__container--has-right-icon .ubits-input {
+  padding-right: 40px;
+}
+
+.ubits-input__container--has-clear .ubits-input {
+  padding-right: 40px;
+}
+
+.ubits-input__container--has-toggle .ubits-input {
+  padding-right: 40px;
+}
+
+/* Textarea */
+.ubits-input[type="textarea"] {
+  min-height: 80px;
+  padding: 12px 16px;
+  resize: vertical;
+}
+
+/* Estados */
 .ubits-input--error {
   border-color: var(--ubits-feedback-accent-error);
 }
 
 .ubits-input--error:focus {
   border-color: var(--ubits-feedback-accent-error);
-  outline-color: var(--ubits-feedback-accent-error);
+  box-shadow: 0 0 0 3px var(--ubits-feedback-bg-error-subtle);
 }
 
-/* Tamaños */
-.ubits-input--sm {
-  @apply px-3 py-1.5 text-sm;
-}
-
-.ubits-input--md {
-  @apply px-4 py-2 text-base;
-}
-
-.ubits-input--lg {
-  @apply px-5 py-3 text-lg;
-}
-
-/* Iconos */
-.ubits-input-icon {
-  @apply absolute flex-shrink-0 pointer-events-none;
-  color: var(--ubits-fg-1-medium);
-}
-
-.ubits-input-icon--left {
-  @apply left-3;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.ubits-input-icon--right {
-  @apply right-3;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* Padding con iconos */
-.ubits-input-wrapper:has(.ubits-input-icon--left) .ubits-input {
-  padding-left: 2.5rem;
-}
-
-.ubits-input-wrapper:has(.ubits-input-icon--right) .ubits-input {
-  padding-right: 2.5rem;
-}
-
-/* Clear Button */
-.ubits-input-clear {
-  @apply absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full transition-all duration-200;
-  background-color: var(--ubits-bg-2);
-  color: var(--ubits-fg-1-medium);
-}
-
-.ubits-input-clear:hover {
-  background-color: var(--ubits-bg-3);
-  color: var(--ubits-fg-1-high);
-}
-
-/* Helper Text */
-.ubits-input-helper {
-  @apply flex justify-between items-center mt-1 text-sm;
-}
-
-.ubits-input-helper-text {
-  color: var(--ubits-fg-1-medium);
-}
-
-.ubits-input-counter {
-  color: var(--ubits-fg-1-medium);
-}
-
-.ubits-input-counter:has-text(over) {
-  color: var(--ubits-feedback-accent-error);
-  font-weight: 600;
-}
-
-/* Error Message */
-.ubits-input-error {
-  @apply mt-1 text-sm;
-  color: var(--ubits-feedback-accent-error);
-}
-
-/* Estados del wrapper */
-.ubits-input-wrapper--focused .ubits-input {
-  border-color: var(--ubits-accent-brand);
-  outline: 2px solid var(--ubits-button-focus-ring);
-  outline-offset: 0;
-}
-
-.ubits-input-wrapper--error .ubits-input {
-  border-color: var(--ubits-feedback-accent-error);
-}
-
-.ubits-input-wrapper--disabled .ubits-input {
-  background-color: var(--ubits-bg-disabled);
+.ubits-input--disabled {
+  background: var(--ubits-bg-disabled);
   color: var(--ubits-fg-disabled);
   border-color: var(--ubits-border-disabled);
   cursor: not-allowed;
 }
 
-.ubits-input-wrapper--hovered:not(.ubits-input-wrapper--disabled) .ubits-input {
-  border-color: var(--ubits-accent-brand);
+.ubits-input--readonly {
+  background: var(--ubits-bg-2);
+  cursor: default;
+}
+
+/* Iconos */
+.ubits-input__icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--ubits-fg-1-medium);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ubits-input__icon--left {
+  left: 12px;
+}
+
+.ubits-input__icon--right {
+  right: 12px;
+}
+
+/* Botones de acción */
+.ubits-input__clear,
+.ubits-input__toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: none;
+  color: var(--ubits-fg-1-medium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.ubits-input__clear:hover,
+.ubits-input__toggle:hover {
+  background: var(--ubits-bg-3);
+  color: var(--ubits-fg-1-high);
+}
+
+/* Helper text */
+.ubits-input__helper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.ubits-input__helper-text {
+  color: var(--ubits-fg-1-medium);
+}
+
+.ubits-input__counter {
+  color: var(--ubits-fg-1-medium);
+  font-weight: 500;
+}
+
+/* Error message */
+.ubits-input__error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ubits-feedback-fg-error-subtle);
+  line-height: 1.4;
+}
+
+.ubits-input__error i {
+  font-size: 14px;
+}
+
+/* Estados del grupo */
+.ubits-input-group--error .ubits-input__label {
+  color: var(--ubits-feedback-accent-error);
+}
+
+.ubits-input-group--disabled .ubits-input__label {
+  color: var(--ubits-fg-disabled);
+}
+
+.ubits-input-group--focused .ubits-input__label {
+  color: var(--ubits-accent-brand);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .ubits-input--sm {
-    @apply px-2 py-1 text-xs;
+    height: 28px;
+    padding: 0 10px;
+    font-size: 13px;
   }
   
   .ubits-input--md {
-    @apply px-3 py-1.5 text-sm;
+    height: 36px;
+    padding: 0 14px;
+    font-size: 15px;
   }
   
   .ubits-input--lg {
-    @apply px-4 py-2 text-base;
+    height: 44px;
+    padding: 0 18px;
+    font-size: 17px;
   }
 }
-</style>
 
+/* Modo oscuro */
+[data-theme="dark"] .ubits-input {
+  background: var(--ubits-bg-1);
+  color: var(--ubits-fg-1-high);
+  border-color: var(--ubits-border-1);
+}
+
+[data-theme="dark"] .ubits-input:focus {
+  border-color: var(--ubits-accent-brand);
+  box-shadow: 0 0 0 3px var(--ubits-button-focus-ring);
+}
+
+[data-theme="dark"] .ubits-input--readonly {
+  background: var(--ubits-bg-2);
+}
+
+/* Utilidades */
+.ubits-input-group--hidden {
+  display: none !important;
+}
+
+.ubits-input-group--visible {
+  display: flex !important;
+}
+</style>
