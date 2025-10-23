@@ -1,0 +1,145 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  # Job de validación para PR
+  validate-pr:
+    name: 🔍 Validar Pull Request
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: 📦 Instalar dependencias
+        run: npm ci
+        
+      - name: 🚪 Ejecutar GATES - Estructura
+        run: npm run gate:dir
+        
+      - name: 🚪 Ejecutar GATES - Variables de entorno
+        run: npm run gate:env
+        env:
+          VITE_CLARITY_PROJECT_ID: ${{ secrets.CLARITY_PROJECT_ID || 'demo_project_id' }}
+          VITE_N8N_FEEDBACK_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL || 'https://demo-webhook.com/feedback' }}
+          
+      - name: 🚪 Ejecutar GATES - Componentes
+        run: npm run gate:components
+        
+      - name: 🏗️ Construir proyecto
+        run: npm run build
+        
+      - name: 📊 Verificar build
+        run: |
+          echo "Verificando que dist/ se creó..."
+          ls -la dist/
+          echo "Verificando archivos principales..."
+          ls -la dist/ | grep -E "\.(html|js|css)$"
+          
+      - name: 🧪 Test de componentes
+        run: |
+          echo "Verificando que los componentes existen..."
+          test -f components/onboarding/onboarding.js || exit 1
+          test -f components/clarity/clarity.js || exit 1
+          test -f components/feedback/feedback.js || exit 1
+          echo "✅ Todos los componentes encontrados"
+
+  # Job de preview en Vercel
+  preview-vercel:
+    name: 🎭 Preview en Vercel
+    runs-on: ubuntu-latest
+    needs: validate-pr
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: 📦 Instalar dependencias
+        run: npm ci
+        
+      - name: 🏗️ Construir proyecto
+        run: npm run build
+        
+      - name: 🚀 Deploy Preview a Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prebuilt'
+        env:
+          VITE_CLARITY_PROJECT_ID: ${{ secrets.CLARITY_PROJECT_ID }}
+          VITE_N8N_FEEDBACK_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+
+  # Job de comentario en PR
+  comment-pr:
+    name: 💬 Comentar en PR
+    runs-on: ubuntu-latest
+    needs: [validate-pr, preview-vercel]
+    if: always()
+    
+    steps:
+      - name: 📝 Crear comentario
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('## 🚀 Preview Status')
+            );
+            
+            const status = '${{ needs.validate-pr.result }}' === 'success' ? '✅' : '❌';
+            const previewStatus = '${{ needs.preview-vercel.result }}' === 'success' ? '✅' : '❌';
+            
+            const commentBody = `## 🚀 Preview Status
+            
+            | Validación | Status |
+            |------------|--------|
+            | Build | ${status} |
+            | Preview | ${previewStatus} |
+            
+            ${previewStatus === '✅' ? '🎉 Preview disponible en Vercel' : '❌ Preview no disponible'}
+            
+            ---
+            *Actualizado automáticamente por GitHub Actions*`;
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: commentBody
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: commentBody
+              });
+            }

@@ -1,0 +1,241 @@
+name: Release Automation
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  # Job de validación para release
+  validate-release:
+    name: 🔍 Validar Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: 📦 Instalar dependencias
+        run: npm ci
+        
+      - name: 🚪 Ejecutar GATES - Estructura
+        run: npm run gate:dir
+        
+      - name: 🚪 Ejecutar GATES - Variables de entorno
+        run: npm run gate:env
+        env:
+          VITE_CLARITY_PROJECT_ID: ${{ secrets.CLARITY_PROJECT_ID || 'demo_project_id' }}
+          VITE_N8N_FEEDBACK_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL || 'https://demo-webhook.com/feedback' }}
+          
+      - name: 🚪 Ejecutar GATES - Componentes
+        run: npm run gate:components
+        
+      - name: 🚪 Ejecutar GATES - Deploy
+        run: npm run gate:deployment
+        
+      - name: 🏗️ Construir proyecto
+        run: npm run build
+        
+      - name: 📊 Verificar build
+        run: |
+          echo "Verificando que dist/ se creó..."
+          ls -la dist/
+          echo "Verificando archivos principales..."
+          ls -la dist/ | grep -E "\.(html|js|css)$"
+
+  # Job de crear release
+  create-release:
+    name: 🚀 Crear Release
+    runs-on: ubuntu-latest
+    needs: validate-release
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: 📦 Instalar dependencias
+        run: npm ci
+        
+      - name: 🏗️ Construir proyecto
+        run: npm run build
+        
+      - name: 📦 Crear archivo de release
+        run: |
+          # Crear archivo de release con todos los archivos necesarios
+          mkdir -p release
+          cp -r dist/* release/
+          cp -r components release/
+          cp -r templates release/
+          cp -r docs release/
+          cp package.json release/
+          cp README.md release/
+          cp env.example release/
+          
+          # Crear archivo de changelog
+          echo "# Changelog" > release/CHANGELOG.md
+          echo "" >> release/CHANGELOG.md
+          echo "## ${{ github.ref_name }}" >> release/CHANGELOG.md
+          echo "" >> release/CHANGELOG.md
+          echo "### ✨ Nuevas características" >> release/CHANGELOG.md
+          echo "- Sistema de onboarding modular" >> release/CHANGELOG.md
+          echo "- Integración de Microsoft Clarity" >> release/CHANGELOG.md
+          echo "- Sistema de feedback híbrido" >> release/CHANGELOG.md
+          echo "- Documentación completa" >> release/CHANGELOG.md
+          echo "" >> release/CHANGELOG.md
+          echo "### 🔧 Mejoras" >> release/CHANGELOG.md
+          echo "- Deploy automático con GitHub Actions" >> release/CHANGELOG.md
+          echo "- Sistema de GATES para validaciones" >> release/CHANGELOG.md
+          echo "- Templates de ejemplo funcionales" >> release/CHANGELOG.md
+          
+      - name: 📦 Crear archivo ZIP
+        run: |
+          cd release
+          zip -r ../prototipo-template-${{ github.ref_name }}.zip .
+          cd ..
+          
+      - name: 🚀 Crear Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            ## 🚀 Release ${{ github.ref_name }}
+            
+            ### ✨ Nuevas características
+            - Sistema de onboarding modular
+            - Integración de Microsoft Clarity
+            - Sistema de feedback híbrido
+            - Documentación completa
+            
+            ### 🔧 Mejoras
+            - Deploy automático con GitHub Actions
+            - Sistema de GATES para validaciones
+            - Templates de ejemplo funcionales
+            
+            ### 📦 Archivos incluidos
+            - `prototipo-template-${{ github.ref_name }}.zip` - Template completo
+            - `components/` - Componentes modulares
+            - `templates/` - Templates de ejemplo
+            - `docs/` - Documentación completa
+            
+            ### 🚀 Cómo usar
+            1. Descarga el archivo ZIP
+            2. Extrae en tu directorio de trabajo
+            3. Ejecuta `npm install`
+            4. Configura las variables de entorno
+            5. Ejecuta `npm run dev`
+            
+            ---
+            *Generado automáticamente por GitHub Actions*
+          files: |
+            prototipo-template-${{ github.ref_name }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Job de deploy a producción
+  deploy-production:
+    name: 🚀 Deploy a Producción
+    runs-on: ubuntu-latest
+    needs: [validate-release, create-release]
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: 📦 Instalar dependencias
+        run: npm ci
+        
+      - name: 🏗️ Construir proyecto
+        run: npm run build
+        env:
+          VITE_CLARITY_PROJECT_ID: ${{ secrets.CLARITY_PROJECT_ID }}
+          VITE_N8N_FEEDBACK_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+          
+      - name: 🚀 Deploy a Vercel (Producción)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+        env:
+          VITE_CLARITY_PROJECT_ID: ${{ secrets.CLARITY_PROJECT_ID }}
+          VITE_N8N_FEEDBACK_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+          
+      - name: 🚀 Deploy a Render (Producción)
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
+        env:
+          VITE_CLARITY_PROJECT_ID: ${{ secrets.CLARITY_PROJECT_ID }}
+          VITE_N8N_FEEDBACK_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+          
+      - name: 🚀 Deploy a GitHub Pages (Producción)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: ${{ secrets.CUSTOM_DOMAIN }}
+
+  # Job de notificaciones
+  notify-release:
+    name: 📢 Notificar Release
+    runs-on: ubuntu-latest
+    needs: [validate-release, create-release, deploy-production]
+    if: always()
+    
+    steps:
+      - name: 📊 Resumen del release
+        run: |
+          echo "## 🚀 Release Status" >> $GITHUB_STEP_SUMMARY
+          echo "| Componente | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Validación | ${{ needs.validate-release.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Release | ${{ needs.create-release.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Deploy | ${{ needs.deploy-production.result }} |" >> $GITHUB_STEP_SUMMARY
+          
+      - name: 🎉 Release exitoso
+        if: needs.validate-release.result == 'success' && needs.create-release.result == 'success'
+        run: |
+          echo "✅ Release ${{ github.ref_name }} creado exitosamente"
+          echo "🔗 URLs de producción:"
+          echo "- Vercel: https://tu-proyecto.vercel.app"
+          echo "- Render: https://tu-proyecto.onrender.com"
+          echo "- GitHub Pages: https://tu-usuario.github.io/tu-repositorio"
+          
+      - name: ❌ Release falló
+        if: needs.validate-release.result == 'failure' || needs.create-release.result == 'failure'
+        run: |
+          echo "❌ Release falló"
+          echo "Revisa los logs para más detalles"

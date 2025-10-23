@@ -1,0 +1,53 @@
+name: 'Setup Prototipo Template'
+description: 'Configura el entorno para el template de prototipo'
+
+inputs:
+  node-version:
+    description: 'Versión de Node.js a usar'
+    required: false
+    default: '18'
+  
+  cache-key:
+    description: 'Clave para el cache de npm'
+    required: false
+    default: 'npm'
+
+outputs:
+  cache-hit:
+    description: 'Indica si el cache fue encontrado'
+    value: ${{ steps.cache.outputs.cache-hit }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 📥 Checkout código
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: ${{ inputs.cache-key }}
+        
+    - name: 📦 Instalar dependencias
+      shell: bash
+      run: npm ci
+      
+    - name: 🚪 Ejecutar GATES - Estructura
+      shell: bash
+      run: npm run gate:dir
+      
+    - name: 🚪 Ejecutar GATES - Variables de entorno
+      shell: bash
+      run: npm run gate:env
+      env:
+        VITE_CLARITY_PROJECT_ID: ${{ env.CLARITY_PROJECT_ID || 'demo_project_id' }}
+        VITE_N8N_FEEDBACK_WEBHOOK_URL: ${{ env.N8N_WEBHOOK_URL || 'https://demo-webhook.com/feedback' }}
+        
+    - name: 🚪 Ejecutar GATES - Componentes
+      shell: bash
+      run: npm run gate:components
+        
+    - name: 🚪 Ejecutar GATES - Deploy
+      shell: bash
+      run: npm run gate:deployment
