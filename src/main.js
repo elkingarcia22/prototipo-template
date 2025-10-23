@@ -16,11 +16,11 @@ const app = createApp({
       currentTheme: 'light',
       
       // Configuración
-      logoUrl: '/images/Ubits-logo.svg',
+      logoUrl: './images/Ubits-logo.svg',
       logoAlt: 'UBITS Logo',
       brandText: 'UBITS',
       showBrandText: true,
-      userAvatar: '/images/Profile-image.jpg',
+      userAvatar: './images/Profile-image.jpg',
       userName: 'Usuario',
       showUserName: true,
       
