@@ -145,6 +145,48 @@
             color: #0c5bef; /* Azul UBITS en active */
         }
         
+        /* Comportamiento regular/solid del playground UBITS */
+        .nav-button i {
+            font-weight: 400; /* Regular por defecto */
+        }
+        
+        .nav-button.active i {
+            font-weight: 900; /* Solid cuando está activo */
+        }
+        
+        /* Cambiar a solid cuando está activo */
+        .nav-button.active i.fa-graduation-cap::before {
+            content: "\f19d"; /* Solid graduation cap */
+        }
+        
+        .nav-button.active i.fa-chart-line::before {
+            content: "\f201"; /* Solid chart line */
+        }
+        
+        .nav-button.active i.fa-chart-bar::before {
+            content: "\f080"; /* Solid chart bar */
+        }
+        
+        .nav-button.active i.fa-clipboard::before {
+            content: "\f328"; /* Solid clipboard */
+        }
+        
+        .nav-button.active i.fa-users::before {
+            content: "\f0c0"; /* Solid users */
+        }
+        
+        .nav-button.active i.fa-layer-group::before {
+            content: "\f5fd"; /* Solid layer group */
+        }
+        
+        .nav-button.active i.fa-sparkles::before {
+            content: "\f890"; /* Solid sparkles */
+        }
+        
+        .nav-button.active i.fa-moon::before {
+            content: "\f186"; /* Solid moon */
+        }
+        
         .sidebar-footer {
             display: flex;
             flex-direction: column;
@@ -712,25 +754,25 @@
                         <!-- Body -->
                         <div class="sidebar-body">
                             <button class="nav-button" data-section="aprendizaje" data-tooltip="Aprendizaje" onclick="return false;">
-                                <i class="fas fa-graduation-cap"></i>
+                                <i class="far fa-graduation-cap"></i>
                             </button>
                             <button class="nav-button" data-section="diagnóstico" data-tooltip="Diagnóstico" onclick="return false;">
-                                <i class="fas fa-chart-line"></i>
+                                <i class="far fa-chart-line"></i>
                             </button>
                             <button class="nav-button" data-section="desempeño" data-tooltip="Desempeño" onclick="return false;">
-                                <i class="fas fa-chart-bar"></i>
+                                <i class="far fa-chart-bar"></i>
                             </button>
                             <button class="nav-button" data-section="encuestas" data-tooltip="Encuestas" onclick="window.location.href='encuestas.html'" style="cursor: pointer;">
-                                <i class="fas fa-clipboard"></i>
+                                <i class="far fa-clipboard"></i>
                             </button>
                             <button class="nav-button" data-section="reclutamiento" data-tooltip="Reclutamiento" onclick="return false;">
-                                <i class="fas fa-users"></i>
+                                <i class="far fa-users"></i>
                             </button>
                             <button class="nav-button" data-section="tareas" data-tooltip="Tareas" onclick="return false;">
-                                <i class="fas fa-tasks"></i>
+                                <i class="far fa-layer-group"></i>
                             </button>
                             <button class="nav-button" data-section="ubits-ai" data-tooltip="UBITS AI" onclick="return false;">
-                                <i class="fas fa-magic"></i>
+                                <i class="far fa-sparkles"></i>
                             </button>
                         </div>
                     </div>
@@ -743,11 +785,39 @@
                             </div>
                         </div>
                         <button class="nav-button" id="darkmode-toggle-playground" data-tooltip="Modo oscuro" data-theme="light" onclick="return false;">
-                            <i class="fas fa-moon"></i>
+                            <i class="far fa-moon"></i>
                         </button>
                     </div>
                 </aside>
             `;
+            
+            // Agregar comportamiento de selección como en el playground UBITS
+            setTimeout(() => {
+                const sidebar = document.getElementById('playground-sidebar');
+                if (sidebar) {
+                    const navButtons = sidebar.querySelectorAll('.nav-button');
+                    
+                    navButtons.forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            
+                            // Remover clase active de todos los botones
+                            navButtons.forEach(btn => btn.classList.remove('active'));
+                            
+                            // Agregar clase active al botón clickeado
+                            this.classList.add('active');
+                            
+                            console.log('🎯 Botón seleccionado:', this.dataset.section);
+                        });
+                    });
+                    
+                    // Simular selección inicial (como en el playground)
+                    const firstButton = navButtons[0];
+                    if (firstButton) {
+                        firstButton.classList.add('active');
+                    }
+                }
+            }, 100);
         }
         
         // Función para crear sidebar del template
