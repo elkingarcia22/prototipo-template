@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBITS Theme System Showcase - Modo Oscuro/Claro</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Estilos UBITS -->
+    <link rel="stylesheet" href="../styles/ubits-tokens.css">
+    <link rel="stylesheet" href="../styles/globals.css">
+    
+    <style>
+        .showcase-container {
+            background: var(--ubits-bg-1);
+            color: var(--ubits-fg-1-high);
+            min-height: 100vh;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .showcase-header {
+            background: var(--ubits-bg-1);
+            border-bottom: 1px solid var(--ubits-border-1);
+            color: var(--ubits-fg-1-high);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .showcase-section {
+            background: var(--ubits-bg-1);
+            border: 1px solid var(--ubits-border-1);
+            color: var(--ubits-fg-1-high);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .showcase-title {
+            color: var(--ubits-fg-1-high);
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .showcase-subtitle {
+            color: var(--ubits-fg-1-medium);
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .theme-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--ubits-accent-brand);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--ubits-radius-sm);
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-demo {
+            background: var(--ubits-bg-2);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-md);
+            padding: var(--ubits-space-4);
+            margin: var(--ubits-space-4) 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .theme-button {
+            background: var(--ubits-accent-brand);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--ubits-radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theme-button:hover {
+            background: var(--ubits-button-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--ubits-shadow-lg);
+        }
+        
+        .theme-button:active {
+            transform: translateY(0);
+        }
+        
+        .component-demo {
+            background: var(--ubits-bg-1);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-md);
+            padding: 20px;
+            margin: 16px 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .demo-sidebar {
+            background: var(--ubits-sidebar-bg);
+            border: 1px solid var(--ubits-sidebar-button-fg-default);
+            border-radius: var(--ubits-radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .demo-button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            border-radius: var(--ubits-radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .demo-button:hover {
+            background: var(--ubits-sidebar-button-bg-pressed);
+        }
+        
+        .demo-button i {
+            font-size: 18px;
+            color: var(--ubits-sidebar-button-fg-default);
+            transition: color 0.2s ease;
+        }
+        
+        .demo-button:hover i {
+            color: var(--ubits-sidebar-button-fg-hover);
+        }
+        
+        .theme-toggle-button {
+            background: var(--ubits-sidebar-button-bg-active);
+            color: var(--ubits-sidebar-button-fg-active);
+        }
+        
+        .theme-toggle-button:hover {
+            background: var(--ubits-sidebar-button-bg-pressed);
+        }
+        
+        .theme-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: var(--ubits-bg-2);
+            border: 1px solid var(--ubits-border-1);
+            border-radius: var(--ubits-radius-md);
+            padding: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--ubits-shadow-md);
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+        
+        .feature-icon--success {
+            background: var(--ubits-feedback-bg-success-subtle);
+            color: var(--ubits-feedback-accent-success);
+        }
+        
+        .feature-icon--info {
+            background: var(--ubits-feedback-bg-info-subtle);
+            color: var(--ubits-feedback-accent-info);
+        }
+        
+        .feature-icon--warning {
+            background: var(--ubits-feedback-bg-warning-subtle);
+            color: var(--ubits-feedback-accent-warning);
+        }
+        
+        .feature-icon--error {
+            background: var(--ubits-feedback-bg-error-subtle);
+            color: var(--ubits-feedback-accent-error);
+        }
+        
+        .theme-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Animaciones de tema */
+        @keyframes themeSwitch {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .theme-switching {
+            animation: themeSwitch 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body class="showcase-container" x-data="themeShowcase()">
+    <!-- Theme Indicator -->
+    <div class="theme-indicator" x-text="`${currentTheme.toUpperCase()} (${isDark ? 'Oscuro' : 'Claro'})`"></div>
+
+    <!-- Header -->
+    <header class="showcase-header shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-semibold showcase-title">UBITS Theme System</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Theme Toggle Button -->
+                    <button 
+                        @click="toggleTheme()"
+                        class="theme-button"
+                        :title="isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+                    >
+                        <i :class="isDark ? 'fa-sun' : 'fa-moon'" class="mr-2"></i>
+                        {{ isDark ? 'Modo Claro' : 'Modo Oscuro' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold showcase-title mb-4">
+                Sistema de Tema UBITS
+            </h2>
+            <p class="text-xl showcase-subtitle mb-8">
+                Modo oscuro/claro con tokens y componentes adaptativos
+            </p>
+            
+            <!-- Theme Status -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div class="flex items-center justify-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <i :class="isDark ? 'fas fa-moon' : 'fas fa-sun'" class="text-blue-600"></i>
+                        <span class="font-medium text-blue-800">Tema: {{ currentTheme }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-palette text-blue-600"></i>
+                        <span class="font-medium text-blue-800">Tokens: {{ isDark ? 'Oscuros' : 'Claros' }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-save text-blue-600"></i>
+                        <span class="font-medium text-blue-800">Persistencia: {{ themePersisted ? 'Guardado' : 'No guardado' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme Demo Container -->
+        <div class="showcase-section p-8 rounded-lg mb-8">
+            <h3 class="text-2xl font-bold showcase-title mb-6">Demo de Tema</h3>
+            
+            <!-- Component Demo -->
+            <div class="theme-demo">
+                <h4 class="text-lg font-semibold showcase-title mb-4">Componentes con Tema</h4>
+                
+                <!-- Sidebar Demo -->
+                <div class="component-demo">
+                    <h5 class="text-md font-semibold showcase-title mb-3">Sidebar con Toggle de Tema</h5>
+                    <div class="demo-sidebar">
+                        <!-- Logo -->
+                        <div class="mb-2">
+                            <img src="/images/Ubits-logo.svg" alt="UBITS" style="width: 40px; height: 40px;" />
+                        </div>
+                        
+                        <!-- Nav Buttons -->
+                        <button class="demo-button">
+                            <i class="far fa-graduation-cap"></i>
+                        </button>
+                        <button class="demo-button">
+                            <i class="far fa-chart-mixed"></i>
+                        </button>
+                        <button class="demo-button">
+                            <i class="far fa-bars-progress"></i>
+                        </button>
+                        
+                        <!-- Theme Toggle Button -->
+                        <button 
+                            class="demo-button theme-toggle-button"
+                            @click="toggleTheme()"
+                            :title="isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+                        >
+                            <i :class="isDark ? 'fa-sun' : 'fa-moon'"></i>
+                        </button>
+                        
+                        <!-- User Avatar -->
+                        <div class="mt-2">
+                            <img src="/images/Profile-image.jpg" alt="User" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TabBar Demo -->
+                <div class="component-demo">
+                    <h5 class="text-md font-semibold showcase-title mb-3">TabBar con Toggle de Tema</h5>
+                    <div style="display: flex; justify-content: space-around; align-items: center; background: var(--ubits-sidebar-bg); border: 1px solid var(--ubits-sidebar-button-fg-default); border-radius: var(--ubits-radius-md); padding: 12px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 4px 8px; border-radius: 8px; min-width: 60px; flex: 1; max-width: 120px;">
+                            <i class="far fa-grid-2" style="font-size: 20px; color: var(--ubits-sidebar-button-fg-default); margin-bottom: 2px;"></i>
+                            <span style="font-size: 12px; color: var(--ubits-sidebar-button-fg-default);">Módulos</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 4px 8px; border-radius: 8px; min-width: 60px; flex: 1; max-width: 120px;">
+                            <img src="/images/Profile-image.jpg" alt="User" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; margin-bottom: 2px;" />
+                            <span style="font-size: 12px; color: var(--ubits-sidebar-button-fg-default);">Mi perfil</span>
+                        </div>
+                        <div 
+                            style="display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 4px 8px; border-radius: 8px; min-width: 60px; flex: 1; max-width: 120px;"
+                            @click="toggleTheme()"
+                        >
+                            <i :class="isDark ? 'fa-sun' : 'fa-moon'" style="font-size: 20px; color: var(--ubits-sidebar-button-fg-default); margin-bottom: 2px;"></i>
+                            <span style="font-size: 12px; color: var(--ubits-sidebar-button-fg-default);">{{ isDark ? 'Modo claro' : 'Modo oscuro' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme Features -->
+        <div class="showcase-section p-8 rounded-lg mb-8">
+            <h3 class="text-2xl font-bold showcase-title mb-6">Características del Sistema de Tema</h3>
+            
+            <div class="theme-features">
+                <!-- Automatic Theme Detection -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon--success">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold showcase-title mb-2">Detección Automática</h4>
+                    <p class="showcase-subtitle text-sm">
+                        Detecta automáticamente la preferencia del sistema y aplica el tema correspondiente.
+                    </p>
+                </div>
+
+                <!-- Persistence -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon--info">
+                        <i class="fas fa-save"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold showcase-title mb-2">Persistencia</h4>
+                    <p class="showcase-subtitle text-sm">
+                        Guarda la preferencia del usuario en localStorage para mantener el tema entre sesiones.
+                    </p>
+                </div>
+
+                <!-- Smooth Transitions -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon--warning">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold showcase-title mb-2">Transiciones Suaves</h4>
+                    <p class="showcase-subtitle text-sm">
+                        Transiciones animadas entre temas para una experiencia fluida y profesional.
+                    </p>
+                </div>
+
+                <!-- Token System -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon--error">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold showcase-title mb-2">Sistema de Tokens</h4>
+                    <p class="showcase-subtitle text-sm">
+                        Utiliza tokens UBITS oficiales que se adaptan automáticamente al tema seleccionado.
+                    </p>
+                </div>
+
+                <!-- Component Integration -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon--success">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold showcase-title mb-2">Integración de Componentes</h4>
+                    <p class="showcase-subtitle text-sm">
+                        Todos los componentes UBITS se adaptan automáticamente al tema sin configuración adicional.
+                    </p>
+                </div>
+
+                <!-- Vue.js Integration -->
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon--info">
+                        <i class="fab fa-vuejs"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold showcase-title mb-2">Integración Vue.js</h4>
+                    <p class="showcase-subtitle text-sm">
+                        Hook useTheme() para integración reactiva con Vue.js 3 y TypeScript.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme Controls -->
+        <div class="showcase-section p-8 rounded-lg mb-8">
+            <h3 class="text-2xl font-bold showcase-title mb-6">Controles de Tema</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Toggle Theme -->
+                <div class="component-demo">
+                    <h4 class="text-lg font-semibold showcase-title mb-3">Alternar Tema</h4>
+                    <button @click="toggleTheme()" class="theme-button w-full">
+                        <i :class="isDark ? 'fa-sun' : 'fa-moon'" class="mr-2"></i>
+                        {{ isDark ? 'Cambiar a Claro' : 'Cambiar a Oscuro' }}
+                    </button>
+                </div>
+
+                <!-- Set Light Theme -->
+                <div class="component-demo">
+                    <h4 class="text-lg font-semibold showcase-title mb-3">Tema Claro</h4>
+                    <button @click="setTheme('light')" class="theme-button w-full">
+                        <i class="fa-sun mr-2"></i>
+                        Activar Modo Claro
+                    </button>
+                </div>
+
+                <!-- Set Dark Theme -->
+                <div class="component-demo">
+                    <h4 class="text-lg font-semibold showcase-title mb-3">Tema Oscuro</h4>
+                    <button @click="setTheme('dark')" class="theme-button w-full">
+                        <i class="fa-moon mr-2"></i>
+                        Activar Modo Oscuro
+                    </button>
+                </div>
+
+                <!-- Reset to System -->
+                <div class="component-demo">
+                    <h4 class="text-lg font-semibold showcase-title mb-3">Resetear al Sistema</h4>
+                    <button @click="resetToSystemTheme()" class="theme-button w-full">
+                        <i class="fas fa-undo mr-2"></i>
+                        Usar Tema del Sistema
+                    </button>
+                </div>
+
+                <!-- Clear Storage -->
+                <div class="component-demo">
+                    <h4 class="text-lg font-semibold showcase-title mb-3">Limpiar Preferencia</h4>
+                    <button @click="clearStoredTheme()" class="theme-button w-full">
+                        <i class="fas fa-trash mr-2"></i>
+                        Limpiar Preferencia
+                    </button>
+                </div>
+
+                <!-- Theme Info -->
+                <div class="component-demo">
+                    <h4 class="text-lg font-semibold showcase-title mb-3">Información del Tema</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="showcase-subtitle">Tema actual:</span>
+                            <span class="font-semibold showcase-title">{{ currentTheme }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="showcase-subtitle">Persistencia:</span>
+                            <span class="font-semibold showcase-title">{{ themePersisted ? 'Sí' : 'No' }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="showcase-subtitle">Sistema:</span>
+                            <span class="font-semibold showcase-title">{{ systemTheme }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="showcase-header border-t mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center">
+                <p class="showcase-subtitle">
+                    🌙 UBITS Theme System - Modo Oscuro/Claro Automático
+                </p>
+                <p class="text-sm showcase-subtitle mt-2">
+                    Tema: {{ currentTheme }} | Persistencia: {{ themePersisted ? 'Guardado' : 'No guardado' }} | Sistema: {{ systemTheme }}
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Data -->
+    <script>
+        function themeShowcase() {
+            return {
+                // Theme
+                currentTheme: 'light',
+                isDark: false,
+                themePersisted: false,
+                systemTheme: 'light',
+                
+                // Methods
+                init() {
+                    // Cargar tema guardado
+                    const savedTheme = localStorage.getItem('ubits-theme');
+                    if (savedTheme === 'dark' || savedTheme === 'light') {
+                        this.currentTheme = savedTheme;
+                        this.isDark = savedTheme === 'dark';
+                        this.themePersisted = true;
+                        this.applyTheme(savedTheme);
+                    } else {
+                        // Usar tema del sistema
+                        this.systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                        this.currentTheme = this.systemTheme;
+                        this.isDark = this.systemTheme === 'dark';
+                        this.applyTheme(this.systemTheme);
+                    }
+                    
+                    // Escuchar cambios en la preferencia del sistema
+                    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                        this.systemTheme = e.matches ? 'dark' : 'light';
+                        if (!this.themePersisted) {
+                            this.currentTheme = this.systemTheme;
+                            this.isDark = this.systemTheme === 'dark';
+                            this.applyTheme(this.systemTheme);
+                        }
+                    });
+                },
+                
+                setTheme(theme, save = true) {
+                    this.currentTheme = theme;
+                    this.isDark = theme === 'dark';
+                    
+                    this.applyTheme(theme);
+                    
+                    if (save) {
+                        localStorage.setItem('ubits-theme', theme);
+                        this.themePersisted = true;
+                    } else {
+                        localStorage.removeItem('ubits-theme');
+                        this.themePersisted = false;
+                    }
+                },
+                
+                toggleTheme() {
+                    const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+                    this.setTheme(newTheme);
+                },
+                
+                applyTheme(theme) {
+                    const root = document.documentElement;
+                    root.classList.remove('light', 'dark');
+                    root.classList.add(theme);
+                    root.setAttribute('data-theme', theme);
+                    document.body.setAttribute('data-theme', theme);
+                    
+                    // Agregar clase de transición
+                    root.classList.add('theme-switching');
+                    setTimeout(() => {
+                        root.classList.remove('theme-switching');
+                    }, 400);
+                },
+                
+                resetToSystemTheme() {
+                    this.systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                    this.setTheme(this.systemTheme, false);
+                },
+                
+                clearStoredTheme() {
+                    localStorage.removeItem('ubits-theme');
+                    this.themePersisted = false;
+                    this.resetToSystemTheme();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

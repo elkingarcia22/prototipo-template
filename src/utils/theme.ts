@@ -1,89 +1,124 @@
 /**
- * UBITS Theme System - Prototipo Template
- * Sistema de temas automático con tokens UBITS
- * Compatible con Vite + Tailwind + Alpine.js
+ * UBITS Theme System - Sistema de Tema Global
+ * Sistema de modo oscuro/claro adaptado del playground UBITS
  */
 
-export interface ThemeConfig {
-  current: 'light' | 'dark';
-  auto: boolean;
-  storageKey: string;
-  classAttribute: string;
+export type Theme = 'light' | 'dark';
+
+export interface ThemeState {
+  currentTheme: Theme;
+  isDark: boolean;
+  isLight: boolean;
 }
 
-export class UBITSTheme {
+export interface ThemeConfig {
+  onThemeChange?: (theme: Theme) => void;
+  onThemeToggle?: (newTheme: Theme) => void;
+  persistTheme?: boolean;
+  storageKey?: string;
+}
+
+/**
+ * Clase principal del sistema de tema UBITS
+ */
+export class UBITSThemeSystem {
+  private state: ThemeState;
   private config: ThemeConfig;
-  private mediaQuery: MediaQueryList;
-  private storage: Storage;
+  private listeners: Array<() => void> = [];
 
-  constructor(config: Partial<ThemeConfig> = {}) {
+  constructor(config: ThemeConfig = {}) {
     this.config = {
-      current: 'light',
-      auto: true,
+      persistTheme: true,
       storageKey: 'ubits-theme',
-      classAttribute: 'data-theme',
-      ...config
+      ...config,
     };
 
-    this.storage = typeof window !== 'undefined' ? localStorage : {
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {}
-    };
-
-    this.mediaQuery = typeof window !== 'undefined' 
-      ? window.matchMedia('(prefers-color-scheme: dark)')
-      : { matches: false, addEventListener: () => {}, removeEventListener: () => {} };
-
-    this.init();
+    this.state = this.getInitialState();
+    this.setupEventListeners();
   }
 
   /**
-   * Inicializar el sistema de temas
+   * Obtener estado inicial del tema
    */
-  private init(): void {
+  private getInitialState(): ThemeState {
+    const savedTheme = this.getStoredTheme();
+    const systemTheme = this.getSystemTheme();
+    const currentTheme = savedTheme || systemTheme;
+    
+    return {
+      currentTheme,
+      isDark: currentTheme === 'dark',
+      isLight: currentTheme === 'light',
+    };
+  }
+
+  /**
+   * Obtener tema guardado en localStorage
+   */
+  private getStoredTheme(): Theme | null {
+    if (!this.config.persistTheme) return null;
+    
+    try {
+      const stored = localStorage.getItem(this.config.storageKey!);
+      return stored === 'light' || stored === 'dark' ? stored : null;
+    } catch (error) {
+      console.warn('Error reading theme from localStorage:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Obtener tema del sistema
+   */
+  private getSystemTheme(): Theme {
+    if (typeof window === 'undefined') return 'light';
+    
+    try {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch (error) {
+      console.warn('Error detecting system theme:', error);
+      return 'light';
+    }
+  }
+
+  /**
+   * Configurar event listeners
+   */
+  private setupEventListeners(): void {
     if (typeof window === 'undefined') return;
 
-    // Cargar tema guardado
-    this.loadSavedTheme();
+    // Escuchar cambios en la preferencia del sistema
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      // Solo cambiar si no hay tema guardado
+      if (!this.getStoredTheme()) {
+        const newTheme = e.matches ? 'dark' : 'light';
+        this.setTheme(newTheme, false); // No guardar automáticamente
+      }
+    };
 
-    // Configurar listener para cambios de preferencia del sistema
-    if (this.config.auto) {
-      this.mediaQuery.addEventListener('change', this.handleSystemThemeChange.bind(this));
+    // Agregar listener
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleSystemThemeChange);
+    } else {
+      // Fallback para navegadores antiguos
+      mediaQuery.addListener(handleSystemThemeChange);
     }
 
-    // Aplicar tema inicial
-    this.applyTheme(this.config.current);
+    // Cleanup function
+    this.listeners.push(() => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleSystemThemeChange);
+      } else {
+        mediaQuery.removeListener(handleSystemThemeChange);
+      }
+    });
   }
 
   /**
-   * Cargar tema guardado desde localStorage
+   * Aplicar tema al DOM
    */
-  private loadSavedTheme(): void {
-    const savedTheme = this.storage.getItem(this.config.storageKey);
-    
-    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-      this.config.current = savedTheme;
-    } else if (this.config.auto) {
-      // Usar preferencia del sistema
-      this.config.current = this.mediaQuery.matches ? 'dark' : 'light';
-    }
-  }
-
-  /**
-   * Manejar cambios en la preferencia del sistema
-   */
-  private handleSystemThemeChange(event: MediaQueryListEvent): void {
-    if (this.config.auto) {
-      const newTheme = event.matches ? 'dark' : 'light';
-      this.setTheme(newTheme, false); // false = no guardar en localStorage
-    }
-  }
-
-  /**
-   * Aplicar tema al documento
-   */
-  private applyTheme(theme: 'light' | 'dark'): void {
+  private applyTheme(theme: Theme): void {
     if (typeof document === 'undefined') return;
 
     const root = document.documentElement;
@@ -95,37 +130,77 @@ export class UBITSTheme {
     root.classList.add(theme);
     
     // Establecer atributo data-theme
-    root.setAttribute(this.config.classAttribute, theme);
+    root.setAttribute('data-theme', theme);
     
-    // Emitir evento personalizado
-    this.dispatchThemeChange(theme);
+    // Establecer atributo en body también
+    document.body.setAttribute('data-theme', theme);
   }
 
   /**
-   * Emitir evento de cambio de tema
+   * Guardar tema en localStorage
    */
-  private dispatchThemeChange(theme: 'light' | 'dark'): void {
-    if (typeof window === 'undefined') return;
-
-    const event = new CustomEvent('ubits-theme-change', {
-      detail: { theme, timestamp: Date.now() }
-    });
+  private saveTheme(theme: Theme): void {
+    if (!this.config.persistTheme) return;
     
-    window.dispatchEvent(event);
+    try {
+      localStorage.setItem(this.config.storageKey!, theme);
+    } catch (error) {
+      console.warn('Error saving theme to localStorage:', error);
+    }
   }
 
   /**
-   * Establecer tema
+   * Obtener estado actual del tema
    */
-  public setTheme(theme: 'light' | 'dark', save: boolean = true): void {
-    this.config.current = theme;
+  public getState(): ThemeState {
+    return { ...this.state };
+  }
+
+  /**
+   * Obtener tema actual
+   */
+  public getCurrentTheme(): Theme {
+    return this.state.currentTheme;
+  }
+
+  /**
+   * Verificar si está en modo oscuro
+   */
+  public isDarkMode(): boolean {
+    return this.state.isDark;
+  }
+
+  /**
+   * Verificar si está en modo claro
+   */
+  public isLightMode(): boolean {
+    return this.state.isLight;
+  }
+
+  /**
+   * Establecer tema específico
+   */
+  public setTheme(theme: Theme, save: boolean = true): void {
+    const previousTheme = this.state.currentTheme;
     
-    // Aplicar tema
+    // Actualizar estado
+    this.state = {
+      currentTheme: theme,
+      isDark: theme === 'dark',
+      isLight: theme === 'light',
+    };
+    
+    // Aplicar tema al DOM
     this.applyTheme(theme);
     
-    // Guardar en localStorage si se solicita
+    // Guardar si se solicita
     if (save) {
-      this.storage.setItem(this.config.storageKey, theme);
+      this.saveTheme(theme);
+    }
+    
+    // Notificar cambios
+    if (previousTheme !== theme) {
+      this.config.onThemeChange?.(theme);
     }
   }
 
@@ -133,214 +208,136 @@ export class UBITSTheme {
    * Alternar entre tema claro y oscuro
    */
   public toggleTheme(): void {
-    const newTheme = this.config.current === 'light' ? 'dark' : 'light';
+    const newTheme: Theme = this.state.isDark ? 'light' : 'dark';
     this.setTheme(newTheme);
+    this.config.onThemeToggle?.(newTheme);
   }
 
   /**
-   * Obtener tema actual
+   * Resetear tema al del sistema
    */
-  public getCurrentTheme(): 'light' | 'dark' {
-    return this.config.current;
+  public resetToSystemTheme(): void {
+    const systemTheme = this.getSystemTheme();
+    this.setTheme(systemTheme);
   }
 
   /**
-   * Verificar si el tema es oscuro
+   * Limpiar preferencia guardada
    */
-  public isDark(): boolean {
-    return this.config.current === 'dark';
-  }
-
-  /**
-   * Verificar si el tema es claro
-   */
-  public isLight(): boolean {
-    return this.config.current === 'light';
-  }
-
-  /**
-   * Habilitar/deshabilitar modo automático
-   */
-  public setAutoMode(enabled: boolean): void {
-    this.config.auto = enabled;
+  public clearStoredTheme(): void {
+    if (!this.config.persistTheme) return;
     
-    if (enabled) {
-      this.mediaQuery.addEventListener('change', this.handleSystemThemeChange.bind(this));
-    } else {
-      this.mediaQuery.removeEventListener('change', this.handleSystemThemeChange.bind(this));
+    try {
+      localStorage.removeItem(this.config.storageKey!);
+    } catch (error) {
+      console.warn('Error clearing theme from localStorage:', error);
     }
   }
 
   /**
-   * Obtener configuración actual
-   */
-  public getConfig(): ThemeConfig {
-    return { ...this.config };
-  }
-
-  /**
-   * Resetear a tema por defecto
-   */
-  public reset(): void {
-    this.storage.removeItem(this.config.storageKey);
-    this.config.current = 'light';
-    this.applyTheme('light');
-  }
-
-  /**
-   * Destruir instancia y limpiar listeners
+   * Limpiar recursos
    */
   public destroy(): void {
-    if (typeof window !== 'undefined') {
-      this.mediaQuery.removeEventListener('change', this.handleSystemThemeChange.bind(this));
-    }
+    this.listeners.forEach(cleanup => cleanup());
+    this.listeners = [];
   }
 }
 
 /**
- * Instancia global del sistema de temas
+ * Hook de Vue.js para usar el sistema de tema
  */
-export const ubitsTheme = new UBITSTheme();
+export function useTheme(config?: ThemeConfig) {
+  const { ref, onMounted, onUnmounted } = require('vue');
+  
+  const themeSystem = new UBITSThemeSystem(config);
+  const state = ref<ThemeState>(themeSystem.getState());
 
-/**
- * Hook para Alpine.js
- */
-export function useUBITSTheme() {
+  // Actualizar estado reactivo
+  const updateState = () => {
+    state.value = themeSystem.getState();
+  };
+
+  onMounted(() => {
+    themeSystem.config.onThemeChange = updateState;
+  });
+
+  onUnmounted(() => {
+    themeSystem.destroy();
+  });
+
   return {
-    theme: ubitsTheme,
-    
-    // Métodos para usar en Alpine.js
-    toggleTheme: () => ubitsTheme.toggleTheme(),
-    setTheme: (theme: 'light' | 'dark') => ubitsTheme.setTheme(theme),
-    isDark: () => ubitsTheme.isDark(),
-    isLight: () => ubitsTheme.isLight(),
-    
-    // Estado reactivo
-    get currentTheme() {
-      return ubitsTheme.getCurrentTheme();
-    },
-    
-    get isDarkMode() {
-      return ubitsTheme.isDark();
-    },
-    
-    get isLightMode() {
-      return ubitsTheme.isLight();
-    }
+    state: state.value,
+    currentTheme: themeSystem.getCurrentTheme(),
+    isDark: themeSystem.isDarkMode(),
+    isLight: themeSystem.isLightMode(),
+    setTheme: themeSystem.setTheme.bind(themeSystem),
+    toggleTheme: themeSystem.toggleTheme.bind(themeSystem),
+    resetToSystemTheme: themeSystem.resetToSystemTheme.bind(themeSystem),
+    clearStoredTheme: themeSystem.clearStoredTheme.bind(themeSystem),
   };
 }
 
 /**
- * Utilidades para componentes
+ * Utilidades de tema estáticas
  */
-export const themeUtils = {
+export const ThemeUtils = {
   /**
-   * Obtener token de color UBITS
+   * Obtener tema actual sin instancia
    */
-  getToken: (token: string): string => {
-    if (typeof window === 'undefined') return '';
+  getCurrentTheme(): Theme {
+    if (typeof document === 'undefined') return 'light';
     
     const root = document.documentElement;
-    const computedStyle = getComputedStyle(root);
-    return computedStyle.getPropertyValue(`--ubits-${token}`).trim();
+    const dataTheme = root.getAttribute('data-theme');
+    
+    if (dataTheme === 'light' || dataTheme === 'dark') {
+      return dataTheme;
+    }
+    
+    // Fallback a preferencia del sistema
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    
+    return 'light';
   },
 
   /**
-   * Establecer token de color UBITS
+   * Verificar si está en modo oscuro
    */
-  setToken: (token: string, value: string): void => {
+  isDarkMode(): boolean {
+    return this.getCurrentTheme() === 'dark';
+  },
+
+  /**
+   * Verificar si está en modo claro
+   */
+  isLightMode(): boolean {
+    return this.getCurrentTheme() === 'light';
+  },
+
+  /**
+   * Aplicar tema directamente
+   */
+  applyTheme(theme: Theme): void {
     if (typeof document === 'undefined') return;
     
     const root = document.documentElement;
-    root.style.setProperty(`--ubits-${token}`, value);
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    root.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
   },
 
   /**
-   * Obtener color de fondo actual
+   * Alternar tema directamente
    */
-  getBackgroundColor: (level: 1 | 2 | 3 | 4 | 5 = 1): string => {
-    return themeUtils.getToken(`bg-${level}`);
+  toggleTheme(): void {
+    const currentTheme = this.getCurrentTheme();
+    const newTheme: Theme = currentTheme === 'dark' ? 'light' : 'dark';
+    this.applyTheme(newTheme);
   },
-
-  /**
-   * Obtener color de texto actual
-   */
-  getTextColor: (level: 'high' | 'medium' | 'low' = 'high'): string => {
-    return themeUtils.getToken(`fg-1-${level}`);
-  },
-
-  /**
-   * Obtener color de borde actual
-   */
-  getBorderColor: (level: 1 | 2 = 1): string => {
-    return themeUtils.getToken(`border-${level}`);
-  },
-
-  /**
-   * Obtener color de marca actual
-   */
-  getBrandColor: (): string => {
-    return themeUtils.getToken('accent-brand');
-  },
-
-  /**
-   * Obtener color de feedback
-   */
-  getFeedbackColor: (type: 'success' | 'info' | 'warning' | 'error'): string => {
-    return themeUtils.getToken(`feedback-accent-${type}`);
-  }
 };
 
-/**
- * Decorador para componentes que usan temas
- */
-export function withTheme<T extends Record<string, any>>(component: T): T & { theme: typeof ubitsTheme } {
-  return {
-    ...component,
-    theme: ubitsTheme
-  };
-}
-
-/**
- * Plugin para Vite
- */
-export function ubitsThemePlugin() {
-  return {
-    name: 'ubits-theme',
-    configureServer(server: any) {
-      // Configurar servidor de desarrollo para temas
-      server.middlewares.use('/api/theme', (req: any, res: any, next: any) => {
-        if (req.method === 'GET') {
-          res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({
-            current: ubitsTheme.getCurrentTheme(),
-            config: ubitsTheme.getConfig()
-          }));
-        } else if (req.method === 'POST') {
-          let body = '';
-          req.on('data', (chunk: any) => body += chunk);
-          req.on('end', () => {
-            try {
-              const { theme } = JSON.parse(body);
-              if (theme === 'light' || theme === 'dark') {
-                ubitsTheme.setTheme(theme);
-                res.end(JSON.stringify({ success: true }));
-              } else {
-                res.statusCode = 400;
-                res.end(JSON.stringify({ error: 'Invalid theme' }));
-              }
-            } catch (error) {
-              res.statusCode = 400;
-              res.end(JSON.stringify({ error: 'Invalid JSON' }));
-            }
-          });
-        } else {
-          next();
-        }
-      });
-    }
-  };
-}
-
-export default ubitsTheme;
-
+// Exportar por defecto
+export default UBITSThemeSystem;
