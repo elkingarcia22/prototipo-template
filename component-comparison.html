@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBITS Component Comparison - Playground vs Template</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Estilos UBITS -->
+    <link rel="stylesheet" href="./src/styles/ubits-colors.css">
+    <link rel="stylesheet" href="./src/styles/ubits-styles.css">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background: var(--ubits-bg-2);
+            margin: 0;
+            padding: 20px;
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .comparison-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--ubits-bg-1);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--ubits-border-1);
+        }
+        
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--ubits-border-1);
+        }
+        
+        .comparison-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--ubits-accent-brand);
+            margin-bottom: 16px;
+        }
+        
+        .comparison-subtitle {
+            font-size: 18px;
+            color: var(--ubits-fg-1-medium);
+            margin-bottom: 24px;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .component-section {
+            background: var(--ubits-bg-2);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--ubits-border-1);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ubits-fg-1-high);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            color: var(--ubits-accent-brand);
+            font-size: 24px;
+        }
+        
+        .component-preview {
+            background: var(--ubits-bg-1);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid var(--ubits-border-1);
+            margin-bottom: 20px;
+            min-height: 200px;
+            position: relative;
+        }
+        
+        .component-info {
+            background: var(--ubits-bg-3);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            color: var(--ubits-fg-1-medium);
+        }
+        
+        .console-logs {
+            background: #1a1a1a;
+            color: #00ff00;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 16px;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 4px 0;
+        }
+        
+        .log-timestamp {
+            color: #888;
+        }
+        
+        .log-component {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        .log-difference {
+            color: #ff6b6b;
+        }
+        
+        .log-match {
+            color: #51cf66;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: var(--ubits-accent-brand);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .control-btn:hover {
+            background: var(--ubits-button-primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .control-btn.secondary {
+            background: var(--ubits-btn-secondary-bg-default);
+            color: var(--ubits-btn-secondary-fg-default);
+            border: 1px solid var(--ubits-btn-secondary-border);
+        }
+        
+        .control-btn.secondary:hover {
+            background: var(--ubits-btn-secondary-bg-hover);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-match {
+            background: #51cf66;
+        }
+        
+        .status-difference {
+            background: #ff6b6b;
+        }
+        
+        .status-unknown {
+            background: #ffd43b;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .comparison-container {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="comparison-container">
+        <!-- Header -->
+        <div class="comparison-header">
+            <h1 class="comparison-title">
+                <i class="far fa-balance-scale"></i>
+                Comparación de Componentes UBITS
+            </h1>
+            <p class="comparison-subtitle">
+                Playground UBITS vs Template - Análisis detallado de estilos y funcionalidades
+            </p>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <button class="control-btn" onclick="compareAllComponents()">
+                <i class="far fa-search"></i>
+                Comparar Todos
+            </button>
+            <button class="control-btn secondary" onclick="clearLogs()">
+                <i class="far fa-trash"></i>
+                Limpiar Logs
+            </button>
+            <button class="control-btn secondary" onclick="exportLogs()">
+                <i class="far fa-download"></i>
+                Exportar Logs
+            </button>
+            <button class="control-btn secondary" onclick="toggleTheme()">
+                <i class="far fa-moon"></i>
+                Cambiar Tema
+            </button>
+        </div>
+        
+        <!-- Component Comparison Grid -->
+        <div class="comparison-grid">
+            <!-- Playground UBITS -->
+            <div class="component-section">
+                <h2 class="section-title">
+                    <i class="far fa-play"></i>
+                    Playground UBITS (Original)
+                </h2>
+                
+                <!-- Sidebar Comparison -->
+                <div class="component-preview" id="playground-sidebar">
+                    <h3>Sidebar Playground</h3>
+                    <div id="playground-sidebar-container"></div>
+                </div>
+                
+                <!-- Button Comparison -->
+                <div class="component-preview" id="playground-buttons">
+                    <h3>Botones Playground</h3>
+                    <div id="playground-buttons-container"></div>
+                </div>
+                
+                <!-- Card Comparison -->
+                <div class="component-preview" id="playground-cards">
+                    <h3>Cards Playground</h3>
+                    <div id="playground-cards-container"></div>
+                </div>
+            </div>
+            
+            <!-- Template UBITS -->
+            <div class="component-section">
+                <h2 class="section-title">
+                    <i class="far fa-code"></i>
+                    Template UBITS (Nuestro)
+                </h2>
+                
+                <!-- Sidebar Comparison -->
+                <div class="component-preview" id="template-sidebar">
+                    <h3>Sidebar Template</h3>
+                    <div id="template-sidebar-container"></div>
+                </div>
+                
+                <!-- Button Comparison -->
+                <div class="component-preview" id="template-buttons">
+                    <h3>Botones Template</h3>
+                    <div id="template-buttons-container"></div>
+                </div>
+                
+                <!-- Card Comparison -->
+                <div class="component-preview" id="template-cards">
+                    <h3>Cards Template</h3>
+                    <div id="template-cards-container"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Console Logs -->
+        <div class="component-section">
+            <h2 class="section-title">
+                <i class="far fa-terminal"></i>
+                Logs de Comparación
+            </h2>
+            <div class="console-logs" id="console-logs">
+                <div class="log-entry">
+                    <span class="log-timestamp">[00:00:00]</span>
+                    <span class="log-component">SYSTEM</span>
+                    <span>Iniciando comparación de componentes...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        // Sistema de logging
+        class ComponentLogger {
+            constructor() {
+                this.logs = [];
+                this.container = document.getElementById('console-logs');
+            }
+            
+            log(component, message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = {
+                    timestamp,
+                    component,
+                    message,
+                    type
+                };
+                
+                this.logs.push(logEntry);
+                this.renderLog(logEntry);
+            }
+            
+            renderLog(logEntry) {
+                const logElement = document.createElement('div');
+                logElement.className = 'log-entry';
+                
+                const statusClass = logEntry.type === 'match' ? 'log-match' : 
+                                   logEntry.type === 'difference' ? 'log-difference' : '';
+                
+                logElement.innerHTML = `
+                    <span class="log-timestamp">[${logEntry.timestamp}]</span>
+                    <span class="log-component">${logEntry.component}</span>
+                    <span class="${statusClass}">${logEntry.message}</span>
+                `;
+                
+                this.container.appendChild(logElement);
+                this.container.scrollTop = this.container.scrollHeight;
+            }
+            
+            clear() {
+                this.logs = [];
+                this.container.innerHTML = `
+                    <div class="log-entry">
+                        <span class="log-timestamp">[00:00:00]</span>
+                        <span class="log-component">SYSTEM</span>
+                        <span>Logs limpiados...</span>
+                    </div>
+                `;
+            }
+            
+            export() {
+                const logText = this.logs.map(log => 
+                    `[${log.timestamp}] ${log.component}: ${log.message}`
+                ).join('\n');
+                
+                const blob = new Blob([logText], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ubits-component-comparison-${new Date().toISOString().split('T')[0]}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+        
+        const logger = new ComponentLogger();
+        
+        // Función para comparar estilos
+        function compareStyles(element1, element2, componentName) {
+            const styles1 = window.getComputedStyle(element1);
+            const styles2 = window.getComputedStyle(element2);
+            
+            const importantProperties = [
+                'width', 'height', 'background-color', 'color', 'border-radius',
+                'padding', 'margin', 'font-size', 'font-weight', 'display',
+                'position', 'top', 'left', 'z-index', 'box-shadow'
+            ];
+            
+            let matches = 0;
+            let differences = 0;
+            
+            importantProperties.forEach(prop => {
+                const value1 = styles1.getPropertyValue(prop);
+                const value2 = styles2.getPropertyValue(prop);
+                
+                if (value1 === value2) {
+                    matches++;
+                    logger.log(componentName, `${prop}: ${value1} ✓`, 'match');
+                } else {
+                    differences++;
+                    logger.log(componentName, `${prop}: "${value1}" vs "${value2}" ✗`, 'difference');
+                }
+            });
+            
+            logger.log(componentName, `Resumen: ${matches} coincidencias, ${differences} diferencias`, 
+                      differences === 0 ? 'match' : 'difference');
+        }
+        
+        // Función para comparar funcionalidades
+        function compareFunctionality(element1, element2, componentName) {
+            // Comparar event listeners
+            const listeners1 = getEventListeners(element1) || {};
+            const listeners2 = getEventListeners(element2) || {};
+            
+            logger.log(componentName, `Event listeners playground: ${Object.keys(listeners1).length}`);
+            logger.log(componentName, `Event listeners template: ${Object.keys(listeners2).length}`);
+            
+            // Comparar clases CSS
+            const classes1 = element1.className;
+            const classes2 = element2.className;
+            
+            if (classes1 === classes2) {
+                logger.log(componentName, `Clases CSS: ${classes1} ✓`, 'match');
+            } else {
+                logger.log(componentName, `Clases CSS: "${classes1}" vs "${classes2}" ✗`, 'difference');
+            }
+        }
+        
+        // Función para crear sidebar del playground
+        function createPlaygroundSidebar() {
+            const container = document.getElementById('playground-sidebar-container');
+            container.innerHTML = `
+                <aside class="sidebar" id="playground-sidebar" style="position: relative; width: 96px; height: 550px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <div class="sidebar-main">
+                        <div class="sidebar-header">
+                            <div class="logo" style="cursor: pointer;">
+                                <img src="./images/Ubits-logo.svg" alt="UBITS Logo" style="width: 24px; height: 25px;" />
+                            </div>
+                        </div>
+                        <div class="sidebar-body">
+                            <button class="nav-button active" data-section="aprendizaje" data-tooltip="Aprendizaje">
+                                <i class="far fa-graduation-cap"></i>
+                            </button>
+                            <button class="nav-button" data-section="diagnóstico" data-tooltip="Diagnóstico">
+                                <i class="far fa-chart-mixed"></i>
+                            </button>
+                            <button class="nav-button" data-section="desempeño" data-tooltip="Desempeño">
+                                <i class="far fa-bars-progress"></i>
+                            </button>
+                            <button class="nav-button" data-section="encuestas" data-tooltip="Encuestas">
+                                <i class="far fa-clipboard"></i>
+                            </button>
+                            <button class="nav-button" data-section="reclutamiento" data-tooltip="Reclutamiento">
+                                <i class="far fa-users"></i>
+                            </button>
+                            <button class="nav-button" data-section="tareas" data-tooltip="Tareas">
+                                <i class="far fa-layer-group"></i>
+                            </button>
+                            <button class="nav-button" data-section="ubits-ai" data-tooltip="UBITS AI">
+                                <i class="far fa-sparkles"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sidebar-footer">
+                        <div class="user-avatar-container">
+                            <div class="user-avatar">
+                                <img src="./images/Profile-image.jpg" alt="Usuario" class="avatar-image">
+                            </div>
+                        </div>
+                        <button class="nav-button" id="darkmode-toggle-playground" data-tooltip="Modo oscuro" data-theme="light">
+                            <i class="far fa-moon"></i>
+                        </button>
+                    </div>
+                </aside>
+            `;
+        }
+        
+        // Función para crear sidebar del template
+        function createTemplateSidebar() {
+            const container = document.getElementById('template-sidebar-container');
+            container.innerHTML = `
+                <aside class="sidebar" id="template-sidebar" style="position: relative; width: 96px; height: 550px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <div class="sidebar-main">
+                        <div class="sidebar-header">
+                            <div class="logo" style="cursor: pointer;">
+                                <img src="./images/Ubits-logo.svg" alt="UBITS Logo" style="width: 24px; height: 25px;" />
+                            </div>
+                        </div>
+                        <div class="sidebar-body">
+                            <button class="nav-button active" data-section="aprendizaje" data-tooltip="Aprendizaje">
+                                <i class="far fa-graduation-cap"></i>
+                            </button>
+                            <button class="nav-button" data-section="diagnóstico" data-tooltip="Diagnóstico">
+                                <i class="far fa-chart-mixed"></i>
+                            </button>
+                            <button class="nav-button" data-section="desempeño" data-tooltip="Desempeño">
+                                <i class="far fa-bars-progress"></i>
+                            </button>
+                            <button class="nav-button" data-section="encuestas" data-tooltip="Encuestas">
+                                <i class="far fa-clipboard"></i>
+                            </button>
+                            <button class="nav-button" data-section="reclutamiento" data-tooltip="Reclutamiento">
+                                <i class="far fa-users"></i>
+                            </button>
+                            <button class="nav-button" data-section="tareas" data-tooltip="Tareas">
+                                <i class="far fa-layer-group"></i>
+                            </button>
+                            <button class="nav-button" data-section="ubits-ai" data-tooltip="UBITS AI">
+                                <i class="far fa-sparkles"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sidebar-footer">
+                        <div class="user-avatar-container">
+                            <div class="user-avatar">
+                                <img src="./images/Profile-image.jpg" alt="Usuario" class="avatar-image">
+                            </div>
+                        </div>
+                        <button class="nav-button" id="darkmode-toggle-template" data-tooltip="Modo oscuro" data-theme="light">
+                            <i class="far fa-moon"></i>
+                        </button>
+                    </div>
+                </aside>
+            `;
+        }
+        
+        // Función para crear botones del playground
+        function createPlaygroundButtons() {
+            const container = document.getElementById('playground-buttons-container');
+            container.innerHTML = `
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="ubits-button ubits-button--primary">
+                        <i class="far fa-plus"></i>
+                        <span>Primario</span>
+                    </button>
+                    <button class="ubits-button ubits-button--secondary">
+                        <i class="far fa-edit"></i>
+                        <span>Secundario</span>
+                    </button>
+                    <button class="ubits-button ubits-button--tertiary">
+                        <i class="far fa-trash"></i>
+                        <span>Terciario</span>
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Función para crear botones del template
+        function createTemplateButtons() {
+            const container = document.getElementById('template-buttons-container');
+            container.innerHTML = `
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="ubits-button ubits-button--primary">
+                        <i class="far fa-plus"></i>
+                        <span>Primario</span>
+                    </button>
+                    <button class="ubits-button ubits-button--secondary">
+                        <i class="far fa-edit"></i>
+                        <span>Secundario</span>
+                    </button>
+                    <button class="ubits-button ubits-button--tertiary">
+                        <i class="far fa-trash"></i>
+                        <span>Terciario</span>
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Función para crear cards del playground
+        function createPlaygroundCards() {
+            const container = document.getElementById('playground-cards-container');
+            container.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="ubits-card">
+                        <div class="ubits-card__header">
+                            <h3>Card Playground</h3>
+                        </div>
+                        <div class="ubits-card__body">
+                            <p>Contenido del card del playground UBITS</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Función para crear cards del template
+        function createTemplateCards() {
+            const container = document.getElementById('template-cards-container');
+            container.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="ubits-card">
+                        <div class="ubits-card__header">
+                            <h3>Card Template</h3>
+                        </div>
+                        <div class="ubits-card__body">
+                            <p>Contenido del card del template UBITS</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Función para comparar todos los componentes
+        function compareAllComponents() {
+            logger.clear();
+            logger.log('SYSTEM', 'Iniciando comparación completa de componentes...');
+            
+            // Comparar sidebars
+            setTimeout(() => {
+                const playgroundSidebar = document.getElementById('playground-sidebar');
+                const templateSidebar = document.getElementById('template-sidebar');
+                
+                if (playgroundSidebar && templateSidebar) {
+                    logger.log('SIDEBAR', 'Comparando estilos del sidebar...');
+                    compareStyles(playgroundSidebar, templateSidebar, 'SIDEBAR');
+                    compareFunctionality(playgroundSidebar, templateSidebar, 'SIDEBAR');
+                }
+            }, 100);
+            
+            // Comparar botones
+            setTimeout(() => {
+                const playgroundButtons = document.querySelectorAll('#playground-buttons-container .ubits-button');
+                const templateButtons = document.querySelectorAll('#template-buttons-container .ubits-button');
+                
+                if (playgroundButtons.length > 0 && templateButtons.length > 0) {
+                    logger.log('BUTTONS', 'Comparando estilos de botones...');
+                    playgroundButtons.forEach((btn, index) => {
+                        if (templateButtons[index]) {
+                            compareStyles(btn, templateButtons[index], `BUTTON-${index + 1}`);
+                        }
+                    });
+                }
+            }, 200);
+            
+            // Comparar cards
+            setTimeout(() => {
+                const playgroundCards = document.querySelectorAll('#playground-cards-container .ubits-card');
+                const templateCards = document.querySelectorAll('#template-cards-container .ubits-card');
+                
+                if (playgroundCards.length > 0 && templateCards.length > 0) {
+                    logger.log('CARDS', 'Comparando estilos de cards...');
+                    playgroundCards.forEach((card, index) => {
+                        if (templateCards[index]) {
+                            compareStyles(card, templateCards[index], `CARD-${index + 1}`);
+                        }
+                    });
+                }
+            }, 300);
+            
+            logger.log('SYSTEM', 'Comparación completada. Revisa los logs para ver las diferencias.');
+        }
+        
+        // Funciones de control
+        function clearLogs() {
+            logger.clear();
+        }
+        
+        function exportLogs() {
+            logger.export();
+        }
+        
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            logger.log('THEME', `Cambiado a tema ${newTheme}`);
+        }
+        
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            logger.log('SYSTEM', 'Cargando componentes de comparación...');
+            
+            // Crear componentes
+            createPlaygroundSidebar();
+            createTemplateSidebar();
+            createPlaygroundButtons();
+            createTemplateButtons();
+            createPlaygroundCards();
+            createTemplateCards();
+            
+            logger.log('SYSTEM', 'Componentes cargados. Haz clic en "Comparar Todos" para iniciar el análisis.');
+        });
+    </script>
+</body>
+</html>

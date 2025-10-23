@@ -632,3 +632,94 @@ body {
     line-height: 1.5;
     margin: 0;
 }
+
+/* UBITS Buttons */
+.ubits-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    min-height: 40px;
+}
+
+.ubits-button--primary {
+    background: var(--ubits-button-primary-bg-default);
+    color: var(--ubits-btn-primary-fg);
+}
+
+.ubits-button--primary:hover {
+    background: var(--ubits-button-primary-hover);
+}
+
+.ubits-button--primary:active {
+    background: var(--ubits-button-primary-pressed);
+}
+
+.ubits-button--secondary {
+    background: var(--ubits-btn-secondary-bg-default);
+    color: var(--ubits-btn-secondary-fg-default);
+    border: 1px solid var(--ubits-btn-secondary-border);
+}
+
+.ubits-button--secondary:hover {
+    background: var(--ubits-btn-secondary-bg-hover);
+}
+
+.ubits-button--secondary:active {
+    background: var(--ubits-btn-secondary-bg-pressed);
+}
+
+.ubits-button--tertiary {
+    background: transparent;
+    color: var(--ubits-btn-tertiary-fg);
+    border: none;
+}
+
+.ubits-button--tertiary:hover {
+    background: var(--ubits-btn-tertiary-bg-hover);
+}
+
+.ubits-button--tertiary:active {
+    background: var(--ubits-btn-tertiary-bg-pressed);
+}
+
+/* UBITS Cards */
+.ubits-card {
+    background: var(--ubits-bg-1);
+    border: 1px solid var(--ubits-border-1);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--ubits-shadow-sm);
+}
+
+.ubits-card__header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--ubits-border-1);
+    background: var(--ubits-bg-2);
+}
+
+.ubits-card__header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ubits-fg-1-high);
+}
+
+.ubits-card__body {
+    padding: 20px;
+}
+
+.ubits-card__body p {
+    margin: 0;
+    color: var(--ubits-fg-1-medium);
+    line-height: 1.5;
+}
