@@ -165,63 +165,63 @@ const app = createApp({
       <div class="dashboard-container">
         <!-- Sidebar Container -->
         <div id="sidebar-container" v-if="isDesktop">
-          <aside class="ubits-sidebar">
+          <div class="sidebar">
             <!-- Header -->
-            <div class="ubits-sidebar__header">
-              <div class="ubits-sidebar__logo" @click="handleLogoClick">
+            <div class="sidebar-header">
+              <div class="logo" @click="handleLogoClick">
                 <img :src="logoUrl" :alt="logoAlt" />
               </div>
             </div>
             
             <!-- Navigation -->
-            <div class="ubits-sidebar__body">
+            <div class="sidebar-body">
               <button 
                 v-for="item in navigationItems"
                 :key="item.id"
-                :class="['ubits-sidebar__nav-button', { 'ubits-sidebar__nav-button--active': activeItem === item.id }]"
+                :class="['sidebar-nav-button', { 'active': activeItem === item.id }]"
                 :data-section="item.id"
                 :data-tooltip="item.tooltip"
                 @click="handleNavClick(item)"
               >
                 <i :class="['far', 'fa-' + item.icon]"></i>
-                <span v-if="showSidebarLabels" class="ubits-sidebar__nav-label">{{ item.label }}</span>
+                <span class="sidebar-nav-label">{{ item.label }}</span>
               </button>
             </div>
             
             <!-- Footer -->
-            <div class="ubits-sidebar__footer">
-              <div class="ubits-sidebar__user-avatar" @click="handleUserClick">
-                <img :src="userAvatar" :alt="userName" class="ubits-sidebar__avatar-image">
+            <div class="sidebar-footer">
+              <div class="sidebar-user-avatar" @click="handleUserClick">
+                <img :src="userAvatar" :alt="userName" class="sidebar-avatar-image">
               </div>
               <button 
-                class="ubits-sidebar__theme-toggle"
+                class="sidebar-theme-toggle"
                 :data-tooltip="currentTheme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
                 @click="handleThemeToggle"
               >
                 <i :class="['far', currentTheme === 'light' ? 'fa-moon' : 'fa-sun']"></i>
               </button>
             </div>
-          </aside>
+          </div>
         </div>
 
         <!-- Main Content -->
         <main class="main-content">
           <!-- Top Navigation -->
           <div id="top-nav-container" v-if="isDesktop">
-            <nav class="ubits-top-nav">
-              <div class="ubits-top-nav__content">
+            <div class="top-nav">
+              <div class="top-nav-content">
                 <!-- Logo/Brand -->
-                <div class="ubits-top-nav__brand">
-                  <img :src="logoUrl" :alt="logoAlt" class="ubits-top-nav__logo" />
-                  <span v-if="showBrandText" class="ubits-top-nav__brand-text">{{ brandText }}</span>
+                <div class="top-nav-brand">
+                  <img :src="logoUrl" :alt="logoAlt" class="top-nav-logo" />
+                  <span v-if="showBrandText" class="top-nav-brand-text">{{ brandText }}</span>
                 </div>
                 
                 <!-- Navigation Tabs -->
-                <div class="ubits-top-nav__tabs">
+                <div class="top-nav-tabs">
                   <button 
                     v-for="tab in navigationTabs"
                     :key="tab.id"
-                    :class="['ubits-top-nav__tab', { 'ubits-top-nav__tab--active': activeTab === tab.id }]"
+                    :class="['top-nav-tab', { 'active': activeTab === tab.id }]"
                     :data-tab="tab.id"
                     @click="handleTabClick(tab)"
                   >
@@ -231,22 +231,22 @@ const app = createApp({
                 </div>
                 
                 <!-- User Actions -->
-                <div class="ubits-top-nav__actions">
+                <div class="top-nav-actions">
                   <button 
-                    class="ubits-top-nav__theme-toggle"
+                    class="top-nav-theme-toggle"
                     :data-tooltip="currentTheme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
                     @click="handleThemeToggle"
                   >
                     <i :class="['far', currentTheme === 'light' ? 'fa-moon' : 'fa-sun']"></i>
                   </button>
                   
-                  <div class="ubits-top-nav__user-menu" @click="handleUserClick">
-                    <img :src="userAvatar" :alt="userName" class="ubits-top-nav__user-avatar" />
-                    <span v-if="showUserName" class="ubits-top-nav__user-name">{{ userName }}</span>
+                  <div class="top-nav-user-menu" @click="handleUserClick">
+                    <img :src="userAvatar" :alt="userName" class="top-nav-user-avatar" />
+                    <span v-if="showUserName" class="top-nav-user-name">{{ userName }}</span>
                   </div>
                 </div>
               </div>
-            </nav>
+            </div>
           </div>
 
           <!-- Content Area -->
@@ -262,28 +262,27 @@ const app = createApp({
 
       <!-- Tab Bar Container (Mobile) -->
       <div id="tab-bar-container" v-if="isMobile || isTablet">
-        <div class="ubits-tab-bar">
-          <div class="ubits-tab-bar__content">
+        <div class="tab-bar">
+          <div class="tab-bar-content">
             <button 
               v-for="item in navigationItems.slice(0, 4)"
               :key="item.id"
-              :class="['ubits-tab-bar__item', { 'ubits-tab-bar__item--active': activeItem === item.id }]"
+              :class="['tab-bar-item', { 'active': activeItem === item.id }]"
               :data-tab="item.id"
               @click="handleNavClick(item)"
             >
               <i :class="['far', 'fa-' + item.icon]"></i>
-              <span class="ubits-tab-bar__text">{{ item.label }}</span>
+              <span class="tab-bar-text">{{ item.label }}</span>
             </button>
             
             <!-- Theme Toggle -->
-            <div
-              class="ubits-tab-bar__item"
-              :class="{ 'ubits-tab-bar__item--active': false }"
+            <button
+              class="tab-bar-item"
               @click="handleThemeToggle"
             >
               <i :class="['far', currentTheme === 'light' ? 'fa-moon' : 'fa-sun']"></i>
-              <span class="ubits-tab-bar__text">{{ currentTheme === 'light' ? 'Oscuro' : 'Claro' }}</span>
-            </div>
+              <span class="tab-bar-text">{{ currentTheme === 'light' ? 'Oscuro' : 'Claro' }}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -291,57 +290,14 @@ const app = createApp({
   `
 });
 
-// Componentes de páginas
+// Componentes de páginas - TEMPLATE VACÍO
 app.component('DashboardPage', {
   template: `
     <div class="dashboard-page">
       <div class="section-single">
         <div class="widget-contenido-principal">
-          <h1 class="ubits-heading-h1">Dashboard Principal</h1>
-          <p class="ubits-body-md-regular">
-            Bienvenido al sistema UBITS. Esta es la página principal del dashboard.
-          </p>
-          
-          <div class="section-dual">
-            <div class="widget-stats">
-              <h3 class="ubits-heading-h2">Estadísticas</h3>
-              <div class="stats-grid">
-                <div class="stat-item">
-                  <div class="stat-value">1,234</div>
-                  <div class="stat-label">Usuarios Activos</div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-value">567</div>
-                  <div class="stat-label">Cursos Completados</div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-value">89%</div>
-                  <div class="stat-label">Satisfacción</div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="widget-recent">
-              <h3 class="ubits-heading-h2">Actividad Reciente</h3>
-              <div class="activity-list">
-                <div class="activity-item">
-                  <i class="far fa-user"></i>
-                  <span>Nuevo usuario registrado</span>
-                  <span class="time">hace 2 horas</span>
-                </div>
-                <div class="activity-item">
-                  <i class="far fa-graduation-cap"></i>
-                  <span>Curso completado</span>
-                  <span class="time">hace 4 horas</span>
-                </div>
-                <div class="activity-item">
-                  <i class="far fa-chart-line"></i>
-                  <span>Reporte generado</span>
-                  <span class="time">hace 6 horas</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p class="ubits-body-md-regular">Contenido principal</p>
+          <br><br><br><br><br><br><br><br><br><br><br>
         </div>
       </div>
     </div>
@@ -353,67 +309,8 @@ app.component('AprendizajePage', {
     <div class="aprendizaje-page">
       <div class="section-single">
         <div class="widget-contenido-principal">
-          <h1 class="ubits-heading-h1">Módulo de Aprendizaje</h1>
-          <p class="ubits-body-md-regular">
-            Gestiona el aprendizaje y desarrollo de tu equipo.
-          </p>
-          
-          <div class="section-dual">
-            <div class="widget-cursos">
-              <h3 class="ubits-heading-h2">Cursos Disponibles</h3>
-              <div class="cursos-grid">
-                <div class="curso-item">
-                  <div class="curso-icon">
-                    <i class="far fa-laptop-code"></i>
-                  </div>
-                  <div class="curso-content">
-                    <h4>Desarrollo Web</h4>
-                    <p>Fundamentos de HTML, CSS y JavaScript</p>
-                    <div class="curso-progress">
-                      <div class="progress-bar">
-                        <div class="progress-fill" style="width: 75%"></div>
-                      </div>
-                      <span>75% completado</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="curso-item">
-                  <div class="curso-icon">
-                    <i class="far fa-chart-line"></i>
-                  </div>
-                  <div class="curso-content">
-                    <h4>Análisis de Datos</h4>
-                    <p>Herramientas y técnicas de análisis</p>
-                    <div class="curso-progress">
-                      <div class="progress-bar">
-                        <div class="progress-fill" style="width: 45%"></div>
-                      </div>
-                      <span>45% completado</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="widget-progreso">
-              <h3 class="ubits-heading-h2">Progreso General</h3>
-              <div class="progreso-stats">
-                <div class="progreso-item">
-                  <div class="progreso-value">12</div>
-                  <div class="progreso-label">Cursos Completados</div>
-                </div>
-                <div class="progreso-item">
-                  <div class="progreso-value">8</div>
-                  <div class="progreso-label">En Progreso</div>
-                </div>
-                <div class="progreso-item">
-                  <div class="progreso-value">156</div>
-                  <div class="progreso-label">Horas de Estudio</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p class="ubits-body-md-regular">Contenido principal</p>
+          <br><br><br><br><br><br><br><br><br><br><br>
         </div>
       </div>
     </div>
