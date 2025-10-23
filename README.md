@@ -7,7 +7,7 @@ Template robusto para prototipos funcionales con onboarding, analytics y feedbac
 - 🎭 **Onboarding System**: Sistema de pasos guiados con enmascaramiento
 - 📊 **Microsoft Clarity**: Analytics automático integrado
 - 💬 **Feedback System**: Sistema híbrido con n8n + localStorage
-- 🎨 **Design System**: Tokens y componentes consistentes
+- 🎨 **UBITS Design System**: Tokens oficiales UBITS con modo oscuro/claro automático
 - 🚀 **Deploy Automático**: GitHub Actions + Vercel/Render
 - 🔧 **GATES System**: Validaciones automáticas
 
@@ -15,9 +15,10 @@ Template robusto para prototipos funcionales con onboarding, analytics y feedbac
 
 - **Vite**: Build tool moderno y rápido
 - **TypeScript**: Tipado estático
-- **Tailwind CSS**: Utility-first CSS
+- **Tailwind CSS**: Utility-first CSS con tokens UBITS
 - **Alpine.js**: JavaScript reactivo ligero
-- **Style Dictionary**: Sistema de tokens
+- **Vue.js**: Framework progresivo
+- **UBITS Tokens**: Sistema de tokens oficial UBITS
 - **GitHub Actions**: CI/CD automático
 
 ## 🚀 Quick Start
@@ -87,6 +88,13 @@ prototipo-template/
 - Export de datos
 - Análisis de feedback
 
+### 🎨 UBITS Design System
+- Tokens oficiales UBITS
+- Modo oscuro/claro automático
+- Componentes consistentes
+- Integración con Tailwind CSS
+- Soporte para Alpine.js y Vue.js
+
 ## 🔧 GATES System
 
 El template incluye un sistema de validaciones automáticas:
@@ -102,6 +110,7 @@ El template incluye un sistema de validaciones automáticas:
 - [**Setup Guide**](docs/setup-guide.md) - Configuración inicial del proyecto
 - [**GitHub Cursor Setup**](docs/github-cursor-setup.md) - Configuración de GitHub y Cursor
 - [**Deployment Guide**](docs/deployment-guide.md) - Guía para desplegar en Vercel o Render
+- [**UBITS Tokens Guide**](docs/ubits-tokens-guide.md) - Guía completa del sistema de tokens UBITS
 - [**Troubleshooting**](docs/troubleshooting.md) - Solución de problemas comunes
 
 ### Componentes
@@ -113,6 +122,7 @@ El template incluye un sistema de validaciones automáticas:
 - [**Onboarding Template**](templates/onboarding.html) - Template con sistema de onboarding
 - [**Clarity Template**](templates/clarity.html) - Template con Microsoft Clarity
 - [**Feedback Template**](templates/feedback.html) - Template con sistema de feedback
+- [**UBITS Tokens Example**](src/examples/ubits-tokens-example.html) - Ejemplo completo del sistema de tokens UBITS
 - [**Complete Template**](templates/complete.html) - Template completo con todos los componentes
 
 ## 🤝 Contribuir

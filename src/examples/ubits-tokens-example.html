@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBITS Tokens System - Ejemplo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- UBITS Tokens CSS -->
+    <link rel="stylesheet" href="../styles/ubits-tokens.css">
+    
+    <style>
+        /* Estilos adicionales para el ejemplo */
+        .example-section {
+            @apply mb-8 p-6 rounded-lg border;
+            background-color: var(--ubits-bg-1);
+            border-color: var(--ubits-border-1);
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .example-title {
+            @apply text-2xl font-bold mb-4;
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .example-subtitle {
+            @apply text-lg font-semibold mb-3;
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .example-description {
+            @apply text-sm mb-4;
+            color: var(--ubits-fg-1-medium);
+        }
+        
+        .example-code {
+            @apply bg-gray-100 p-4 rounded-lg font-mono text-sm;
+            background-color: var(--ubits-bg-2);
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .example-button {
+            @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+            background-color: var(--ubits-button-primary-bg-default);
+            color: var(--ubits-btn-primary-fg);
+            border: 1px solid var(--ubits-button-primary-bg-default);
+        }
+        
+        .example-button:hover {
+            background-color: var(--ubits-button-primary-hover);
+            border-color: var(--ubits-button-primary-hover);
+        }
+        
+        .example-input {
+            @apply w-full px-4 py-2 rounded-lg border transition-all duration-200;
+            background-color: var(--ubits-bg-1);
+            color: var(--ubits-fg-1-high);
+            border-color: var(--ubits-border-1);
+        }
+        
+        .example-input:focus {
+            border-color: var(--ubits-accent-brand);
+            outline: 2px solid var(--ubits-button-focus-ring);
+            outline-offset: 0;
+        }
+        
+        .example-card {
+            @apply p-4 rounded-lg border;
+            background-color: var(--ubits-bg-1);
+            border-color: var(--ubits-border-1);
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .example-alert {
+            @apply p-4 rounded-lg border;
+            border-color: var(--ubits-feedback-border-info);
+            background-color: var(--ubits-feedback-bg-info-subtle);
+            color: var(--ubits-feedback-fg-info-subtle);
+        }
+        
+        .example-alert-success {
+            border-color: var(--ubits-feedback-border-success);
+            background-color: var(--ubits-feedback-bg-success-subtle);
+            color: var(--ubits-feedback-fg-success-subtle);
+        }
+        
+        .example-alert-warning {
+            border-color: var(--ubits-feedback-border-warning);
+            background-color: var(--ubits-feedback-bg-warning-subtle);
+            color: var(--ubits-feedback-fg-warning-subtle);
+        }
+        
+        .example-alert-error {
+            border-color: var(--ubits-feedback-border-error);
+            background-color: var(--ubits-feedback-bg-error-subtle);
+            color: var(--ubits-feedback-fg-error-subtle);
+        }
+        
+        .color-palette {
+            @apply grid grid-cols-2 md:grid-cols-4 gap-4;
+        }
+        
+        .color-item {
+            @apply p-4 rounded-lg text-center;
+            background-color: var(--ubits-bg-1);
+            border: 1px solid var(--ubits-border-1);
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .color-swatch {
+            @apply w-full h-16 rounded-lg mb-2;
+        }
+        
+        .color-name {
+            @apply text-sm font-medium;
+            color: var(--ubits-fg-1-high);
+        }
+        
+        .color-value {
+            @apply text-xs;
+            color: var(--ubits-fg-1-medium);
+        }
+    </style>
+</head>
+<body class="min-h-screen" style="background-color: var(--ubits-bg-1); color: var(--ubits-fg-1-high);">
+    <!-- Header -->
+    <header class="p-6 border-b" style="background-color: var(--ubits-bg-1); border-color: var(--ubits-border-1);">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold" style="color: var(--ubits-fg-1-high);">
+                🎨 UBITS Tokens System
+            </h1>
+            
+            <!-- Theme Toggle -->
+            <div class="flex items-center gap-4">
+                <span class="text-sm" style="color: var(--ubits-fg-1-medium);">
+                    Tema actual: <span id="current-theme">{{ currentTheme }}</span>
+                </span>
+                <button 
+                    @click="toggleTheme()"
+                    class="px-4 py-2 rounded-lg font-medium transition-all duration-200"
+                    style="background-color: var(--ubits-button-primary-bg-default); color: var(--ubits-btn-primary-fg); border: 1px solid var(--ubits-button-primary-bg-default);"
+                >
+                    <i :class="isDark ? 'fa-sun' : 'fa-moon'" class="mr-2"></i>
+                    {{ isDark ? 'Modo claro' : 'Modo oscuro' }}
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto p-6">
+        <!-- Introducción -->
+        <div class="example-section">
+            <h2 class="example-title">🚀 Sistema de Tokens UBITS</h2>
+            <p class="example-description">
+                Este ejemplo demuestra el sistema de tokens UBITS integrado con Vite, Tailwind CSS y Alpine.js.
+                Los colores, tipografías y espaciados se adaptan automáticamente al tema claro/oscuro.
+            </p>
+        </div>
+
+        <!-- Colores de Marca -->
+        <div class="example-section">
+            <h3 class="example-subtitle">🎨 Colores de Marca</h3>
+            <p class="example-description">
+                Los colores principales de UBITS que se adaptan automáticamente al tema.
+            </p>
+            
+            <div class="color-palette">
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: var(--ubits-accent-brand);"></div>
+                    <div class="color-name">Accent Brand</div>
+                    <div class="color-value">{{ getToken('accent-brand') }}</div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: var(--ubits-button-primary-bg-default);"></div>
+                    <div class="color-name">Button Primary</div>
+                    <div class="color-value">{{ getToken('button-primary-bg-default') }}</div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: var(--ubits-button-primary-hover);"></div>
+                    <div class="color-name">Button Hover</div>
+                    <div class="color-value">{{ getToken('button-primary-hover') }}</div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: var(--ubits-button-primary-pressed);"></div>
+                    <div class="color-name">Button Pressed</div>
+                    <div class="color-value">{{ getToken('button-primary-pressed') }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colores de Texto -->
+        <div class="example-section">
+            <h3 class="example-subtitle">📝 Colores de Texto</h3>
+            <p class="example-description">
+                Los colores de texto que se adaptan automáticamente al tema.
+            </p>
+            
+            <div class="space-y-4">
+                <div class="example-card">
+                    <h4 class="text-lg font-semibold mb-2" style="color: var(--ubits-fg-1-high);">
+                        Texto Principal (High)
+                    </h4>
+                    <p class="text-sm" style="color: var(--ubits-fg-1-medium);">
+                        Texto secundario (Medium) - Este es un ejemplo de texto que usa los tokens UBITS.
+                    </p>
+                    <p class="text-xs" style="color: var(--ubits-fg-disabled);">
+                        Texto deshabilitado (Disabled) - Este texto está deshabilitado.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colores de Fondo -->
+        <div class="example-section">
+            <h3 class="example-subtitle">🎨 Colores de Fondo</h3>
+            <p class="example-description">
+                Los colores de fondo que se adaptan automáticamente al tema.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-lg border" style="background-color: var(--ubits-bg-1); border-color: var(--ubits-border-1);">
+                    <h4 class="font-semibold mb-2" style="color: var(--ubits-fg-1-high);">Fondo Nivel 1</h4>
+                    <p class="text-sm" style="color: var(--ubits-fg-1-medium);">Fondo principal del sistema</p>
+                </div>
+                
+                <div class="p-4 rounded-lg border" style="background-color: var(--ubits-bg-2); border-color: var(--ubits-border-1);">
+                    <h4 class="font-semibold mb-2" style="color: var(--ubits-fg-1-high);">Fondo Nivel 2</h4>
+                    <p class="text-sm" style="color: var(--ubits-fg-1-medium);">Fondo secundario del sistema</p>
+                </div>
+                
+                <div class="p-4 rounded-lg border" style="background-color: var(--ubits-bg-3); border-color: var(--ubits-border-1);">
+                    <h4 class="font-semibold mb-2" style="color: var(--ubits-fg-1-high);">Fondo Nivel 3</h4>
+                    <p class="text-sm" style="color: var(--ubits-fg-1-medium);">Fondo terciario del sistema</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colores de Feedback -->
+        <div class="example-section">
+            <h3 class="example-subtitle">💬 Colores de Feedback</h3>
+            <p class="example-description">
+                Los colores de feedback que se adaptan automáticamente al tema.
+            </p>
+            
+            <div class="space-y-4">
+                <div class="example-alert-success">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="font-semibold">Éxito</span>
+                    </div>
+                    <p class="text-sm mt-2">Este es un mensaje de éxito usando los tokens UBITS.</p>
+                </div>
+                
+                <div class="example-alert">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="font-semibold">Información</span>
+                    </div>
+                    <p class="text-sm mt-2">Este es un mensaje de información usando los tokens UBITS.</p>
+                </div>
+                
+                <div class="example-alert-warning">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="font-semibold">Advertencia</span>
+                    </div>
+                    <p class="text-sm mt-2">Este es un mensaje de advertencia usando los tokens UBITS.</p>
+                </div>
+                
+                <div class="example-alert-error">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-times-circle"></i>
+                        <span class="font-semibold">Error</span>
+                    </div>
+                    <p class="text-sm mt-2">Este es un mensaje de error usando los tokens UBITS.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Componentes Interactivos -->
+        <div class="example-section">
+            <h3 class="example-subtitle">🔧 Componentes Interactivos</h3>
+            <p class="example-description">
+                Componentes que usan los tokens UBITS y se adaptan automáticamente al tema.
+            </p>
+            
+            <div class="space-y-6">
+                <!-- Botones -->
+                <div>
+                    <h4 class="font-semibold mb-3" style="color: var(--ubits-fg-1-high);">Botones</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="example-button">
+                            <i class="fas fa-plus mr-2"></i>
+                            Botón Primario
+                        </button>
+                        
+                        <button class="example-button" style="background-color: var(--ubits-btn-secondary-bg-default); color: var(--ubits-btn-secondary-fg-default); border-color: var(--ubits-btn-secondary-border);">
+                            <i class="fas fa-edit mr-2"></i>
+                            Botón Secundario
+                        </button>
+                        
+                        <button class="example-button" style="background-color: transparent; color: var(--ubits-btn-tertiary-fg); border-color: transparent;">
+                            <i class="fas fa-link mr-2"></i>
+                            Botón Terciario
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Inputs -->
+                <div>
+                    <h4 class="font-semibold mb-3" style="color: var(--ubits-fg-1-high);">Inputs</h4>
+                    <div class="space-y-4">
+                        <input 
+                            type="text" 
+                            placeholder="Input de texto"
+                            class="example-input"
+                        >
+                        
+                        <input 
+                            type="email" 
+                            placeholder="Input de email"
+                            class="example-input"
+                        >
+                        
+                        <textarea 
+                            placeholder="Textarea"
+                            class="example-input"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                </div>
+                
+                <!-- Cards -->
+                <div>
+                    <h4 class="font-semibold mb-3" style="color: var(--ubits-fg-1-high);">Cards</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="example-card">
+                            <h5 class="font-semibold mb-2" style="color: var(--ubits-fg-1-high);">Card 1</h5>
+                            <p class="text-sm" style="color: var(--ubits-fg-1-medium);">Contenido de la card usando tokens UBITS.</p>
+                        </div>
+                        
+                        <div class="example-card">
+                            <h5 class="font-semibold mb-2" style="color: var(--ubits-fg-1-high);">Card 2</h5>
+                            <p class="text-sm" style="color: var(--ubits-fg-1-medium);">Contenido de la card usando tokens UBITS.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Código de Ejemplo -->
+        <div class="example-section">
+            <h3 class="example-subtitle">💻 Código de Ejemplo</h3>
+            <p class="example-description">
+                Cómo usar los tokens UBITS en tu código CSS y JavaScript.
+            </p>
+            
+            <div class="example-code">
+                <pre><code>/* CSS - Usar tokens UBITS */
+.my-component {
+  background-color: var(--ubits-bg-1);
+  color: var(--ubits-fg-1-high);
+  border: 1px solid var(--ubits-border-1);
+}
+
+.my-button {
+  background-color: var(--ubits-button-primary-bg-default);
+  color: var(--ubits-btn-primary-fg);
+}
+
+.my-button:hover {
+  background-color: var(--ubits-button-primary-hover);
+}
+
+/* JavaScript - Obtener tokens UBITS */
+const brandColor = getComputedStyle(document.documentElement)
+  .getPropertyValue('--ubits-accent-brand');
+
+const backgroundColor = getComputedStyle(document.documentElement)
+  .getPropertyValue('--ubits-bg-1');</code></pre>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-6 border-t" style="background-color: var(--ubits-bg-1); border-color: var(--ubits-border-1);">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-sm" style="color: var(--ubits-fg-1-medium);">
+                🎨 UBITS Tokens System - Prototipo Template
+            </p>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Data -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('ubitsTheme', () => ({
+                currentTheme: 'light',
+                isDark: false,
+                isLight: true,
+                
+                init() {
+                    // Cargar tema guardado
+                    const savedTheme = localStorage.getItem('ubits-theme');
+                    if (savedTheme === 'dark' || savedTheme === 'light') {
+                        this.currentTheme = savedTheme;
+                        this.isDark = savedTheme === 'dark';
+                        this.isLight = savedTheme === 'light';
+                        this.applyTheme(savedTheme);
+                    }
+                    
+                    // Configurar listener para cambios de preferencia del sistema
+                    if (window.matchMedia) {
+                        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                        mediaQuery.addEventListener('change', (event) => {
+                            if (localStorage.getItem('ubits-theme-auto') !== 'false') {
+                                this.setTheme(event.matches ? 'dark' : 'light', false);
+                            }
+                        });
+                    }
+                },
+                
+                setTheme(theme, save = true) {
+                    this.currentTheme = theme;
+                    this.isDark = theme === 'dark';
+                    this.isLight = theme === 'light';
+                    
+                    this.applyTheme(theme);
+                    
+                    if (save) {
+                        localStorage.setItem('ubits-theme', theme);
+                    }
+                },
+                
+                toggleTheme() {
+                    const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+                    this.setTheme(newTheme);
+                },
+                
+                applyTheme(theme) {
+                    const root = document.documentElement;
+                    root.classList.remove('light', 'dark');
+                    root.classList.add(theme);
+                    root.setAttribute('data-theme', theme);
+                },
+                
+                getToken(token) {
+                    const root = document.documentElement;
+                    const computedStyle = getComputedStyle(root);
+                    return computedStyle.getPropertyValue(`--ubits-${token}`).trim();
+                }
+            }));
+        });
+    </script>
+</body>
+</html>
