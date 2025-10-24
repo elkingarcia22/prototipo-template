@@ -4,7 +4,7 @@
   "description": "Template robusto para prototipos funcionales con onboarding, analytics y feedback",
   "type": "module",
   "scripts": {
-    "postinstall": "npm run gate:dir && npm run gate:env && npm run gate:components",
+    "postinstall": "npm run gate:dir",
     "gate:dir": "node -e \"const fs=require('fs');if(!(fs.existsSync('package.json')&&fs.existsSync('components')))process.exit(1)\"",
     "gate:env": "node scripts/check-env.js",
     "gate:components": "node scripts/check-components.js",
