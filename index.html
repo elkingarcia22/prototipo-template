@@ -1,125 +1,21 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UBITS Template - Prototipo Robusto</title>
-    
-    <!-- Meta tags -->
-    <meta name="description" content="Template robusto para prototipos funcionales con tecnologías modernas">
-    <meta name="keywords" content="ubits, template, prototipo, vue, typescript, tailwind">
-    <meta name="author" content="UBITS">
-    
-    <!-- Favicon -->
+    <title>UBITS Template</title>
     <link rel="icon" type="image/svg+xml" href="/images/Ubits-logo.svg">
     
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" as="style">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <!-- Vue.js -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    
-    <!-- Estilos UBITS -->
-    <link rel="stylesheet" href="./src/styles/ubits-colors.css">
-    <link rel="stylesheet" href="./src/styles/ubits-styles.css">
-    
-    <style>
-        /* Loading spinner */
-        .loading-spinner {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--ubits-border-1);
-            border-top: 4px solid var(--ubits-accent-brand);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            z-index: 9999;
-        }
-        
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        
-        /* Ocultar loading cuando la app esté lista */
-        .app-loaded .loading-spinner {
-            display: none;
-        }
-    </style>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Loading spinner -->
-    <div class="loading-spinner" id="loading-spinner"></div>
-    
-    <!-- Vue App -->
-    <div id="app">
-        <!-- La aplicación Vue se montará aquí -->
-    </div>
-    
-    <!-- Scripts -->
-    <script src="./src/main.js"></script>
-    
-    <!-- Script para ocultar loading -->
-    <script>
-        // Ocultar loading cuando la app esté lista
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                document.body.classList.add('app-loaded');
-                const spinner = document.getElementById('loading-spinner');
-                if (spinner) {
-                    spinner.style.display = 'none';
-                }
-            }, 1000);
-        });
-        
-        // Configurar Tailwind con tokens UBITS
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'ubits-brand': 'var(--ubits-accent-brand)',
-                        'ubits-bg-1': 'var(--ubits-bg-1)',
-                        'ubits-bg-2': 'var(--ubits-bg-2)',
-                        'ubits-bg-3': 'var(--ubits-bg-3)',
-                        'ubits-fg-1-high': 'var(--ubits-fg-1-high)',
-                        'ubits-fg-1-medium': 'var(--ubits-fg-1-medium)',
-                        'ubits-fg-1-low': 'var(--ubits-fg-1-low)',
-                        'ubits-border-1': 'var(--ubits-border-1)',
-                        'ubits-border-2': 'var(--ubits-border-2)',
-                    },
-                    fontFamily: {
-                        'ubits': ['Noto Sans', 'sans-serif'],
-                    },
-                    spacing: {
-                        'ubits-xs': 'var(--ubits-spacing-xs)',
-                        'ubits-sm': 'var(--ubits-spacing-sm)',
-                        'ubits-md': 'var(--ubits-spacing-md)',
-                        'ubits-lg': 'var(--ubits-spacing-lg)',
-                        'ubits-xl': 'var(--ubits-spacing-xl)',
-                    },
-                    borderRadius: {
-                        'ubits-sm': 'var(--ubits-radius-sm)',
-                        'ubits-md': 'var(--ubits-radius-md)',
-                        'ubits-lg': 'var(--ubits-radius-lg)',
-                    },
-                    boxShadow: {
-                        'ubits-sm': 'var(--ubits-shadow-sm)',
-                        'ubits-md': 'var(--ubits-shadow-md)',
-                        'ubits-lg': 'var(--ubits-shadow-lg)',
-                    }
-                }
-            }
-        };
-    </script>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

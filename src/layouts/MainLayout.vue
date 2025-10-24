@@ -4,209 +4,29 @@
 -->
 <template>
   <div class="ubits-layout" :data-theme="currentTheme">
-    <!-- Tooltip Global -->
-    <div id="tooltip" class="ubits-tooltip"></div>
-    
-    <!-- Dashboard Container -->
-    <div class="dashboard-container">
-      <!-- Sidebar Container -->
-      <div id="sidebar-container">
-        <UBITSSidebar
-          :logo-url="logoUrl"
-          :logo-alt="logoAlt"
-          :navigation-items="navigationItems"
-          :active-item="activeItem"
-          :user-avatar="userAvatar"
-          :user-name="userName"
-          :current-theme="currentTheme"
-          :show-labels="showSidebarLabels"
-          @logo-click="handleLogoClick"
-          @nav-click="handleNavClick"
-          @user-click="handleUserClick"
-          @theme-toggle="handleThemeToggle"
-        />
-      </div>
-
-      <!-- Main Content -->
+    <!-- Layout simplificado - solo clarity, feedback y onboarding -->
+    <div class="main-container">
       <main class="main-content">
-        <!-- Top Navigation -->
-        <div id="top-nav-container">
-          <UBITSTopNav
-            :logo-url="logoUrl"
-            :logo-alt="logoAlt"
-            :brand-text="brandText"
-            :show-brand-text="showBrandText"
-            :navigation-tabs="navigationTabs"
-            :active-tab="activeTab"
-            :user-avatar="userAvatar"
-            :user-name="userName"
-            :current-theme="currentTheme"
-            :show-user-name="showUserName"
-            @logo-click="handleLogoClick"
-            @tab-click="handleTabClick"
-            @user-click="handleUserClick"
-            @theme-toggle="handleThemeToggle"
-          />
-        </div>
-
         <!-- Content Area -->
         <div class="content-area">
-          <!-- Content wrapper con secciones de widgets -->
           <div class="content-sections">
             <slot></slot>
           </div>
         </div>
       </main>
     </div>
-
-    <!-- Tab Bar Container (Mobile) -->
-    <div id="tab-bar-container">
-      <UBITSTabBar
-        :navigation-items="navigationItems"
-        :active-item="activeItem"
-        :current-theme="currentTheme"
-        @nav-click="handleNavClick"
-        @theme-toggle="handleThemeToggle"
-      />
-    </div>
-
-    <!-- Floating Menu Container -->
-    <div id="floating-menu-container">
-      <!-- Floating Menu Component -->
-    </div>
-    
-    <!-- Profile Menu Container -->
-    <div id="profile-menu-container">
-      <!-- Profile Menu Component -->
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import UBITSSidebar from '../components/UBITSSidebar.vue'
-import UBITSTopNav from '../components/UBITSTopNav.vue'
-import UBITSTabBar from '../components/UBITSTabBar.vue'
+// Componentes UBITS eliminados - solo mantener clarity, feedback y onboarding
 import { useTheme } from '../utils/theme'
 import { useResponsive } from '../utils/responsive'
 
-// Props del layout
-interface Props {
-  // Logo
-  logoUrl?: string
-  logoAlt?: string
-  brandText?: string
-  showBrandText?: boolean
-  
-  // Navigation
-  navigationItems?: NavigationItem[]
-  navigationTabs?: NavigationTab[]
-  activeItem?: string
-  activeTab?: string
-  
-  // User
-  userAvatar?: string
-  userName?: string
-  showUserName?: boolean
-  
-  // Theme
-  currentTheme?: 'light' | 'dark'
-  
-  // Responsive
-  showSidebarLabels?: boolean
-}
-
-interface NavigationItem {
-  id: string
-  label: string
-  icon: string
-  tooltip: string
-  href?: string
-  active?: boolean
-}
-
-interface NavigationTab {
-  id: string
-  label: string
-  icon: string
-  active?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  logoUrl: '/images/Ubits-logo.svg',
-  logoAlt: 'UBITS Logo',
-  brandText: 'UBITS',
-  showBrandText: true,
-  navigationItems: () => [
-    { id: 'aprendizaje', label: 'Aprendizaje', icon: 'graduation-cap', tooltip: 'Aprendizaje' },
-    { id: 'diagnostico', label: 'Diagnóstico', icon: 'chart-line', tooltip: 'Diagnóstico' },
-    { id: 'desempeno', label: 'Desempeño', icon: 'chart-bar', tooltip: 'Desempeño' },
-    { id: 'encuestas', label: 'Encuestas', icon: 'clipboard', tooltip: 'Encuestas', href: 'encuestas.html' },
-    { id: 'reclutamiento', label: 'Reclutamiento', icon: 'users', tooltip: 'Reclutamiento' },
-    { id: 'tareas', label: 'Tareas', icon: 'layer-group', tooltip: 'Tareas' },
-    { id: 'ubits-ai', label: 'UBITS AI', icon: 'sparkles', tooltip: 'UBITS AI' }
-  ],
-  navigationTabs: () => [
-    { id: 'dashboard', label: 'Dashboard', icon: 'home' },
-    { id: 'aprendizaje', label: 'Aprendizaje', icon: 'graduation-cap' },
-    { id: 'diagnostico', label: 'Diagnóstico', icon: 'chart-line' },
-    { id: 'desempeno', label: 'Desempeño', icon: 'chart-bar' }
-  ],
-  activeItem: '',
-  activeTab: '',
-  userAvatar: '/images/Profile-image.jpg',
-  userName: 'Usuario',
-  showUserName: true,
-  currentTheme: 'light',
-  showSidebarLabels: true
-})
-
-// Emits
-const emit = defineEmits<{
-  logoClick: []
-  navClick: [item: NavigationItem]
-  tabClick: [tab: NavigationTab]
-  userClick: []
-  themeToggle: []
-}>()
-
+// Layout simplificado - solo para clarity, feedback y onboarding
 // Sistema de tema
 const { currentTheme, isDark, toggleTheme } = useTheme()
-
-// Sistema responsive
-const { isMobile, isTablet, isDesktop } = useResponsive()
-
-// Computed
-const showSidebarLabels = computed(() => {
-  return !isMobile.value && !isTablet.value
-})
-
-// Handlers
-const handleLogoClick = () => {
-  emit('logoClick')
-}
-
-const handleNavClick = (item: NavigationItem) => {
-  emit('navClick', item)
-  
-  // Navegación automática si hay href
-  if (item.href) {
-    window.location.href = item.href
-  }
-}
-
-const handleTabClick = (tab: NavigationTab) => {
-  emit('tabClick', tab)
-}
-
-const handleUserClick = () => {
-  emit('userClick')
-}
-
-const handleThemeToggle = () => {
-  toggleTheme()
-  emit('themeToggle')
-}
 
 // Lifecycle
 onMounted(() => {
@@ -232,19 +52,16 @@ onUnmounted(() => {
   transition: all 0.3s ease;
 }
 
-/* Dashboard Container */
-.dashboard-container {
-  display: flex;
+/* Main Container */
+.main-container {
   min-height: 100vh;
   transition: all 0.3s ease;
 }
 
 /* Main Content */
 .main-content {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 96px; /* Ancho del sidebar */
   transition: all 0.3s ease;
 }
 
@@ -324,10 +141,6 @@ onUnmounted(() => {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-  }
-  
   .content-area {
     padding: 16px;
   }

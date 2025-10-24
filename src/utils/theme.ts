@@ -3,6 +3,8 @@
  * Sistema de modo oscuro/claro adaptado del playground UBITS
  */
 
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+
 export type Theme = 'light' | 'dark';
 
 export interface ThemeState {
@@ -30,89 +32,39 @@ export class UBITSThemeSystem {
     this.config = {
       persistTheme: true,
       storageKey: 'ubits-theme',
-      ...config,
+      ...config
     };
 
-    this.state = this.getInitialState();
-    this.setupEventListeners();
+    // Inicializar estado
+    this.state = {
+      currentTheme: this.getInitialTheme(),
+      isDark: false,
+      isLight: true,
+    };
+
+    // Aplicar tema inicial
+    this.applyTheme(this.state.currentTheme);
   }
 
   /**
-   * Obtener estado inicial del tema
+   * Obtener tema inicial
    */
-  private getInitialState(): ThemeState {
-    const savedTheme = this.getStoredTheme();
-    const systemTheme = this.getSystemTheme();
-    const currentTheme = savedTheme || systemTheme;
-    
-    return {
-      currentTheme,
-      isDark: currentTheme === 'dark',
-      isLight: currentTheme === 'light',
-    };
-  }
-
-  /**
-   * Obtener tema guardado en localStorage
-   */
-  private getStoredTheme(): Theme | null {
-    if (!this.config.persistTheme) return null;
-    
-    try {
-      const stored = localStorage.getItem(this.config.storageKey!);
-      return stored === 'light' || stored === 'dark' ? stored : null;
-    } catch (error) {
-      console.warn('Error reading theme from localStorage:', error);
-      return null;
+  private getInitialTheme(): Theme {
+    // Verificar si hay tema guardado
+    if (this.config.persistTheme && typeof localStorage !== 'undefined') {
+      const savedTheme = localStorage.getItem(this.config.storageKey!);
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        return savedTheme;
+      }
     }
-  }
 
-  /**
-   * Obtener tema del sistema
-   */
-  private getSystemTheme(): Theme {
-    if (typeof window === 'undefined') return 'light';
-    
-    try {
+    // Verificar preferencia del sistema
+    if (typeof window !== 'undefined' && window.matchMedia) {
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    } catch (error) {
-      console.warn('Error detecting system theme:', error);
-      return 'light';
-    }
-  }
-
-  /**
-   * Configurar event listeners
-   */
-  private setupEventListeners(): void {
-    if (typeof window === 'undefined') return;
-
-    // Escuchar cambios en la preferencia del sistema
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      // Solo cambiar si no hay tema guardado
-      if (!this.getStoredTheme()) {
-        const newTheme = e.matches ? 'dark' : 'light';
-        this.setTheme(newTheme, false); // No guardar automáticamente
-      }
-    };
-
-    // Agregar listener
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleSystemThemeChange);
-    } else {
-      // Fallback para navegadores antiguos
-      mediaQuery.addListener(handleSystemThemeChange);
     }
 
-    // Cleanup function
-    this.listeners.push(() => {
-      if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener('change', handleSystemThemeChange);
-      } else {
-        mediaQuery.removeListener(handleSystemThemeChange);
-      }
-    });
+    // Por defecto, tema claro
+    return 'light';
   }
 
   /**
@@ -122,35 +74,49 @@ export class UBITSThemeSystem {
     if (typeof document === 'undefined') return;
 
     const root = document.documentElement;
-    
+    const body = document.body;
+
     // Remover clases anteriores
     root.classList.remove('light', 'dark');
-    
+    body.classList.remove('light', 'dark');
+
     // Agregar nueva clase
     root.classList.add(theme);
-    
-    // Establecer atributo data-theme
+    body.classList.add(theme);
+
+    // Establecer atributos
     root.setAttribute('data-theme', theme);
-    
-    // Establecer atributo en body también
-    document.body.setAttribute('data-theme', theme);
+    body.setAttribute('data-theme', theme);
+
+    // Actualizar estado
+    this.state = {
+      currentTheme: theme,
+      isDark: theme === 'dark',
+      isLight: theme === 'light',
+    };
+
+    // Notificar listeners
+    this.notifyListeners();
   }
 
   /**
-   * Guardar tema en localStorage
+   * Guardar tema
    */
   private saveTheme(theme: Theme): void {
-    if (!this.config.persistTheme) return;
-    
-    try {
+    if (this.config.persistTheme && typeof localStorage !== 'undefined') {
       localStorage.setItem(this.config.storageKey!, theme);
-    } catch (error) {
-      console.warn('Error saving theme to localStorage:', error);
     }
   }
 
   /**
-   * Obtener estado actual del tema
+   * Notificar listeners
+   */
+  private notifyListeners(): void {
+    this.listeners.forEach(listener => listener());
+  }
+
+  /**
+   * Obtener estado actual
    */
   public getState(): ThemeState {
     return { ...this.state };
@@ -166,14 +132,14 @@ export class UBITSThemeSystem {
   /**
    * Verificar si está en modo oscuro
    */
-  public isDarkMode(): boolean {
+  public isDark(): boolean {
     return this.state.isDark;
   }
 
   /**
    * Verificar si está en modo claro
    */
-  public isLightMode(): boolean {
+  public isLight(): boolean {
     return this.state.isLight;
   }
 
@@ -182,13 +148,6 @@ export class UBITSThemeSystem {
    */
   public setTheme(theme: Theme, save: boolean = true): void {
     const previousTheme = this.state.currentTheme;
-    
-    // Actualizar estado
-    this.state = {
-      currentTheme: theme,
-      isDark: theme === 'dark',
-      isLight: theme === 'light',
-    };
     
     // Aplicar tema al DOM
     this.applyTheme(theme);
@@ -214,65 +173,51 @@ export class UBITSThemeSystem {
   }
 
   /**
-   * Resetear tema al del sistema
-   */
-  public resetToSystemTheme(): void {
-    const systemTheme = this.getSystemTheme();
-    this.setTheme(systemTheme);
-  }
-
-  /**
-   * Limpiar preferencia guardada
+   * Limpiar tema guardado
    */
   public clearStoredTheme(): void {
-    if (!this.config.persistTheme) return;
-    
-    try {
+    if (typeof localStorage !== 'undefined') {
       localStorage.removeItem(this.config.storageKey!);
-    } catch (error) {
-      console.warn('Error clearing theme from localStorage:', error);
     }
   }
 
   /**
-   * Limpiar recursos
+   * Agregar listener
    */
-  public destroy(): void {
-    this.listeners.forEach(cleanup => cleanup());
-    this.listeners = [];
+  public addListener(listener: () => void): () => void {
+    this.listeners.push(listener);
+    return () => {
+      const index = this.listeners.indexOf(listener);
+      if (index > -1) {
+        this.listeners.splice(index, 1);
+      }
+    };
   }
 }
 
 /**
- * Hook de Vue.js para usar el sistema de tema
+ * Hook para usar en componentes Vue
  */
 export function useTheme(config?: ThemeConfig) {
-  const { ref, onMounted, onUnmounted } = require('vue');
-  
   const themeSystem = new UBITSThemeSystem(config);
   const state = ref<ThemeState>(themeSystem.getState());
 
-  // Actualizar estado reactivo
-  const updateState = () => {
+  // Actualizar estado cuando cambie
+  const removeListener = themeSystem.addListener(() => {
     state.value = themeSystem.getState();
-  };
-
-  onMounted(() => {
-    themeSystem.config.onThemeChange = updateState;
   });
 
+  // Cleanup
   onUnmounted(() => {
-    themeSystem.destroy();
+    removeListener();
   });
 
   return {
-    state: state.value,
-    currentTheme: themeSystem.getCurrentTheme(),
-    isDark: themeSystem.isDarkMode(),
-    isLight: themeSystem.isLightMode(),
+    currentTheme: computed(() => state.value.currentTheme),
+    isDark: computed(() => state.value.isDark),
+    isLight: computed(() => state.value.isLight),
     setTheme: themeSystem.setTheme.bind(themeSystem),
     toggleTheme: themeSystem.toggleTheme.bind(themeSystem),
-    resetToSystemTheme: themeSystem.resetToSystemTheme.bind(themeSystem),
     clearStoredTheme: themeSystem.clearStoredTheme.bind(themeSystem),
   };
 }
@@ -323,10 +268,14 @@ export const ThemeUtils = {
     if (typeof document === 'undefined') return;
     
     const root = document.documentElement;
+    const body = document.body;
+    
     root.classList.remove('light', 'dark');
+    body.classList.remove('light', 'dark');
     root.classList.add(theme);
+    body.classList.add(theme);
     root.setAttribute('data-theme', theme);
-    document.body.setAttribute('data-theme', theme);
+    body.setAttribute('data-theme', theme);
   },
 
   /**

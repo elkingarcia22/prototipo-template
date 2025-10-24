@@ -33,6 +33,8 @@ import { ref, computed, onMounted } from 'vue'
 import MainLayout from './layouts/MainLayout.vue'
 import DashboardPage from './pages/DashboardPage.vue'
 import AprendizajePage from './pages/AprendizajePage.vue'
+import ComponentsShowcase from './pages/ComponentsShowcase.vue'
+import TemplatePage from './pages/TemplatePage.vue'
 import { useTheme } from './utils/theme'
 import { useResponsive } from './utils/responsive'
 
@@ -56,12 +58,22 @@ interface NavigationTab {
 // Sistema de tema
 const { currentTheme, isDark, toggleTheme } = useTheme()
 
-// Sistema responsive
-const { isMobile, isTablet, isDesktop } = useResponsive()
+// Sistema responsive - Implementación simple
+const isMobile = ref(false)
+const isTablet = ref(false)
+const isDesktop = ref(true)
+
+// Detectar tamaño de pantalla
+const updateResponsive = () => {
+  const width = window.innerWidth
+  isMobile.value = width < 768
+  isTablet.value = width >= 768 && width < 1024
+  isDesktop.value = width >= 1024
+}
 
 // Estado de la aplicación
-const activeItem = ref('dashboard')
-const activeTab = ref('dashboard')
+const activeItem = ref('template')
+const activeTab = ref('template')
 
 // Configuración
 const logoUrl = ref('/images/Ubits-logo.svg')
@@ -74,21 +86,24 @@ const showUserName = ref(true)
 
 // Navegación
 const navigationItems = ref<NavigationItem[]>([
-  { id: 'dashboard', label: 'Dashboard', icon: 'home', tooltip: 'Dashboard' },
+  { id: 'template', label: 'Template', icon: 'home', tooltip: 'Template Principal' },
+  { id: 'dashboard', label: 'Dashboard', icon: 'chart-line', tooltip: 'Dashboard' },
   { id: 'aprendizaje', label: 'Aprendizaje', icon: 'graduation-cap', tooltip: 'Aprendizaje' },
-  { id: 'diagnostico', label: 'Diagnóstico', icon: 'chart-line', tooltip: 'Diagnóstico' },
-  { id: 'desempeno', label: 'Desempeño', icon: 'chart-bar', tooltip: 'Desempeño' },
+  { id: 'diagnostico', label: 'Diagnóstico', icon: 'chart-mixed', tooltip: 'Diagnóstico' },
+  { id: 'desempeno', label: 'Desempeño', icon: 'bars-progress', tooltip: 'Desempeño' },
   { id: 'encuestas', label: 'Encuestas', icon: 'clipboard', tooltip: 'Encuestas', href: 'encuestas.html' },
   { id: 'reclutamiento', label: 'Reclutamiento', icon: 'users', tooltip: 'Reclutamiento' },
   { id: 'tareas', label: 'Tareas', icon: 'layer-group', tooltip: 'Tareas' },
-  { id: 'ubits-ai', label: 'UBITS AI', icon: 'sparkles', tooltip: 'UBITS AI' }
+  { id: 'ubits-ai', label: 'UBITS AI', icon: 'sparkles', tooltip: 'UBITS AI' },
+  { id: 'components', label: 'Componentes', icon: 'puzzle-piece', tooltip: 'Showcase de Componentes' }
 ])
 
 const navigationTabs = ref<NavigationTab[]>([
-  { id: 'dashboard', label: 'Dashboard', icon: 'home' },
+  { id: 'template', label: 'Template', icon: 'home' },
+  { id: 'dashboard', label: 'Dashboard', icon: 'chart-line' },
   { id: 'aprendizaje', label: 'Aprendizaje', icon: 'graduation-cap' },
-  { id: 'diagnostico', label: 'Diagnóstico', icon: 'chart-line' },
-  { id: 'desempeno', label: 'Desempeño', icon: 'chart-bar' }
+  { id: 'diagnostico', label: 'Diagnóstico', icon: 'chart-mixed' },
+  { id: 'desempeno', label: 'Desempeño', icon: 'bars-progress' }
 ])
 
 // Computed
@@ -98,24 +113,28 @@ const showSidebarLabels = computed(() => {
 
 const currentPageComponent = computed(() => {
   switch (activeItem.value) {
+    case 'template':
+      return TemplatePage
     case 'dashboard':
       return DashboardPage
     case 'aprendizaje':
       return AprendizajePage
+    case 'components':
+      return ComponentsShowcase
     case 'diagnostico':
       return DashboardPage // Placeholder
     case 'desempeno':
       return DashboardPage // Placeholder
     default:
-      return DashboardPage
+      return TemplatePage
   }
 })
 
 // Handlers
 const handleLogoClick = () => {
   console.log('Logo clicked')
-  activeItem.value = 'dashboard'
-  activeTab.value = 'dashboard'
+  activeItem.value = 'template'
+  activeTab.value = 'template'
 }
 
 const handleNavClick = (item: NavigationItem) => {
@@ -145,21 +164,50 @@ const handleThemeToggle = () => {
 
 // Lifecycle
 onMounted(() => {
-  console.log('UBITS App mounted')
+  console.log('🚀 UBITS App mounted')
+  console.log('📊 Current page component:', currentPageComponent.value)
+  console.log('🎯 Active item:', activeItem.value)
+  console.log('🌙 Current theme:', currentTheme.value)
+  
+  // Inicializar responsive
+  updateResponsive()
+  window.addEventListener('resize', updateResponsive)
+  console.log('📱 Responsive initialized:', { isMobile: isMobile.value, isTablet: isTablet.value, isDesktop: isDesktop.value })
   
   // Aplicar tema inicial
   document.documentElement.setAttribute('data-theme', currentTheme.value)
+  console.log('🎨 App theme applied:', currentTheme.value)
   
   // Cargar configuración desde localStorage si existe
   const savedActiveItem = localStorage.getItem('ubits-active-item')
   if (savedActiveItem) {
     activeItem.value = savedActiveItem
+    console.log('💾 App loaded active item:', savedActiveItem)
   }
   
   const savedActiveTab = localStorage.getItem('ubits-active-tab')
   if (savedActiveTab) {
     activeTab.value = savedActiveTab
+    console.log('💾 App loaded active tab:', savedActiveTab)
   }
+  
+  // Verificar que los componentes se estén renderizando
+  setTimeout(() => {
+    console.log('🔍 Checking components in DOM...')
+    const sidebar = document.querySelector('.sidebar')
+    const topNav = document.querySelector('.ubits-top-nav')
+    const templatePage = document.querySelector('.template-page')
+    
+    console.log('🧭 Sidebar found:', !!sidebar)
+    console.log('📊 TopNav found:', !!topNav)
+    console.log('📄 TemplatePage found:', !!templatePage)
+    
+    if (sidebar) {
+      console.log('✅ Sidebar is rendered')
+    } else {
+      console.log('❌ Sidebar is NOT rendered')
+    }
+  }, 1000)
 })
 
 // Guardar estado en localStorage
@@ -177,13 +225,24 @@ watch(activeTab, saveState)
 <style>
 /* Importar tokens UBITS globales */
 @import './styles/ubits-tokens.css';
-@import './styles/globals.css';
+@import './styles/ubits-styles.css';
+@import './styles/ubits-colors.css';
+@import './styles/ubits-layout.css';
 
 /* Reset global */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Asegurar que el fondo cubra toda la pantalla */
+#app {
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  background: var(--ubits-bg-2);
+  overflow: hidden;
 }
 
 html {

@@ -1,257 +1,137 @@
 /* ========================================
-   UBITS COLOR TOKENS
-   Sistema de colores oficial de UBITS
+   UBITS COLORS - Sistema de Temas Correcto
    ======================================== */
 
-:root {
-  /* ========================================
-     BRAND COLORS
-     ======================================== */
-  
-  /* Accent Brand */
-  --ubits-accent-brand: #0c5bef;
-  --ubits-accent-brand-inverted: #0c5bef;
-  --ubits-accent-brand-static: #0c5bef;
-  --ubits-accent-brand-static-inverted: #3865f5;
-  
-  /* Button Colors */
-  --ubits-button-primary-bg-default: #0c5bef;
-  --ubits-button-primary-hover: #223a91;
-  --ubits-button-primary-pressed: #1e4abf;
-  --ubits-button-active-bg: rgba(12, 91, 239, 0.15);
-  --ubits-button-focus-ring: rgba(82, 151, 244, 0.3);
-  --ubits-button-badge: #cf0e34;
-  --ubits-btn-primary-fg: #ffffff;
+/* ========================================
+   LIGHT MODE - Tema Claro (Por defecto)
+   ======================================== */
 
-  /* Secondary Button Colors - LIGHT MODE */
-  --ubits-btn-secondary-bg-default: #ffffff;
-  --ubits-btn-secondary-bg-hover: #f3f3f4;
-  --ubits-btn-secondary-bg-pressed: #e7e8ea;
-  --ubits-btn-secondary-fg-default: #303a47;
-  --ubits-btn-secondary-border: #d0d2d5;
-
-  /* Tertiary Button Colors - LIGHT MODE */
-  --ubits-btn-tertiary-fg: #5c646f;
-  --ubits-btn-tertiary-bg-hover: rgba(231, 232, 234, 0.5);
-  --ubits-btn-tertiary-bg-pressed: rgba(231, 232, 234, 0.7);
-  
-  /* UBITS Logo */
-  --ubits-logo: #0d1f57;
-  --ubits-logo-inverted: #ffffff;
-  --ubits-logo-static: #0d1f57;
-  --ubits-logo-static-inverted: #ffffff;
-  
+:root,
+[data-theme="light"] {
   /* ========================================
-     FOREGROUND COLORS
+     BACKGROUND COLORS - LIGHT MODE
      ======================================== */
   
-  /* Primary Text */
-  --ubits-fg-1-high: #303a47;
-  --ubits-fg-1-high-inverted: #edeeef;
-  --ubits-fg-1-high-static: #303a47;
-  --ubits-fg-1-high-static-inverted: #edeeef;
-  
-  --ubits-fg-1-medium: #5c646f;
-  --ubits-fg-1-medium-inverted: #b8bcc0;
-  --ubits-fg-1-medium-static: #5c646f;
-  --ubits-fg-1-medium-static-inverted: #b8bcc0;
-  
-  --ubits-fg-1-low: #8a9299;
-  --ubits-fg-1-low-inverted: #8a9299;
-  --ubits-fg-1-low-static: #8a9299;
-  --ubits-fg-1-low-static-inverted: #8a9299;
-  
-  /* Secondary Text */
-  --ubits-fg-2-high: #303a47;
-  --ubits-fg-2-high-inverted: #edeeef;
-  --ubits-fg-2-high-static: #303a47;
-  --ubits-fg-2-high-static-inverted: #edeeef;
-  
-  --ubits-fg-2-medium: #5c646f;
-  --ubits-fg-2-medium-inverted: #b8bcc0;
-  --ubits-fg-2-medium-static: #5c646f;
-  --ubits-fg-2-medium-static-inverted: #b8bcc0;
-  
-  --ubits-fg-2-low: #8a9299;
-  --ubits-fg-2-low-inverted: #8a9299;
-  --ubits-fg-2-low-static: #8a9299;
-  --ubits-fg-2-low-static-inverted: #8a9299;
-  
-  /* ========================================
-     BACKGROUND COLORS
-     ======================================== */
-  
-  /* Primary Backgrounds */
   --ubits-bg-1: #ffffff;
   --ubits-bg-1-inverted: #1a1a1a;
-  --ubits-bg-1-static: #ffffff;
-  --ubits-bg-1-static-inverted: #1a1a1a;
-  
-  --ubits-bg-2: #f8f9fa;
+  --ubits-bg-2: #1a1a1a;
   --ubits-bg-2-inverted: #2a2a2a;
-  --ubits-bg-2-static: #f8f9fa;
-  --ubits-bg-2-static-inverted: #2a2a2a;
-  
-  --ubits-bg-3: #f3f3f4;
+  --ubits-bg-3: #f1f3f4;
   --ubits-bg-3-inverted: #3a3a3a;
-  --ubits-bg-3-static: #f3f3f4;
-  --ubits-bg-3-static-inverted: #3a3a3a;
-  
   --ubits-bg-4: #e7e8ea;
   --ubits-bg-4-inverted: #4a4a4a;
-  --ubits-bg-4-static: #e7e8ea;
-  --ubits-bg-4-static-inverted: #4a4a4a;
-  
   --ubits-bg-5: #d0d2d5;
   --ubits-bg-5-inverted: #5a5a5a;
-  --ubits-bg-5-static: #d0d2d5;
-  --ubits-bg-5-static-inverted: #5a5a5a;
-  
-  --ubits-bg-disabled: #f3f3f4;
-  --ubits-bg-disabled-inverted: #3a3a3a;
-  --ubits-bg-disabled-static: #f3f3f4;
-  --ubits-bg-disabled-static-inverted: #3a3a3a;
-  
-  --ubits-bg-disabled-button: #e7e8ea;
-  --ubits-bg-disabled-button-inverted: #4a4a4a;
-  --ubits-bg-disabled-button-static: #e7e8ea;
-  --ubits-bg-disabled-button-static-inverted: #4a4a4a;
+  --ubits-bg-disabled: #f5f5f5;
+  --ubits-bg-disabled-inverted: #404040;
+  --ubits-bg-disabled-button: #f5f5f5;
+  --ubits-bg-disabled-button-inverted: #404040;
   
   /* ========================================
-     BORDER COLORS
+     FOREGROUND COLORS - LIGHT MODE
+     ======================================== */
+  
+  --ubits-fg-1-high: #303a47;
+  --ubits-fg-1-high-inverted: #ffffff;
+  --ubits-fg-1-medium: #5c646f;
+  --ubits-fg-1-medium-inverted: #b8bcc0;
+  --ubits-fg-1-low: #8a9299;
+  --ubits-fg-1-low-inverted: #8a9299;
+  
+  --ubits-fg-2-high: #303a47;
+  --ubits-fg-2-high-inverted: #edeeef;
+  --ubits-fg-2-medium: #5c646f;
+  --ubits-fg-2-medium-inverted: #b8bcc0;
+  --ubits-fg-2-low: #8a9299;
+  --ubits-fg-2-low-inverted: #8a9299;
+  
+  /* ========================================
+     BORDER COLORS - LIGHT MODE
      ======================================== */
   
   --ubits-border-1: #d0d2d5;
   --ubits-border-1-inverted: #5a5a5a;
-  --ubits-border-1-static: #d0d2d5;
-  --ubits-border-1-static-inverted: #5a5a5a;
-  
   --ubits-border-2: #e7e8ea;
   --ubits-border-2-inverted: #4a4a4a;
-  --ubits-border-2-static: #e7e8ea;
-  --ubits-border-2-static-inverted: #4a4a4a;
   
   /* ========================================
-     SIDEBAR COLORS
+     SIDEBAR COLORS - LIGHT MODE
      ======================================== */
   
-  --ubits-sidebar-bg: #ffffff;
-  --ubits-sidebar-bg-inverted: #1a1a1a;
-  --ubits-sidebar-bg-static: #ffffff;
-  --ubits-sidebar-bg-static-inverted: #1a1a1a;
-  
+  --ubits-sidebar-bg: #202837;
+  --ubits-sidebar-bg-inverted: #ffffff;
   --ubits-sidebar-button-bg-default: transparent;
   --ubits-sidebar-button-bg-hover: rgba(12, 91, 239, 0.1);
   --ubits-sidebar-button-bg-active: rgba(12, 91, 239, 0.15);
-  --ubits-sidebar-button-bg-default-inverted: transparent;
-  --ubits-sidebar-button-bg-hover-inverted: rgba(12, 91, 239, 0.2);
-  --ubits-sidebar-button-bg-active-inverted: rgba(12, 91, 239, 0.25);
-  
-  --ubits-sidebar-button-fg-default: #5c646f;
-  --ubits-sidebar-button-fg-hover: #303a47;
+  --ubits-sidebar-button-fg-default: #d0d2d5;
+  --ubits-sidebar-button-fg-hover: #edeeef;
   --ubits-sidebar-button-fg-active: #0c5bef;
-  --ubits-sidebar-button-fg-default-inverted: #b8bcc0;
-  --ubits-sidebar-button-fg-hover-inverted: #edeeef;
-  --ubits-sidebar-button-fg-active-inverted: #0c5bef;
   
   /* ========================================
-     TOOLTIP COLORS
+     TOOLTIP COLORS - LIGHT MODE
      ======================================== */
   
   --ubits-tooltip-bg: #303a47;
   --ubits-tooltip-fg: #ffffff;
   --ubits-tooltip-bg-inverted: #edeeef;
   --ubits-tooltip-fg-inverted: #303a47;
-  --ubits-tooltip-bg-static: #303a47;
-  --ubits-tooltip-fg-static: #ffffff;
-  --ubits-tooltip-bg-static-inverted: #edeeef;
-  --ubits-tooltip-fg-static-inverted: #303a47;
   
   /* ========================================
-     SHADOW COLORS
+     ACCENT COLORS - LIGHT MODE
+     ======================================== */
+  
+  --ubits-accent-brand: #0c5bef;
+  --ubits-accent-brand-hover: #0a4bc7;
+  --ubits-accent-brand-pressed: #0942b3;
+  
+  /* ========================================
+     FEEDBACK COLORS - LIGHT MODE
+     ======================================== */
+  
+  --ubits-feedback-accent-success: #25c37a;
+  --ubits-feedback-accent-info: #0c5bef;
+  --ubits-feedback-accent-warning: #f59e0b;
+  --ubits-feedback-accent-error: #ef4444;
+  
+  /* ========================================
+     SHADOW COLORS - LIGHT MODE
      ======================================== */
   
   --ubits-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --ubits-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --ubits-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --ubits-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
-  /* ========================================
-     SPACING
-     ======================================== */
-  
-  --ubits-spacing-xs: 4px;
-  --ubits-spacing-sm: 8px;
-  --ubits-spacing-md: 16px;
-  --ubits-spacing-lg: 24px;
-  --ubits-spacing-xl: 32px;
-  --ubits-spacing-2xl: 48px;
-  
-  /* ========================================
-     BORDER RADIUS
-     ======================================== */
-  
-  --ubits-radius-sm: 4px;
-  --ubits-radius-md: 8px;
-  --ubits-radius-lg: 12px;
-  --ubits-radius-xl: 16px;
-  
-  /* ========================================
-     TYPOGRAPHY
-     ======================================== */
-  
-  --ubits-font-family: 'Noto Sans', sans-serif;
-  --ubits-font-size-xs: 12px;
-  --ubits-font-size-sm: 14px;
-  --ubits-font-size-md: 16px;
-  --ubits-font-size-lg: 18px;
-  --ubits-font-size-xl: 20px;
-  --ubits-font-size-2xl: 24px;
-  --ubits-font-size-3xl: 30px;
-  --ubits-font-size-4xl: 36px;
-  
-  /* ========================================
-     BUTTON HEIGHTS
-     ======================================== */
-  
-  --ubits-button-height: 40px;
-  --ubits-button-height-sm: 32px;
-  --ubits-button-height-lg: 48px;
 }
 
 /* ========================================
-   DARK MODE
+   DARK MODE - Tema Oscuro
    ======================================== */
 
 [data-theme="dark"] {
-  /* Brand Colors - Dark Mode */
-  --ubits-accent-brand: #0c5bef;
-  --ubits-accent-brand-inverted: #0c5bef;
+  /* ========================================
+     BACKGROUND COLORS - DARK MODE
+     ======================================== */
   
-  /* Button Colors - Dark Mode */
-  --ubits-button-primary-bg-default: #0c5bef;
-  --ubits-button-primary-hover: #223a91;
-  --ubits-button-primary-pressed: #1e4abf;
-  --ubits-button-active-bg: rgba(12, 91, 239, 0.2);
+  --ubits-bg-1: #1a1a1a;
+  --ubits-bg-1-inverted: #ffffff;
+  --ubits-bg-2: #1a1a1a;
+  --ubits-bg-2-inverted: #F3F3F4;
+  --ubits-bg-3: #3a3a3a;
+  --ubits-bg-3-inverted: #f1f3f4;
+  --ubits-bg-4: #4a4a4a;
+  --ubits-bg-4-inverted: #e7e8ea;
+  --ubits-bg-5: #5a5a5a;
+  --ubits-bg-5-inverted: #d0d2d5;
+  --ubits-bg-disabled: #3a3a3a;
+  --ubits-bg-disabled-inverted: #f3f3f4;
+  --ubits-bg-disabled-button: #4a4a4a;
+  --ubits-bg-disabled-button-inverted: #e7e8ea;
   
-  /* Secondary Button Colors - Dark Mode */
-  --ubits-btn-secondary-bg-default: #2a2a2a;
-  --ubits-btn-secondary-bg-hover: #3a3a3a;
-  --ubits-btn-secondary-bg-pressed: #4a4a4a;
-  --ubits-btn-secondary-fg-default: #edeeef;
-  --ubits-btn-secondary-border: #5a5a5a;
+  /* ========================================
+     FOREGROUND COLORS - DARK MODE
+     ======================================== */
   
-  /* Tertiary Button Colors - Dark Mode */
-  --ubits-btn-tertiary-fg: #b8bcc0;
-  --ubits-btn-tertiary-bg-hover: rgba(58, 58, 58, 0.5);
-  --ubits-btn-tertiary-bg-pressed: rgba(58, 58, 58, 0.7);
-  
-  /* UBITS Logo - Dark Mode */
-  --ubits-logo: #ffffff;
-  --ubits-logo-inverted: #0d1f57;
-  
-  /* Foreground Colors - Dark Mode */
-  --ubits-fg-1-high: #edeeef;
+  --ubits-fg-1-high: #ffffff;
   --ubits-fg-1-high-inverted: #303a47;
   --ubits-fg-1-medium: #b8bcc0;
   --ubits-fg-1-medium-inverted: #5c646f;
@@ -265,41 +145,60 @@
   --ubits-fg-2-low: #8a9299;
   --ubits-fg-2-low-inverted: #8a9299;
   
-  /* Background Colors - Dark Mode */
-  --ubits-bg-1: #1a1a1a;
-  --ubits-bg-1-inverted: #ffffff;
-  --ubits-bg-2: #2a2a2a;
-  --ubits-bg-2-inverted: #f8f9fa;
-  --ubits-bg-3: #3a3a3a;
-  --ubits-bg-3-inverted: #f3f3f4;
-  --ubits-bg-4: #4a4a4a;
-  --ubits-bg-4-inverted: #e7e8ea;
-  --ubits-bg-5: #5a5a5a;
-  --ubits-bg-5-inverted: #d0d2d5;
-  --ubits-bg-disabled: #3a3a3a;
-  --ubits-bg-disabled-inverted: #f3f3f4;
-  --ubits-bg-disabled-button: #4a4a4a;
-  --ubits-bg-disabled-button-inverted: #e7e8ea;
+  /* ========================================
+     BORDER COLORS - DARK MODE
+     ======================================== */
   
-  /* Border Colors - Dark Mode */
   --ubits-border-1: #5a5a5a;
   --ubits-border-1-inverted: #d0d2d5;
   --ubits-border-2: #4a4a4a;
   --ubits-border-2-inverted: #e7e8ea;
   
-  /* Sidebar Colors - Dark Mode */
-  --ubits-sidebar-bg: #1a1a1a;
+  /* ========================================
+     SIDEBAR COLORS - DARK MODE
+     ======================================== */
+  
+  --ubits-sidebar-bg: #202837;
   --ubits-sidebar-bg-inverted: #ffffff;
   --ubits-sidebar-button-bg-default: transparent;
   --ubits-sidebar-button-bg-hover: rgba(12, 91, 239, 0.2);
   --ubits-sidebar-button-bg-active: rgba(12, 91, 239, 0.25);
-  --ubits-sidebar-button-fg-default: #b8bcc0;
+  --ubits-sidebar-button-fg-default: #d0d2d5;
   --ubits-sidebar-button-fg-hover: #edeeef;
   --ubits-sidebar-button-fg-active: #0c5bef;
   
-  /* Tooltip Colors - Dark Mode */
+  /* ========================================
+     TOOLTIP COLORS - DARK MODE
+     ======================================== */
+  
   --ubits-tooltip-bg: #edeeef;
   --ubits-tooltip-fg: #303a47;
   --ubits-tooltip-bg-inverted: #303a47;
   --ubits-tooltip-fg-inverted: #ffffff;
+  
+  /* ========================================
+     ACCENT COLORS - DARK MODE
+     ======================================== */
+  
+  --ubits-accent-brand: #0c5bef;
+  --ubits-accent-brand-hover: #0a4bc7;
+  --ubits-accent-brand-pressed: #0942b3;
+  
+  /* ========================================
+     FEEDBACK COLORS - DARK MODE
+     ======================================== */
+  
+  --ubits-feedback-accent-success: #25c37a;
+  --ubits-feedback-accent-info: #0c5bef;
+  --ubits-feedback-accent-warning: #f59e0b;
+  --ubits-feedback-accent-error: #ef4444;
+  
+  /* ========================================
+     SHADOW COLORS - DARK MODE
+     ======================================== */
+  
+  --ubits-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --ubits-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --ubits-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --ubits-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }

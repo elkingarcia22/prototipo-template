@@ -38,8 +38,10 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
     "alpinejs": "^3.13.0",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "vue": "^3.5.22"
   },
   "engines": {
     "node": ">=18.0.0",

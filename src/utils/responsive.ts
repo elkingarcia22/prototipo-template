@@ -3,6 +3,8 @@
  * Sistema responsive adaptado del playground UBITS con tecnologías de punta
  */
 
+import { ref, onMounted, onUnmounted } from 'vue';
+
 // Breakpoints UBITS oficiales
 export const UBITS_BREAKPOINTS = {
   xs: 480,
@@ -243,7 +245,6 @@ export class UBITSResponsiveSystem {
  * Hook de Vue.js para usar el sistema responsive
  */
 export function useResponsive(config?: ResponsiveConfig) {
-  const { ref, onMounted, onUnmounted } = require('vue');
   
   const responsiveSystem = new UBITSResponsiveSystem(config);
   const state = ref<ResponsiveState>(responsiveSystem.getState());
