@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template con Microsoft Clarity</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Clarity CSS -->
+  <link rel="stylesheet" crossorigin href="/assets/clarity-Cwk-shc8.css">
+  <link rel="stylesheet" crossorigin href="/assets/globals-DnjlsjD0.css">
+</head>
+<body class="prototype-container">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-semibold text-gray-900">Template con Clarity</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="prototype-button prototype-button-secondary" id="debugToggle">
+                        🔧 Debug
+                    </button>
+                    <button class="prototype-button prototype-button-primary" data-prototype-start>
+                        🚀 Iniciar Prototipo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                Prototipo con Microsoft Clarity
+            </h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Este template incluye integración completa con Microsoft Clarity para analytics
+            </p>
+        </div>
+
+        <!-- Demo Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Card 1 - Trackeada -->
+            <div class="prototype-card" data-clarity-track="analytics_card">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">📊</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Analytics</h3>
+                    <p class="text-gray-600">
+                        Sistema de análisis integrado con Clarity
+                    </p>
+                    <button class="prototype-button prototype-button-primary mt-4" data-clarity-track="analytics_button">
+                        Ver Analytics
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Card 2 - Trackeada -->
+            <div class="prototype-card" data-clarity-track="features_card">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">🎯</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Features</h3>
+                    <p class="text-gray-600">
+                        Características del prototipo trackeadas
+                    </p>
+                    <button class="prototype-button prototype-button-primary mt-4" data-clarity-track="features_button">
+                        Explorar Features
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Card 3 - Trackeada -->
+            <div class="prototype-card" data-clarity-track="reports_card">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">📈</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Reportes</h3>
+                    <p class="text-gray-600">
+                        Genera reportes con datos de Clarity
+                    </p>
+                    <button class="prototype-button prototype-button-primary mt-4" data-clarity-track="reports_button">
+                        Generar Reporte
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="prototype-card mb-8">
+            <h3 class="text-2xl font-semibold text-gray-900 mb-6">Características de Clarity</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-4">Eventos Automáticos</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Session recordings
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Heatmaps automáticos
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            User journeys
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Performance metrics
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-4">Eventos Personalizados</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Prototipo interactions
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Feedback submissions
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Onboarding progress
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Error tracking
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Buttons -->
+        <div class="text-center">
+            <button class="prototype-button prototype-button-primary mr-4" data-clarity-track="demo_button">
+                🎭 Demo Event
+            </button>
+            <button class="prototype-button prototype-button-secondary" id="testError">
+                🐛 Test Error
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-gray-600">
+                <p>Template con Clarity - Creado con ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Feedback Button -->
+    <div class="feedback-trigger" id="feedbackTrigger" onclick="openFeedbackModal()">
+        💬
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="feedback-modal" id="feedbackModal">
+        <div class="feedback-modal-content">
+            <div class="feedback-modal-header">
+                <h3>Feedback</h3>
+                <button class="feedback-close" onclick="closeFeedbackModal()">&times;</button>
+            </div>
+            <div class="feedback-modal-body">
+                <form id="feedbackForm">
+                    <div class="feedback-form-group">
+                        <label for="feedbackSection">Sección actual:</label>
+                        <select id="feedbackSection" name="section" required>
+                            <option value="">Selecciona una sección</option>
+                            <option value="Home">Home</option>
+                            <option value="Clarity">Clarity</option>
+                            <option value="Analytics">Analytics</option>
+                            <option value="Feedback">Feedback</option>
+                            <option value="Otra">Otra</option>
+                        </select>
+                    </div>
+                    <div class="feedback-form-group">
+                        <label for="feedbackComment">Tu comentario:</label>
+                        <textarea id="feedbackComment" name="comment" placeholder="¿Qué funciona bien? ¿Qué falta? ¿Qué mejorarías?" required></textarea>
+                    </div>
+                    <div class="feedback-form-actions">
+                        <button type="button" class="feedback-cancel" onclick="closeFeedbackModal()">Cancelar</button>
+                        <button type="submit" class="feedback-submit">Enviar Feedback</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../components/clarity/clarity.js"></script>
+    <script src="../components/feedback/feedback.js"></script>
+    
+    <script>
+        // Configuración de Clarity
+        const clarity = createClarity({
+            projectId: 'demo_project_id', // En producción usar variable de entorno
+            enabled: true,
+            debug: true, // Habilitar debug para demo
+            customEvents: {
+                'prototype_start': {
+                    selector: '[data-prototype-start]',
+                    eventType: 'click',
+                    data: { section: 'home' }
+                },
+                'analytics_interaction': {
+                    selector: '[data-clarity-track="analytics_button"]',
+                    eventType: 'click',
+                    data: { type: 'analytics' }
+                },
+                'features_interaction': {
+                    selector: '[data-clarity-track="features_button"]',
+                    eventType: 'click',
+                    data: { type: 'features' }
+                },
+                'reports_interaction': {
+                    selector: '[data-clarity-track="reports_button"]',
+                    eventType: 'click',
+                    data: { type: 'reports' }
+                },
+                'demo_event': {
+                    selector: '[data-clarity-track="demo_button"]',
+                    eventType: 'click',
+                    data: { type: 'demo' }
+                }
+            }
+        });
+
+        // Event listeners
+        document.getElementById('debugToggle').addEventListener('click', () => {
+            const panel = document.querySelector('.clarity-debug-panel');
+            if (panel) {
+                panel.classList.toggle('show');
+            }
+        });
+
+        document.getElementById('testError').addEventListener('click', () => {
+            try {
+                throw new Error('Error de prueba para Clarity');
+            } catch (error) {
+                clarity.trackError(error, { context: 'demo' });
+                alert('Error trackeado en Clarity');
+            }
+        });
+
+        // Trackear vista de página
+        clarity.trackPageView('clarity_template', {
+            section: 'home',
+            timestamp: new Date().toISOString()
+        });
+
+        // Funciones del feedback (placeholder)
+        function openFeedbackModal() {
+            document.getElementById('feedbackModal').classList.add('show');
+            clarity.trackEvent('feedback_opened', { source: 'template' });
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('show');
+            clarity.trackEvent('feedback_closed', { source: 'template' });
+        }
+
+        // Manejar envío del feedback
+        document.getElementById('feedbackForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            clarity.trackEvent('feedback_submitted', {
+                section: data.section,
+                comment_length: data.comment.length,
+                timestamp: new Date().toISOString()
+            });
+            
+            alert('¡Gracias por tu feedback! Evento trackeado en Clarity.');
+            closeFeedbackModal();
+        });
+
+        // Trackear interacciones adicionales
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.prototype-button')) {
+                clarity.trackUserAction('button_click', {
+                    button: e.target.textContent.trim(),
+                    element: e.target.tagName
+                });
+            }
+        });
+
+        // Trackear scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                clarity.trackEvent('page_scroll', {
+                    scroll_percentage: Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
+                });
+            }, 1000);
+        });
+
+        console.log('📊 Clarity configurado y listo para tracking');
+    </script>
+</body>
+</html>
