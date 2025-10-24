@@ -14,8 +14,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         onboarding: resolve(__dirname, 'templates/onboarding.html'),
         clarity: resolve(__dirname, 'templates/clarity.html'),
-        feedback: resolve(__dirname, 'templates/feedback.html'),
-        full: resolve(__dirname, 'templates/full-featured.html')
+        feedback: resolve(__dirname, 'templates/feedback.html')
       }
     }
   },
