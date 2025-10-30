@@ -105,6 +105,7 @@
         <a class="subtab" href="#colores/blue" data-cat="blue" role="tab">Blue Foregrounds</a>
         <a class="subtab" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
         <a class="subtab" href="#colores/gray" data-cat="gray" role="tab">Gray Foregrounds</a>
+        <a class="subtab" href="#colores/green" data-cat="green" role="tab">Green Foregrounds</a>
       </div>
     
       <div id="cat-brand" class="cat-section">
@@ -202,6 +203,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · YELLOW FOREGROUNDS</div>
             <div class="grid" id="grid-dark-fg-yellow">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-green" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · GREEN FOREGROUNDS</div>
+            <div class="grid" id="grid-light-fg-green">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · GREEN FOREGROUNDS</div>
+            <div class="grid" id="grid-dark-fg-green">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -404,6 +422,27 @@
         gridDGray.appendChild(cell(token,'dark'));
       }
       GRAY_FG.forEach(addRowGray);
+
+      // GREEN FOREGROUNDS
+      const GREEN_FG = [
+        '--ubits-fg-green-subtle',
+        '--ubits-fg-green-subtle-inverted',
+        '--ubits-fg-green-subtle-hover',
+        '--ubits-fg-green-subtle-inverted-hover',
+        '--ubits-fg-green-subtle-static',
+        '--ubits-fg-green-subtle-static-inverted',
+        '--ubits-fg-green-subtle-static-hover',
+        '--ubits-fg-green-subtle-static-inverted-hover'
+      ];
+      const gridLGreen = document.getElementById('grid-light-fg-green');
+      const gridDGreen = document.getElementById('grid-dark-fg-green');
+      function addRowGreen(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLGreen.appendChild(nameL);
+        gridLGreen.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDGreen.appendChild(nameD);
+        gridDGreen.appendChild(cell(token,'dark'));
+      }
+      GREEN_FG.forEach(addRowGreen);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
