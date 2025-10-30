@@ -109,6 +109,7 @@
         <a class="subtab" href="#colores/purple" data-cat="purple" role="tab">Purple Foregrounds</a>
         <a class="subtab" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
         <a class="subtab" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
+        <a class="subtab" href="#colores/background" data-cat="background" role="tab">Background Colors</a>
         <a class="subtab" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
       </div>
     
@@ -129,6 +130,22 @@
       </div>
       </div>
 
+      <div id="cat-background" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · BACKGROUND COLORS</div>
+            <div class="grid" id="grid-light-bg">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · BACKGROUND COLORS</div>
+            <div class="grid" id="grid-dark-bg">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div id="cat-button" class="cat-section" style="display:none">
       <div class="columns">
         <div class="panel">
@@ -599,6 +616,20 @@
         gridDRose.appendChild(cell(token,'dark'));
       }
       ROSE_FG.forEach(addRowRose);
+
+      // BACKGROUND COLORS
+      const BG = [
+        '--ubits-bg-active','--ubits-bg-1','--ubits-bg-2','--ubits-bg-3','--ubits-bg-4','--ubits-bg-5','--ubits-bg-dim','--ubits-bg-disabled'
+      ];
+      const gridLBG = document.getElementById('grid-light-bg');
+      const gridDBG = document.getElementById('grid-dark-bg');
+      function addRowBg(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLBG.appendChild(nameL);
+        gridLBG.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDBG.appendChild(nameD);
+        gridDBG.appendChild(cell(token,'dark'));
+      }
+      BG.forEach(addRowBg);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
