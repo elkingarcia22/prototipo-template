@@ -134,6 +134,7 @@
               <a class="side-link" href="#colores/feedback-borders" data-cat="feedback-borders" role="tab">Feedback · Borders</a>
               <a class="side-link" href="#colores/chart" data-cat="chart" role="tab">Chart Colors</a>
               <a class="side-link" href="#colores/toast" data-cat="toast" role="tab">Toast Colors</a>
+              <a class="side-link" href="#colores/bottom-nav" data-cat="bottom-nav" role="tab">Bottom Nav Colors</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -558,6 +559,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · TOAST COLORS</div>
             <div class="grid" id="grid-dark-toast">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-bottom-nav" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · BOTTOM NAV COLORS</div>
+            <div class="grid" id="grid-light-bottom-nav">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · BOTTOM NAV COLORS</div>
+            <div class="grid" id="grid-dark-bottom-nav">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -1126,6 +1144,20 @@
         gridDToast.appendChild(cell(token,'dark'));
       }
       TOAST.forEach(addRowToast);
+
+      // BOTTOM NAV COLORS
+      const BOTTOM_NAV = [
+        '--ubits-bottom-nav-shadow-opacity'
+      ];
+      const gridLBN = document.getElementById('grid-light-bottom-nav');
+      const gridDBN = document.getElementById('grid-dark-bottom-nav');
+      function addRowBN(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLBN.appendChild(nameL);
+        gridLBN.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDBN.appendChild(nameD);
+        gridDBN.appendChild(cell(token,'dark'));
+      }
+      BOTTOM_NAV.forEach(addRowBN);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
