@@ -106,6 +106,7 @@
         <a class="subtab" href="#colores/gray" data-cat="gray" role="tab">Gray Foregrounds</a>
         <a class="subtab" href="#colores/green" data-cat="green" role="tab">Green Foregrounds</a>
         <a class="subtab" href="#colores/teal" data-cat="teal" role="tab">Teal Foregrounds</a>
+        <a class="subtab" href="#colores/purple" data-cat="purple" role="tab">Purple Foregrounds</a>
         <a class="subtab" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
       </div>
     
@@ -238,6 +239,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · TEAL FOREGROUNDS</div>
             <div class="grid" id="grid-dark-fg-teal">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-purple" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · PURPLE FOREGROUNDS</div>
+            <div class="grid" id="grid-light-fg-purple">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · PURPLE FOREGROUNDS</div>
+            <div class="grid" id="grid-dark-fg-purple">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -482,6 +500,27 @@
         gridDTeal.appendChild(cell(token,'dark'));
       }
       TEAL_FG.forEach(addRowTeal);
+
+      // PURPLE FOREGROUNDS
+      const PURPLE_FG = [
+        '--ubits-fg-purple-subtle',
+        '--ubits-fg-purple-subtle-inverted',
+        '--ubits-fg-purple-subtle-hover',
+        '--ubits-fg-purple-subtle-inverted-hover',
+        '--ubits-fg-purple-subtle-static',
+        '--ubits-fg-purple-subtle-static-inverted',
+        '--ubits-fg-purple-subtle-static-hover',
+        '--ubits-fg-purple-subtle-static-inverted-hover'
+      ];
+      const gridLPurple = document.getElementById('grid-light-fg-purple');
+      const gridDPurple = document.getElementById('grid-dark-fg-purple');
+      function addRowPurple(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLPurple.appendChild(nameL);
+        gridLPurple.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDPurple.appendChild(nameD);
+        gridDPurple.appendChild(cell(token,'dark'));
+      }
+      PURPLE_FG.forEach(addRowPurple);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
