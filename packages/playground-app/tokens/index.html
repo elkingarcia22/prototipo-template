@@ -685,7 +685,48 @@
         if(input){
           input.addEventListener('input', applySearchFilter);
         }
+        // Manejo robusto de clicks en el menú lateral (evita estados de hash inconsistentes)
+        const side = document.querySelector('#section-colores .side');
+        if(side){
+          side.addEventListener('click', (ev)=>{
+            const a = ev.target.closest('a.side-link');
+            if(!a) return;
+            const cat = a.getAttribute('data-cat');
+            if(!cat) return;
+            ev.preventDefault();
+            activateSubtab(cat);
+          });
+        }
       })();
+
+      // Ajuste: detección más robusta de sección activa visible
+      function getActiveCategorySection(){
+        const all = Array.from(document.querySelectorAll('#section-colores .cat-section'));
+        // sección sin display:none (inline style)
+        const visible = all.find(s => s.style.display !== 'none');
+        return visible || all.find(s => !s.hasAttribute('style')) || null;
+      }
+
+      // Reescribir applySearchFilter para usar getActiveCategorySection
+      function applySearchFilter(){
+        const input = document.getElementById('tokens-search');
+        const q = (input && input.value ? input.value : '').trim().toLowerCase();
+        const activeSection = getActiveCategorySection();
+        if(!activeSection) return;
+        const grids = activeSection.querySelectorAll('.grid');
+        grids.forEach(grid => {
+          const children = Array.from(grid.children);
+          for(let i=0;i<children.length;i+=2){
+            const nameEl = children[i];
+            const valEl = children[i+1];
+            if(!nameEl || !valEl) continue;
+            const txt = (nameEl.textContent + ' ' + valEl.textContent).toLowerCase();
+            const match = q === '' || txt.includes(q);
+            nameEl.style.display = match ? '' : 'none';
+            valEl.style.display = match ? '' : 'none';
+          }
+        });
+      }
 
       function copyToClipboard(text){
         if (navigator.clipboard && navigator.clipboard.writeText) {
