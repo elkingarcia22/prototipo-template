@@ -103,6 +103,7 @@
         <a class="subtab" href="#colores/button" data-cat="button" role="tab">Button</a>
         <a class="subtab" href="#colores/foreground" data-cat="foreground" role="tab">Foreground</a>
         <a class="subtab" href="#colores/blue" data-cat="blue" role="tab">Blue Foregrounds</a>
+        <a class="subtab" href="#colores/gray" data-cat="gray" role="tab">Gray Foregrounds</a>
       </div>
     
       <div id="cat-brand" class="cat-section">
@@ -166,6 +167,23 @@
         <div class="panel dark">
           <div class="section-title">DARK MODE · BLUE FOREGROUNDS</div>
           <div class="grid" id="grid-dark-fg-blue">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <div id="cat-gray" class="cat-section" style="display:none">
+      <div class="columns">
+        <div class="panel">
+          <div class="section-title">LIGHT MODE · GRAY FOREGROUNDS</div>
+          <div class="grid" id="grid-light-fg-gray">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+        <div class="panel dark">
+          <div class="section-title">DARK MODE · GRAY FOREGROUNDS</div>
+          <div class="grid" id="grid-dark-fg-gray">
             <div class="head"></div><div class="head"></div>
           </div>
         </div>
@@ -346,6 +364,27 @@
         gridDBlue.appendChild(cell(token,'dark'));
       }
       BLUE_FG.forEach(addRowBlue);
+
+      // GRAY FOREGROUNDS
+      const GRAY_FG = [
+        '--ubits-fg-gray-subtle',
+        '--ubits-fg-gray-subtle-inverted',
+        '--ubits-fg-gray-subtle-hover',
+        '--ubits-fg-gray-subtle-inverted-hover',
+        '--ubits-fg-gray-subtle-static',
+        '--ubits-fg-gray-subtle-static-inverted',
+        '--ubits-fg-gray-subtle-static-hover',
+        '--ubits-fg-gray-subtle-static-inverted-hover'
+      ];
+      const gridLGray = document.getElementById('grid-light-fg-gray');
+      const gridDGray = document.getElementById('grid-dark-fg-gray');
+      function addRowGray(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLGray.appendChild(nameL);
+        gridLGray.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDGray.appendChild(nameD);
+        gridDGray.appendChild(cell(token,'dark'));
+      }
+      GRAY_FG.forEach(addRowGray);
       // restaurar estado por defecto de cálculo si fuese necesario
       html.setAttribute('data-theme','light');
       // activar tab inicial
