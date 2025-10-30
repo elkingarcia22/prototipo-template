@@ -21,6 +21,11 @@
       code{font-size:12px; color:inherit; opacity:.85}
       .copyable{cursor:pointer}
       .copied{outline:2px solid #86efac; outline-offset:2px}
+      .toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
+        background:#111827; color:#fff; padding:10px 14px; border-radius:8px;
+        box-shadow:0 10px 15px rgba(0,0,0,.15); font-size:12px; opacity:0; pointer-events:none;
+        transition:opacity .2s ease, transform .2s ease}
+      .toast.show{opacity:1; transform:translateX(-50%) translateY(-4px)}
     </style>
   </head>
   <body>
@@ -57,6 +62,8 @@
       </div>
     </div>
 
+    <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+
     <script>
       const root = document.documentElement;
       const html = document.documentElement;
@@ -71,6 +78,15 @@
         '--ubits-logo-static',
         '--ubits-logo-static-inverted'
       ];
+
+      function showToast(message){
+        const el = document.getElementById('toast');
+        if(!el) return;
+        el.textContent = message;
+        el.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(()=> el.classList.remove('show'), 1200);
+      }
 
       function copyToClipboard(text){
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -96,6 +112,7 @@
         wrap.innerHTML = `<div class="swatch" style="background:${value}"></div><code>${value}</code>`;
         wrap.addEventListener('click', async () => {
           await copyToClipboard(`${name}: ${value}`);
+          showToast(`Token copiado: ${name} = ${value}`);
           wrap.classList.add('copied');
           const prev = wrap.querySelector('code')?.textContent;
           const codeEl = wrap.querySelector('code');
