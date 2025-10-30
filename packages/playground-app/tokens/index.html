@@ -31,10 +31,15 @@
       .nav-link:hover{color:#111827}
       .nav-link.active{color:#2563eb; border-bottom-color:#2563eb}
       .tabs-wrap{position:sticky; top:0; z-index:20; margin-bottom:12px; background:#fff}
-      .subtabs{display:flex; gap:12px; align-items:center; padding:8px 0; border-bottom:1px solid #e5e7eb; margin-bottom:16px}
-      .subtab{padding:6px 10px; border-radius:8px; color:#6b7280; text-decoration:none; font-weight:500}
-      .subtab:hover{background:#f3f4f6; color:#111827}
-      .subtab.active{background:#111827; color:#fff}
+      .layout-colors{display:flex; gap:16px}
+      .sidebar{width:240px}
+      .sidebox{position:sticky; top:56px; border:1px solid #e5e7eb; border-radius:12px; padding:8px; background:#fff}
+      .side-title{font-size:12px; color:#6b7280; padding:8px 10px}
+      .side{display:flex; flex-direction:column; gap:6px}
+      .side-link{padding:8px 10px; border-radius:8px; color:#6b7280; text-decoration:none; font-weight:500}
+      .side-link:hover{background:#f3f4f6; color:#111827}
+      .side-link.active{background:#111827; color:#fff}
+      .content{flex:1}
       .section{display:none}
       .section.active{display:block}
       .kcard{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px}
@@ -97,21 +102,28 @@
 
     <div id="section-colores" class="section active">
       <h1>Colores UBITS</h1>
-      <p class="subtitle">Explora los tokens por categoría (tabs) y en Light/Dark.</p>
-      <div class="subtabs" role="tablist" aria-label="Categorías de colores">
-        <a class="subtab active" href="#colores/brand" data-cat="brand" role="tab">Brand</a>
-        <a class="subtab" href="#colores/button" data-cat="button" role="tab">Button</a>
-        <a class="subtab" href="#colores/foreground" data-cat="foreground" role="tab">Foreground</a>
-        <a class="subtab" href="#colores/blue" data-cat="blue" role="tab">Blue Foregrounds</a>
-        <a class="subtab" href="#colores/gray" data-cat="gray" role="tab">Gray Foregrounds</a>
-        <a class="subtab" href="#colores/green" data-cat="green" role="tab">Green Foregrounds</a>
-        <a class="subtab" href="#colores/teal" data-cat="teal" role="tab">Teal Foregrounds</a>
-        <a class="subtab" href="#colores/purple" data-cat="purple" role="tab">Purple Foregrounds</a>
-        <a class="subtab" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
-        <a class="subtab" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
-        <a class="subtab" href="#colores/background" data-cat="background" role="tab">Background Colors</a>
-        <a class="subtab" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
-      </div>
+      <p class="subtitle">Explora los tokens por categoría (menú lateral) y en Light/Dark.</p>
+      <div class="layout-colors">
+        <aside class="sidebar">
+          <div class="sidebox">
+            <div class="side-title">Categorías</div>
+            <nav class="side" role="tablist" aria-label="Categorías de colores">
+              <a class="side-link active" href="#colores/brand" data-cat="brand" role="tab">Brand</a>
+              <a class="side-link" href="#colores/button" data-cat="button" role="tab">Button</a>
+              <a class="side-link" href="#colores/foreground" data-cat="foreground" role="tab">Foreground</a>
+              <a class="side-link" href="#colores/blue" data-cat="blue" role="tab">Blue Foregrounds</a>
+              <a class="side-link" href="#colores/gray" data-cat="gray" role="tab">Gray Foregrounds</a>
+              <a class="side-link" href="#colores/green" data-cat="green" role="tab">Green Foregrounds</a>
+              <a class="side-link" href="#colores/teal" data-cat="teal" role="tab">Teal Foregrounds</a>
+              <a class="side-link" href="#colores/purple" data-cat="purple" role="tab">Purple Foregrounds</a>
+              <a class="side-link" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
+              <a class="side-link" href="#colores/background" data-cat="background" role="tab">Background Colors</a>
+              <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
+              <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
+            </nav>
+          </div>
+        </aside>
+        <div class="content">
     
       <div id="cat-brand" class="cat-section">
       <div class="columns">
@@ -126,6 +138,7 @@
           <div class="grid" id="grid-dark">
             <div class="head"></div><div class="head"></div>
           </div>
+        </div>
         </div>
       </div>
       </div>
@@ -361,7 +374,7 @@
 
       // Subtabs (categorías dentro de Colores)
       function activateSubtab(cat){
-        const subTabs = document.querySelectorAll('.subtab');
+        const subTabs = document.querySelectorAll('.side-link');
         subTabs.forEach(t=> t.classList.toggle('active', t.getAttribute('data-cat')===cat));
         document.querySelectorAll('#section-colores .cat-section').forEach(s=> s.style.display='none');
         const el = document.getElementById(`cat-${cat}`);
