@@ -19,6 +19,8 @@
       .token-name{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
       .swatch{height:28px; border:1px solid #ddd; border-radius:6px; margin-bottom:4px}
       code{font-size:12px; color:inherit; opacity:.85}
+      .copyable{cursor:pointer}
+      .copied{outline:2px solid #86efac; outline-offset:2px}
     </style>
   </head>
   <body>
@@ -70,11 +72,39 @@
         '--ubits-logo-static-inverted'
       ];
 
+      function copyToClipboard(text){
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        try { document.execCommand('copy'); } catch(e) {}
+        document.body.removeChild(ta);
+        return Promise.resolve();
+      }
+
       function cell(name, theme){
         html.setAttribute('data-theme', theme);
         const value = getComputedStyle(root).getPropertyValue(name).trim();
         const wrap = document.createElement('div');
+        wrap.className = 'copyable';
+        wrap.title = `Click para copiar: ${name} = ${value}`;
         wrap.innerHTML = `<div class="swatch" style="background:${value}"></div><code>${value}</code>`;
+        wrap.addEventListener('click', async () => {
+          await copyToClipboard(`${name}: ${value}`);
+          wrap.classList.add('copied');
+          const prev = wrap.querySelector('code')?.textContent;
+          const codeEl = wrap.querySelector('code');
+          if (codeEl) codeEl.textContent = 'copiado';
+          setTimeout(() => {
+            wrap.classList.remove('copied');
+            if (codeEl && prev) codeEl.textContent = prev;
+          }, 900);
+        });
         return wrap;
       }
 
