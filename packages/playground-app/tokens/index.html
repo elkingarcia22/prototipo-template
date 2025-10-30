@@ -108,6 +108,7 @@
         <a class="subtab" href="#colores/teal" data-cat="teal" role="tab">Teal Foregrounds</a>
         <a class="subtab" href="#colores/purple" data-cat="purple" role="tab">Purple Foregrounds</a>
         <a class="subtab" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
+        <a class="subtab" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
         <a class="subtab" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
       </div>
     
@@ -274,6 +275,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · PINK FOREGROUNDS</div>
             <div class="grid" id="grid-dark-fg-pink">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-rose" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · ROSE FOREGROUNDS</div>
+            <div class="grid" id="grid-light-fg-rose">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · ROSE FOREGROUNDS</div>
+            <div class="grid" id="grid-dark-fg-rose">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -560,6 +578,27 @@
         gridDPink.appendChild(cell(token,'dark'));
       }
       PINK_FG.forEach(addRowPink);
+
+      // ROSE FOREGROUNDS
+      const ROSE_FG = [
+        '--ubits-fg-rose-subtle',
+        '--ubits-fg-rose-subtle-inverted',
+        '--ubits-fg-rose-subtle-hover',
+        '--ubits-fg-rose-subtle-inverted-hover',
+        '--ubits-fg-rose-subtle-static',
+        '--ubits-fg-rose-subtle-static-inverted',
+        '--ubits-fg-rose-subtle-static-hover',
+        '--ubits-fg-rose-subtle-static-inverted-hover'
+      ];
+      const gridLRose = document.getElementById('grid-light-fg-rose');
+      const gridDRose = document.getElementById('grid-dark-fg-rose');
+      function addRowRose(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLRose.appendChild(nameL);
+        gridLRose.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDRose.appendChild(nameD);
+        gridDRose.appendChild(cell(token,'dark'));
+      }
+      ROSE_FG.forEach(addRowRose);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
