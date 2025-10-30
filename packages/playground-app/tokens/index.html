@@ -122,6 +122,7 @@
               <a class="side-link" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
               <a class="side-link" href="#colores/background" data-cat="background" role="tab">Background Colors</a>
               <a class="side-link" href="#colores/borders-main" data-cat="borders-main" role="tab">Border Colors - Main</a>
+              <a class="side-link" href="#colores/borders-colored" data-cat="borders-colored" role="tab">Border Colors - Colored</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -342,6 +343,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · BORDER COLORS - MAIN</div>
             <div class="grid" id="grid-dark-border-main">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-borders-colored" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · BORDER COLORS - COLORED</div>
+            <div class="grid" id="grid-light-border-colored">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · BORDER COLORS - COLORED</div>
+            <div class="grid" id="grid-dark-border-colored">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -677,6 +695,20 @@
         gridDBM.appendChild(cell(token,'dark'));
       }
       BORDERS_MAIN.forEach(addRowBM);
+
+      // BORDER COLORS - COLORED
+      const BORDERS_COLORED = [
+        '--ubits-border-blue','--ubits-border-gray','--ubits-border-green','--ubits-border-teal','--ubits-border-indigo','--ubits-border-purple','--ubits-border-pink','--ubits-border-yellow','--ubits-border-rose'
+      ];
+      const gridLBC = document.getElementById('grid-light-border-colored');
+      const gridDBC = document.getElementById('grid-dark-border-colored');
+      function addRowBC(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLBC.appendChild(nameL);
+        gridLBC.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDBC.appendChild(nameD);
+        gridDBC.appendChild(cell(token,'dark'));
+      }
+      BORDERS_COLORED.forEach(addRowBC);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
