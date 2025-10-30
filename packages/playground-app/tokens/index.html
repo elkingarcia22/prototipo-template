@@ -123,6 +123,7 @@
               <a class="side-link" href="#colores/background" data-cat="background" role="tab">Background Colors</a>
               <a class="side-link" href="#colores/borders-main" data-cat="borders-main" role="tab">Border Colors - Main</a>
               <a class="side-link" href="#colores/borders-colored" data-cat="borders-colored" role="tab">Border Colors - Colored</a>
+              <a class="side-link" href="#colores/borders-inverted" data-cat="borders-inverted" role="tab">Border Colors - Inverted</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -360,6 +361,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · BORDER COLORS - COLORED</div>
             <div class="grid" id="grid-dark-border-colored">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-borders-inverted" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · BORDER COLORS - INVERTED</div>
+            <div class="grid" id="grid-light-border-inverted">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · BORDER COLORS - INVERTED</div>
+            <div class="grid" id="grid-dark-border-inverted">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -709,6 +727,21 @@
         gridDBC.appendChild(cell(token,'dark'));
       }
       BORDERS_COLORED.forEach(addRowBC);
+
+      // BORDER COLORS - INVERTED
+      const BORDERS_INVERTED = [
+        '--ubits-border-1-inverted','--ubits-border-2-inverted','--ubits-border-disabled-inverted',
+        '--ubits-border-blue-inverted','--ubits-border-gray-inverted','--ubits-border-green-inverted','--ubits-border-teal-inverted','--ubits-border-indigo-inverted','--ubits-border-purple-inverted','--ubits-border-pink-inverted','--ubits-border-yellow-inverted','--ubits-border-rose-inverted'
+      ];
+      const gridLBI = document.getElementById('grid-light-border-inverted');
+      const gridDBI = document.getElementById('grid-dark-border-inverted');
+      function addRowBI(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLBI.appendChild(nameL);
+        gridLBI.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDBI.appendChild(nameD);
+        gridDBI.appendChild(cell(token,'dark'));
+      }
+      BORDERS_INVERTED.forEach(addRowBI);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
