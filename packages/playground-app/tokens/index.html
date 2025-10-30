@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tokens Explorer</title>
+    <link rel="stylesheet" href="../../tokens/dist/tokens.css" />
+    <style>
+      body{font-family:ui-sans-serif, system-ui, -apple-system; margin:16px}
+      .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+      .grid{display:grid;grid-template-columns: 260px 1fr 1fr;gap:8px;align-items:center}
+      .row{display:contents}
+      .swatch{height:28px;border:1px solid #ddd;border-radius:6px}
+      .head{font-weight:600;}
+      code{font-size:12px;color:#555}
+      .token-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <button id="toggleTheme">Toggle theme</button>
+      <span>Theme: <strong id="themeLabel">light</strong></span>
+    </div>
+    <div class="grid" id="grid">
+      <div class="head">Token</div>
+      <div class="head">Light</div>
+      <div class="head">Dark</div>
+    </div>
+    <script>
+      const root = document.documentElement;
+      const body = document.body.parentElement; // <html>
+      const themeLabel = document.getElementById('themeLabel');
+      document.getElementById('toggleTheme').onclick = () => {
+        const t = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', t);
+        themeLabel.textContent = t;
+      };
+
+      const TOKENS = [
+        '--ubits-accent-brand',
+        '--ubits-fg-1-high',
+        '--ubits-bg-1',
+        '--ubits-border-1',
+        '--ubits-feedback-accent-success'
+      ];
+
+      const grid = document.getElementById('grid');
+      function row(name){
+        const r1 = document.createElement('div'); r1.className='row';
+        const n = document.createElement('div'); n.className='token-name'; n.textContent = name; r1.appendChild(n);
+        // Light
+        body.setAttribute('data-theme','light');
+        const vL = getComputedStyle(root).getPropertyValue(name).trim();
+        const lcell = document.createElement('div');
+        lcell.innerHTML = `<div class=\"swatch\" style=\"background:${vL}\"></div><code>${vL}</code>`;
+        r1.appendChild(lcell);
+        // Dark
+        body.setAttribute('data-theme','dark');
+        const vD = getComputedStyle(root).getPropertyValue(name).trim();
+        const dcell = document.createElement('div');
+        dcell.innerHTML = `<div class=\"swatch\" style=\"background:${vD}\"></div><code>${vD}</code>`;
+        r1.appendChild(dcell);
+        // restore UI label
+        themeLabel.textContent = body.getAttribute('data-theme');
+        return r1;
+      }
+      TOKENS.forEach(t => grid.appendChild(row(t)));
+      // Default back to light
+      body.setAttribute('data-theme','light');
+      themeLabel.textContent = 'light';
+    </script>
+  </body>
+</html>
