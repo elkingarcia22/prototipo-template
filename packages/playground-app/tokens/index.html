@@ -126,6 +126,7 @@
               <a class="side-link" href="#colores/borders-inverted" data-cat="borders-inverted" role="tab">Border Colors - Inverted</a>
               <a class="side-link" href="#colores/borders-static" data-cat="borders-static" role="tab">Border Colors - Static</a>
               <a class="side-link" href="#colores/borders-static-inverted" data-cat="borders-static-inverted" role="tab">Border Colors - Static Inverted</a>
+              <a class="side-link" href="#colores/sidebar" data-cat="sidebar" role="tab">Sidebar Colors</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -414,6 +415,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · BORDER COLORS - STATIC INVERTED</div>
             <div class="grid" id="grid-dark-border-static-inv">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-sidebar" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · SIDEBAR COLORS</div>
+            <div class="grid" id="grid-light-sidebar">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · SIDEBAR COLORS</div>
+            <div class="grid" id="grid-dark-sidebar">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -808,6 +826,20 @@
         gridDBSI.appendChild(cell(token,'dark'));
       }
       BORDERS_STATIC_INV.forEach(addRowBSI);
+
+      // SIDEBAR COLORS
+      const SIDEBAR = [
+        '--ubits-sidebar-bg','--ubits-sidebar-logo','--ubits-sidebar-button-bg-pressed','--ubits-sidebar-button-bg-disabled','--ubits-sidebar-button-bg-active','--ubits-sidebar-button-fg-default','--ubits-sidebar-button-fg-hover','--ubits-sidebar-button-fg-pressed','--ubits-sidebar-button-fg-active','--ubits-sidebar-button-fg-disabled'
+      ];
+      const gridLSide = document.getElementById('grid-light-sidebar');
+      const gridDSide = document.getElementById('grid-dark-sidebar');
+      function addRowSide(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLSide.appendChild(nameL);
+        gridLSide.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDSide.appendChild(nameD);
+        gridDSide.appendChild(cell(token,'dark'));
+      }
+      SIDEBAR.forEach(addRowSide);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
