@@ -125,6 +125,21 @@
           </div>
         </div>
       </div>
+
+      <div class="columns">
+        <div class="panel">
+          <div class="section-title">LIGHT MODE · FOREGROUND COLORS</div>
+          <div class="grid" id="grid-light-fg">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+        <div class="panel dark">
+          <div class="section-title">DARK MODE · FOREGROUND COLORS</div>
+          <div class="grid" id="grid-dark-fg">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <p class="subtitle">Explora los tokens de Brand en Light y Dark, comparados lado a lado.</p>
 
@@ -276,6 +291,26 @@
         gridDB.appendChild(cell(token,'dark'));
       }
       BTN.forEach(addRowBtn);
+
+      // FOREGROUND COLORS
+      const FG = [
+        '--ubits-fg-1-high','--ubits-fg-1-high-inverted','--ubits-fg-1-high-static','--ubits-fg-1-high-static-inverted',
+        '--ubits-fg-1-medium','--ubits-fg-1-medium-inverted','--ubits-fg-1-medium-static','--ubits-fg-1-medium-static-inverted',
+        '--ubits-fg-2-high','--ubits-fg-2-high-inverted','--ubits-fg-2-high-static','--ubits-fg-2-high-static-inverted',
+        '--ubits-fg-2-medium','--ubits-fg-2-medium-inverted','--ubits-fg-2-medium-static','--ubits-fg-2-medium-static-inverted',
+        '--ubits-fg-disabled','--ubits-fg-disabled-inverted','--ubits-fg-disabled-static','--ubits-fg-disabled-static-inverted',
+        '--ubits-fg-on-disabled','--ubits-fg-on-disabled-inverted','--ubits-fg-on-disabled-static','--ubits-fg-on-disabled-static-inverted',
+        '--ubits-fg-bold'
+      ];
+      const gridLFG = document.getElementById('grid-light-fg');
+      const gridDFG = document.getElementById('grid-dark-fg');
+      function addRowFg(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLFG.appendChild(nameL);
+        gridLFG.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDFG.appendChild(nameD);
+        gridDFG.appendChild(cell(token,'dark'));
+      }
+      FG.forEach(addRowFg);
       // restaurar estado por defecto de cálculo si fuese necesario
       html.setAttribute('data-theme','light');
       // activar tab inicial
