@@ -108,6 +108,7 @@
         <a class="subtab" href="#colores/teal" data-cat="teal" role="tab">Teal Foregrounds</a>
         <a class="subtab" href="#colores/purple" data-cat="purple" role="tab">Purple Foregrounds</a>
         <a class="subtab" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
+        <a class="subtab" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
       </div>
     
       <div id="cat-brand" class="cat-section">
@@ -256,6 +257,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · PURPLE FOREGROUNDS</div>
             <div class="grid" id="grid-dark-fg-purple">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-pink" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · PINK FOREGROUNDS</div>
+            <div class="grid" id="grid-light-fg-pink">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · PINK FOREGROUNDS</div>
+            <div class="grid" id="grid-dark-fg-pink">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -521,6 +539,27 @@
         gridDPurple.appendChild(cell(token,'dark'));
       }
       PURPLE_FG.forEach(addRowPurple);
+
+      // PINK FOREGROUNDS
+      const PINK_FG = [
+        '--ubits-fg-pink-subtle',
+        '--ubits-fg-pink-subtle-inverted',
+        '--ubits-fg-pink-subtle-hover',
+        '--ubits-fg-pink-subtle-inverted-hover',
+        '--ubits-fg-pink-subtle-static',
+        '--ubits-fg-pink-subtle-static-inverted',
+        '--ubits-fg-pink-subtle-static-hover',
+        '--ubits-fg-pink-subtle-static-inverted-hover'
+      ];
+      const gridLPink = document.getElementById('grid-light-fg-pink');
+      const gridDPink = document.getElementById('grid-dark-fg-pink');
+      function addRowPink(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLPink.appendChild(nameL);
+        gridLPink.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDPink.appendChild(nameD);
+        gridDPink.appendChild(cell(token,'dark'));
+      }
+      PINK_FG.forEach(addRowPink);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
