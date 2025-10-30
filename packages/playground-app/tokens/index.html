@@ -47,6 +47,8 @@
       .section.active{display:block}
       .kcard{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px}
       .kstack{display:grid;gap:12px}
+      .searchbar{margin:8px 0 16px; display:flex; align-items:center; gap:8px}
+      .searchbar input{flex:1; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px}
     </style>
   </head>
   <body>
@@ -106,6 +108,9 @@
     <div id="section-colores" class="section active">
       <h1>Colores UBITS</h1>
       <p class="subtitle">Explora los tokens por categoría (menú lateral) y en Light/Dark.</p>
+      <div class="searchbar">
+        <input id="tokens-search" type="search" placeholder="Buscar por nombre o valor (hex/rgba)" aria-label="Buscar tokens" />
+      </div>
       <div class="layout-colors">
         <aside class="sidebar">
           <div class="sidebox">
@@ -618,13 +623,22 @@
         const section = document.getElementById(`section-${tab}`);
         if(section) section.classList.add('active');
       }
+
       function syncFromHash(){
         const raw = (location.hash||'#colores').replace('#','');
-        const [tab, sub] = raw.split('/');
+        const parts = raw.split('/');
+        const tab = parts[0];
+        const sub = parts[1];
         activateTab(tab);
         if(tab==='colores') activateSubtab(sub||'brand');
+        debugLayout(sub||'brand');
+        if (tab === 'colores') {
+          // aplicar filtro tras activar la categoría
+          if (typeof applySearchFilter === 'function') {
+            applySearchFilter();
+          }
+        }
       }
-      window.addEventListener('hashchange', syncFromHash);
 
       // Subtabs (categorías dentro de Colores)
       function activateSubtab(cat){
@@ -636,7 +650,42 @@
         // sincronizar hash
         const base = 'colores';
         history.replaceState(null,'',`#${base}/${cat}`);
+        debugLayout(cat);
+        if (typeof applySearchFilter === 'function') {
+          applySearchFilter();
+        }
       }
+
+      // Buscador de tokens por nombre o valor en la categoría activa
+      function applySearchFilter(){
+        const input = document.getElementById('tokens-search');
+        const q = (input && input.value ? input.value : '').trim().toLowerCase();
+        const sectionColores = document.getElementById('section-colores');
+        if(!sectionColores) return;
+        // detectar sección activa visible (sin display:none)
+        const activeSection = Array.from(sectionColores.querySelectorAll('.cat-section')).find(s => s.style.display === '' || s.style.display === 'block' || (!s.hasAttribute('style')));
+        if(!activeSection) return;
+        const grids = activeSection.querySelectorAll('.grid');
+        grids.forEach(grid => {
+          const children = Array.from(grid.children);
+          for(let i=0;i<children.length;i+=2){
+            const nameEl = children[i];
+            const valEl = children[i+1];
+            if(!nameEl || !valEl) continue;
+            const txt = (nameEl.textContent + ' ' + valEl.textContent).toLowerCase();
+            const match = q === '' || txt.includes(q);
+            nameEl.style.display = match ? '' : 'none';
+            valEl.style.display = match ? '' : 'none';
+          }
+        });
+      }
+
+      (function initSearch(){
+        const input = document.getElementById('tokens-search');
+        if(input){
+          input.addEventListener('input', applySearchFilter);
+        }
+      })();
 
       function copyToClipboard(text){
         if (navigator.clipboard && navigator.clipboard.writeText) {
