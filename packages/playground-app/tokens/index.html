@@ -121,6 +121,7 @@
               <a class="side-link" href="#colores/purple" data-cat="purple" role="tab">Purple Foregrounds</a>
               <a class="side-link" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
               <a class="side-link" href="#colores/background" data-cat="background" role="tab">Background Colors</a>
+              <a class="side-link" href="#colores/borders-main" data-cat="borders-main" role="tab">Border Colors - Main</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -324,6 +325,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · ROSE FOREGROUNDS</div>
             <div class="grid" id="grid-dark-fg-rose">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-borders-main" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · BORDER COLORS - MAIN</div>
+            <div class="grid" id="grid-light-border-main">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · BORDER COLORS - MAIN</div>
+            <div class="grid" id="grid-dark-border-main">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -645,6 +663,20 @@
         gridDBG.appendChild(cell(token,'dark'));
       }
       BG.forEach(addRowBg);
+
+      // BORDER COLORS - MAIN
+      const BORDERS_MAIN = [
+        '--ubits-border-1','--ubits-border-2','--ubits-border-disabled'
+      ];
+      const gridLBM = document.getElementById('grid-light-border-main');
+      const gridDBM = document.getElementById('grid-dark-border-main');
+      function addRowBM(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLBM.appendChild(nameL);
+        gridLBM.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDBM.appendChild(nameD);
+        gridDBM.appendChild(cell(token,'dark'));
+      }
+      BORDERS_MAIN.forEach(addRowBM);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
