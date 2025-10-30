@@ -103,6 +103,7 @@
         <a class="subtab" href="#colores/button" data-cat="button" role="tab">Button</a>
         <a class="subtab" href="#colores/foreground" data-cat="foreground" role="tab">Foreground</a>
         <a class="subtab" href="#colores/blue" data-cat="blue" role="tab">Blue Foregrounds</a>
+        <a class="subtab" href="#colores/yellow" data-cat="yellow" role="tab">Yellow Foregrounds</a>
         <a class="subtab" href="#colores/gray" data-cat="gray" role="tab">Gray Foregrounds</a>
       </div>
     
@@ -187,6 +188,23 @@
             <div class="head"></div><div class="head"></div>
           </div>
         </div>
+      </div>
+      
+      <div id="cat-yellow" class="cat-section" style="display:none">
+      <div class="columns">
+        <div class="panel">
+          <div class="section-title">LIGHT MODE · YELLOW FOREGROUNDS</div>
+          <div class="grid" id="grid-light-fg-yellow">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+        <div class="panel dark">
+          <div class="section-title">DARK MODE · YELLOW FOREGROUNDS</div>
+          <div class="grid" id="grid-dark-fg-yellow">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+      </div>
       </div>
       </div>
     </div>
@@ -385,6 +403,24 @@
         gridDGray.appendChild(cell(token,'dark'));
       }
       GRAY_FG.forEach(addRowGray);
+
+      // YELLOW FOREGROUNDS
+      const YELLOW_FG = [
+        '--ubits-fg-yellow-subtle','--ubits-fg-yellow-subtle-inverted','--ubits-fg-yellow-subtle-hover','--ubits-fg-yellow-subtle-inverted-hover',
+        '--ubits-fg-yellow-bold','--ubits-fg-yellow-bold-inverted','--ubits-fg-yellow-bold-hover','--ubits-fg-yellow-bold-inverted-hover',
+        '--ubits-fg-yellow-subtle-static','--ubits-fg-yellow-subtle-static-inverted','--ubits-fg-yellow-bold-static','--ubits-fg-yellow-bold-static-inverted',
+        '--ubits-fg-yellow-subtle-static-hover','--ubits-fg-yellow-subtle-static-inverted-hover','--ubits-fg-yellow-bold-static-hover','--ubits-fg-yellow-bold-static-inverted-hover'
+      ];
+      const gridLYellow = document.getElementById('grid-light-fg-yellow');
+      const gridDYellow = document.getElementById('grid-dark-fg-yellow');
+      function addRowYellow(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLYellow.appendChild(nameL);
+        gridLYellow.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDYellow.appendChild(nameD);
+        gridDYellow.appendChild(cell(token,'dark'));
+      }
+      YELLOW_FG.forEach(addRowYellow);
+
       // restaurar estado por defecto de cálculo si fuese necesario
       html.setAttribute('data-theme','light');
       // activar tab inicial
