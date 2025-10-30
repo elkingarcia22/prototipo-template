@@ -129,6 +129,7 @@
               <a class="side-link" href="#colores/sidebar" data-cat="sidebar" role="tab">Sidebar Colors</a>
               <a class="side-link" href="#colores/feedback-success" data-cat="feedback-success" role="tab">Feedback · Success</a>
               <a class="side-link" href="#colores/feedback-info" data-cat="feedback-info" role="tab">Feedback · Info</a>
+              <a class="side-link" href="#colores/feedback-warning" data-cat="feedback-warning" role="tab">Feedback · Warning</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -468,6 +469,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · FEEDBACK INFO</div>
             <div class="grid" id="grid-dark-feedback-info">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-feedback-warning" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · FEEDBACK WARNING</div>
+            <div class="grid" id="grid-light-feedback-warning">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · FEEDBACK WARNING</div>
+            <div class="grid" id="grid-dark-feedback-warning">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -930,6 +948,35 @@
         gridDFI.appendChild(cell(token,'dark'));
       }
       FEEDBACK_INFO.forEach(addRowFI);
+
+      // FEEDBACK WARNING
+      const FEEDBACK_WARNING = [
+        '--ubits-feedback-bg-warning-subtle',
+        '--ubits-feedback-fg-warning-subtle',
+        '--ubits-feedback-accent-warning',
+        '--ubits-feedback-accent-warning-inverted',
+        '--ubits-feedback-fg-warning-subtle-alt',
+        '--ubits-feedback-fg-warning-subtle-inverted',
+        '--ubits-feedback-fg-warning-subtle-hover',
+        '--ubits-feedback-fg-warning-subtle-inverted-hover',
+        '--ubits-feedback-fg-warning-bold',
+        '--ubits-feedback-fg-warning-bold-inverted',
+        '--ubits-feedback-fg-warning-bold-hover',
+        '--ubits-feedback-fg-warning-bold-inverted-hover',
+        '--ubits-feedback-fg-warning-subtle-static',
+        '--ubits-feedback-fg-warning-subtle-static-inverted',
+        '--ubits-feedback-fg-warning-subtle-static-hover',
+        '--ubits-feedback-fg-warning-subtle-static-inverted-hover'
+      ];
+      const gridLFW = document.getElementById('grid-light-feedback-warning');
+      const gridDFW = document.getElementById('grid-dark-feedback-warning');
+      function addRowFW(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLFW.appendChild(nameL);
+        gridLFW.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDFW.appendChild(nameD);
+        gridDFW.appendChild(cell(token,'dark'));
+      }
+      FEEDBACK_WARNING.forEach(addRowFW);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
