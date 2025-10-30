@@ -1,40 +1,47 @@
 <!doctype html>
-<html lang="es" data-theme="light">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tokens Explorer</title>
+    <title>Colores UBITS · Brand Colors</title>
     <link rel="stylesheet" href="../../tokens/dist/tokens.css" />
     <style>
-      body{font-family:ui-sans-serif, system-ui, -apple-system; margin:16px}
-      .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
-      .grid{display:grid;grid-template-columns: 260px 1fr 1fr;gap:8px;align-items:center}
+      body{font-family:ui-sans-serif, system-ui, -apple-system; margin:16px; background:#ffffff; color:#1a1a1a}
+      h1{margin:0 0 8px 0}
+      .subtitle{margin:0 0 24px 0; color:#555}
+      .columns{display:grid; grid-template-columns: 1fr 1fr; gap:16px}
+      .panel{border:1px solid #e5e7eb; border-radius:10px; padding:16px}
+      .panel.dark{background:#0E1825; color:#edeeef; border-color:#0E1825}
+      .section-title{font-weight:700; margin:0 0 12px 0}
+      .grid{display:grid; grid-template-columns: 240px 1fr; gap:8px; align-items:center}
       .row{display:contents}
-      .swatch{height:28px;border:1px solid #ddd;border-radius:6px}
-      .head{font-weight:600;}
-      code{font-size:12px;color:#555}
-      .token-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .token-name{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+      .swatch{height:28px; border:1px solid #ddd; border-radius:6px; margin-bottom:4px}
+      code{font-size:12px; color:inherit; opacity:.85}
     </style>
   </head>
   <body>
-    <div class="toolbar">
-      <button id="toggleTheme">Toggle theme</button>
-      <span>Theme: <strong id="themeLabel">light</strong></span>
+    <h1>Colores UBITS</h1>
+    <p class="subtitle">Explora los tokens de Brand en Light y Dark, comparados lado a lado.</p>
+
+    <div class="columns">
+      <div class="panel">
+        <div class="section-title">LIGHT MODE · BRAND COLORS</div>
+        <div class="grid" id="grid-light">
+          <div class="head"></div><div class="head"></div>
+        </div>
+      </div>
+      <div class="panel dark">
+        <div class="section-title">DARK MODE · BRAND COLORS</div>
+        <div class="grid" id="grid-dark">
+          <div class="head"></div><div class="head"></div>
+        </div>
+      </div>
     </div>
-    <div class="grid" id="grid">
-      <div class="head">Token</div>
-      <div class="head">Light</div>
-      <div class="head">Dark</div>
-    </div>
+
     <script>
       const root = document.documentElement;
-      const body = document.body.parentElement; // <html>
-      const themeLabel = document.getElementById('themeLabel');
-      document.getElementById('toggleTheme').onclick = () => {
-        const t = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', t);
-        themeLabel.textContent = t;
-      };
+      const html = document.documentElement;
 
       const TOKENS = [
         '--ubits-accent-brand',
@@ -47,30 +54,26 @@
         '--ubits-logo-static-inverted'
       ];
 
-      const grid = document.getElementById('grid');
-      function row(name){
-        const r1 = document.createElement('div'); r1.className='row';
-        const n = document.createElement('div'); n.className='token-name'; n.textContent = name; r1.appendChild(n);
-        // Light
-        body.setAttribute('data-theme','light');
-        const vL = getComputedStyle(root).getPropertyValue(name).trim();
-        const lcell = document.createElement('div');
-        lcell.innerHTML = `<div class=\"swatch\" style=\"background:${vL}\"></div><code>${vL}</code>`;
-        r1.appendChild(lcell);
-        // Dark
-        body.setAttribute('data-theme','dark');
-        const vD = getComputedStyle(root).getPropertyValue(name).trim();
-        const dcell = document.createElement('div');
-        dcell.innerHTML = `<div class=\"swatch\" style=\"background:${vD}\"></div><code>${vD}</code>`;
-        r1.appendChild(dcell);
-        // restore UI label
-        themeLabel.textContent = body.getAttribute('data-theme');
-        return r1;
+      function cell(name, theme){
+        html.setAttribute('data-theme', theme);
+        const value = getComputedStyle(root).getPropertyValue(name).trim();
+        const wrap = document.createElement('div');
+        wrap.innerHTML = `<div class="swatch" style="background:${value}"></div><code>${value}</code>`;
+        return wrap;
       }
-      TOKENS.forEach(t => grid.appendChild(row(t)));
-      // Default back to light
-      body.setAttribute('data-theme','light');
-      themeLabel.textContent = 'light';
+
+      function addRow(token){
+        const gridL = document.getElementById('grid-light');
+        const gridD = document.getElementById('grid-dark');
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridL.appendChild(nameL);
+        gridL.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridD.appendChild(nameD);
+        gridD.appendChild(cell(token,'dark'));
+      }
+
+      TOKENS.forEach(addRow);
+      // restaurar estado por defecto de cálculo si fuese necesario
+      html.setAttribute('data-theme','light');
     </script>
   </body>
 </html>
