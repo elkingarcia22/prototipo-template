@@ -131,6 +131,7 @@
               <a class="side-link" href="#colores/feedback-info" data-cat="feedback-info" role="tab">Feedback · Info</a>
               <a class="side-link" href="#colores/feedback-warning" data-cat="feedback-warning" role="tab">Feedback · Warning</a>
               <a class="side-link" href="#colores/feedback-error" data-cat="feedback-error" role="tab">Feedback · Error</a>
+              <a class="side-link" href="#colores/chart" data-cat="chart" role="tab">Chart Colors</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -504,6 +505,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · FEEDBACK ERROR</div>
             <div class="grid" id="grid-dark-feedback-error">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-chart" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · CHART COLORS</div>
+            <div class="grid" id="grid-light-chart">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · CHART COLORS</div>
+            <div class="grid" id="grid-dark-chart">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -1022,6 +1040,20 @@
         gridDFE.appendChild(cell(token,'dark'));
       }
       FEEDBACK_ERROR.forEach(addRowFE);
+
+      // CHART COLORS
+      const CHART = [
+        '--ubits-chart-bg-level-1'
+      ];
+      const gridLChart = document.getElementById('grid-light-chart');
+      const gridDChart = document.getElementById('grid-dark-chart');
+      function addRowChart(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLChart.appendChild(nameL);
+        gridLChart.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDChart.appendChild(nameD);
+        gridDChart.appendChild(cell(token,'dark'));
+      }
+      CHART.forEach(addRowChart);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
