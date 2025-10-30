@@ -131,6 +131,7 @@
               <a class="side-link" href="#colores/feedback-info" data-cat="feedback-info" role="tab">Feedback · Info</a>
               <a class="side-link" href="#colores/feedback-warning" data-cat="feedback-warning" role="tab">Feedback · Warning</a>
               <a class="side-link" href="#colores/feedback-error" data-cat="feedback-error" role="tab">Feedback · Error</a>
+              <a class="side-link" href="#colores/feedback-borders" data-cat="feedback-borders" role="tab">Feedback · Borders</a>
               <a class="side-link" href="#colores/chart" data-cat="chart" role="tab">Chart Colors</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
@@ -505,6 +506,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · FEEDBACK ERROR</div>
             <div class="grid" id="grid-dark-feedback-error">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-feedback-borders" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · FEEDBACK BORDERS</div>
+            <div class="grid" id="grid-light-feedback-borders">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · FEEDBACK BORDERS</div>
+            <div class="grid" id="grid-dark-feedback-borders">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -1040,6 +1058,23 @@
         gridDFE.appendChild(cell(token,'dark'));
       }
       FEEDBACK_ERROR.forEach(addRowFE);
+
+      // FEEDBACK BORDERS
+      const FEEDBACK_BORDERS = [
+        '--ubits-feedback-border-success','--ubits-feedback-border-info','--ubits-feedback-border-warning','--ubits-feedback-border-error',
+        '--ubits-feedback-border-success-inverted','--ubits-feedback-border-info-inverted','--ubits-feedback-border-warning-inverted','--ubits-feedback-border-error-inverted',
+        '--ubits-feedback-border-success-static','--ubits-feedback-border-info-static','--ubits-feedback-border-warning-static','--ubits-feedback-border-error-static',
+        '--ubits-feedback-border-success-static-inverted','--ubits-feedback-border-info-static-inverted','--ubits-feedback-border-warning-static-inverted','--ubits-feedback-border-error-static-inverted'
+      ];
+      const gridLFB = document.getElementById('grid-light-feedback-borders');
+      const gridDFB = document.getElementById('grid-dark-feedback-borders');
+      function addRowFB(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLFB.appendChild(nameL);
+        gridLFB.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDFB.appendChild(nameD);
+        gridDFB.appendChild(cell(token,'dark'));
+      }
+      FEEDBACK_BORDERS.forEach(addRowFB);
 
       // CHART COLORS
       const CHART = [
