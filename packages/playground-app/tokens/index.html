@@ -125,6 +125,7 @@
               <a class="side-link" href="#colores/borders-colored" data-cat="borders-colored" role="tab">Border Colors - Colored</a>
               <a class="side-link" href="#colores/borders-inverted" data-cat="borders-inverted" role="tab">Border Colors - Inverted</a>
               <a class="side-link" href="#colores/borders-static" data-cat="borders-static" role="tab">Border Colors - Static</a>
+              <a class="side-link" href="#colores/borders-static-inverted" data-cat="borders-static-inverted" role="tab">Border Colors - Static Inverted</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -396,6 +397,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · BORDER COLORS - STATIC</div>
             <div class="grid" id="grid-dark-border-static">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-borders-static-inverted" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · BORDER COLORS - STATIC INVERTED</div>
+            <div class="grid" id="grid-light-border-static-inv">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · BORDER COLORS - STATIC INVERTED</div>
+            <div class="grid" id="grid-dark-border-static-inv">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -775,6 +793,21 @@
         gridDBS.appendChild(cell(token,'dark'));
       }
       BORDERS_STATIC.forEach(addRowBS);
+
+      // BORDER COLORS - STATIC INVERTED
+      const BORDERS_STATIC_INV = [
+        '--ubits-border-1-static-inverted','--ubits-border-2-static-inverted','--ubits-border-disabled-static-inverted',
+        '--ubits-border-blue-static-inverted','--ubits-border-gray-static-inverted','--ubits-border-green-static-inverted','--ubits-border-teal-static-inverted','--ubits-border-indigo-static-inverted','--ubits-border-purple-static-inverted','--ubits-border-pink-static-inverted','--ubits-border-yellow-static-inverted','--ubits-border-rose-static-inverted'
+      ];
+      const gridLBSI = document.getElementById('grid-light-border-static-inv');
+      const gridDBSI = document.getElementById('grid-dark-border-static-inv');
+      function addRowBSI(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLBSI.appendChild(nameL);
+        gridLBSI.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDBSI.appendChild(nameD);
+        gridDBSI.appendChild(cell(token,'dark'));
+      }
+      BORDERS_STATIC_INV.forEach(addRowBSI);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
