@@ -32,19 +32,100 @@
       .tab:focus-visible{outline:2px solid #8b5cf6; outline-offset:2px; border-radius:12px}
       .tab.active{background:#ffffff; color:#111827; box-shadow:0 1px 2px rgba(0,0,0,.06), inset 0 0 0 1px #e5e7eb}
       .tabs-wrap{position:sticky; top:8px; z-index:10; margin-bottom:12px; background:transparent}
+      .section{display:none}
+      .section.active{display:block}
+      .kcard{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px}
+      .kstack{display:grid;gap:12px}
     </style>
   </head>
   <body>
     <div class="tabs-wrap">
       <nav class="tabs" aria-label="Secciones de diseño">
-        <a class="tab active" href="#">Colores</a>
-        <a class="tab" href="#">Tipografía</a>
-        <a class="tab" href="#">Iconos</a>
-        <a class="tab" href="#">Componentes</a>
-        <a class="tab" href="#">Guía de prompts</a>
+        <a class="tab" href="#template" data-tab="template">Template</a>
+        <a class="tab active" href="#colores" data-tab="colores">Colores</a>
+        <a class="tab" href="#tipografia" data-tab="tipografia">Tipografía</a>
+        <a class="tab" href="#iconos" data-tab="iconos">Iconos</a>
+        <a class="tab" href="#componentes" data-tab="componentes">Componentes</a>
+        <a class="tab" href="#guia" data-tab="guia">Guía de prompts</a>
       </nav>
     </div>
-    <h1>Colores UBITS</h1>
+    
+    <div id="section-template" class="section">
+      <h1>Template · Arquitectura</h1>
+      <div class="kstack">
+        <div class="kcard">
+          <h3>Monorepo (pnpm workspaces)</h3>
+          <ul>
+            <li><code>packages/tokens</code>: tokens y build (Style Dictionary)</li>
+            <li><code>packages/ui</code>: componentes (Web Components/Vue SFC)</li>
+            <li><code>packages/core</code>: runtime, event bus, AppContext</li>
+            <li><code>packages/addons</code>: plugins desacoplados</li>
+            <li><code>packages/playground-app</code>: shell de demo</li>
+            <li><code>docs-site</code>: Storybook + VitePress</li>
+          </ul>
+        </div>
+        <div class="kcard">
+          <h3>Tecnologías</h3>
+          <ul>
+            <li>TypeScript, Vite</li>
+            <li>Biome (lint + format + typecheck)</li>
+            <li>Style Dictionary (fuente única <code>tokens.json</code>)</li>
+            <li>Storybook, Playwright (tests E2E/componente)</li>
+          </ul>
+        </div>
+        <div class="kcard">
+          <h3>Funcionamiento</h3>
+          <ul>
+            <li>CSS variables por tema: <code>:root</code> y <code>[data-theme="dark"]</code></li>
+            <li>Loader de plugins por manifiesto y dynamic import</li>
+            <li>Event bus namespaced para comunicación entre add-ons</li>
+          </ul>
+        </div>
+        <div class="kcard">
+          <h3>Flujo de trabajo</h3>
+          <ul>
+            <li>Conventional Commits + ramas por feature</li>
+            <li>CI/CD con checks (lint, build, tests)</li>
+            <li>Previews automáticas (Netlify/Vercel) opcional</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="section-colores" class="section active">
+      <h1>Colores UBITS</h1>
+      <p class="subtitle">Explora los tokens de Brand en Light y Dark, comparados lado a lado.</p>
+    
+      <div class="columns">
+        <div class="panel">
+          <div class="section-title">LIGHT MODE · BRAND COLORS</div>
+          <div class="grid" id="grid-light">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+        <div class="panel dark">
+          <div class="section-title">DARK MODE · BRAND COLORS</div>
+          <div class="grid" id="grid-dark">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="panel">
+          <div class="section-title">LIGHT MODE · BUTTON COLORS</div>
+          <div class="grid" id="grid-light-button">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+        <div class="panel dark">
+          <div class="section-title">DARK MODE · BUTTON COLORS</div>
+          <div class="grid" id="grid-dark-button">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <p class="subtitle">Explora los tokens de Brand en Light y Dark, comparados lado a lado.</p>
 
     <div class="columns">
@@ -102,6 +183,20 @@
         clearTimeout(showToast._t);
         showToast._t = setTimeout(()=> el.classList.remove('show'), 1200);
       }
+
+      // Tabs por hash (#template, #colores)
+      function activateTab(tab){
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-tab')===tab));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const section = document.getElementById(`section-${tab}`);
+        if(section) section.classList.add('active');
+      }
+      function syncFromHash(){
+        const hash = (location.hash||'#colores').replace('#','');
+        activateTab(hash);
+      }
+      window.addEventListener('hashchange', syncFromHash);
 
       function copyToClipboard(text){
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -183,6 +278,8 @@
       BTN.forEach(addRowBtn);
       // restaurar estado por defecto de cálculo si fuese necesario
       html.setAttribute('data-theme','light');
+      // activar tab inicial
+      syncFromHash();
     </script>
   </body>
 </html>
