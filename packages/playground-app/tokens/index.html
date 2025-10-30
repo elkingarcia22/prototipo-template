@@ -26,12 +26,15 @@
         box-shadow:0 10px 15px rgba(0,0,0,.15); font-size:12px; opacity:0; pointer-events:none;
         transition:opacity .2s ease, transform .2s ease}
       .toast.show{opacity:1; transform:translateX(-50%) translateY(-4px)}
-      .tabs{display:flex; gap:16px; align-items:center; padding:4px 0}
-      .tab{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; color:#6b7280; text-decoration:none; font-weight:500; line-height:1}
-      .tab:hover{background:#f3f4f6; color:#111827}
-      .tab:focus-visible{outline:2px solid #8b5cf6; outline-offset:2px; border-radius:12px}
-      .tab.active{background:#ffffff; color:#111827; box-shadow:0 1px 2px rgba(0,0,0,.06), inset 0 0 0 1px #e5e7eb}
-      .tabs-wrap{position:sticky; top:8px; z-index:10; margin-bottom:12px; background:transparent}
+      .navbar{display:flex; gap:20px; align-items:center; padding:10px 0; border-bottom:1px solid #e5e7eb; position:sticky; top:0; background:#fff; z-index:20}
+      .nav-link{display:inline-flex; align-items:center; gap:8px; padding:8px 2px; color:#6b7280; text-decoration:none; font-weight:600; line-height:1; border-bottom:2px solid transparent}
+      .nav-link:hover{color:#111827}
+      .nav-link.active{color:#2563eb; border-bottom-color:#2563eb}
+      .tabs-wrap{position:sticky; top:0; z-index:20; margin-bottom:12px; background:#fff}
+      .subtabs{display:flex; gap:12px; align-items:center; padding:8px 0; border-bottom:1px solid #e5e7eb; margin-bottom:16px}
+      .subtab{padding:6px 10px; border-radius:8px; color:#6b7280; text-decoration:none; font-weight:500}
+      .subtab:hover{background:#f3f4f6; color:#111827}
+      .subtab.active{background:#111827; color:#fff}
       .section{display:none}
       .section.active{display:block}
       .kcard{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px}
@@ -40,13 +43,13 @@
   </head>
   <body>
     <div class="tabs-wrap">
-      <nav class="tabs" aria-label="Secciones de diseño">
-        <a class="tab" href="#template" data-tab="template">Template</a>
-        <a class="tab active" href="#colores" data-tab="colores">Colores</a>
-        <a class="tab" href="#tipografia" data-tab="tipografia">Tipografía</a>
-        <a class="tab" href="#iconos" data-tab="iconos">Iconos</a>
-        <a class="tab" href="#componentes" data-tab="componentes">Componentes</a>
-        <a class="tab" href="#guia" data-tab="guia">Guía de prompts</a>
+      <nav class="navbar" aria-label="Navegación principal">
+        <a class="nav-link" href="#template" data-tab="template">Template</a>
+        <a class="nav-link active" href="#colores" data-tab="colores">Colores</a>
+        <a class="nav-link" href="#tipografia" data-tab="tipografia">Tipografía</a>
+        <a class="nav-link" href="#iconos" data-tab="iconos">Iconos</a>
+        <a class="nav-link" href="#componentes" data-tab="componentes">Componentes</a>
+        <a class="nav-link" href="#guia" data-tab="guia">Guía de prompts</a>
       </nav>
     </div>
     
@@ -94,8 +97,15 @@
 
     <div id="section-colores" class="section active">
       <h1>Colores UBITS</h1>
-      <p class="subtitle">Explora los tokens de Brand en Light y Dark, comparados lado a lado.</p>
+      <p class="subtitle">Explora los tokens por categoría (tabs) y en Light/Dark.</p>
+      <div class="subtabs" role="tablist" aria-label="Categorías de colores">
+        <a class="subtab active" href="#colores/brand" data-cat="brand" role="tab">Brand</a>
+        <a class="subtab" href="#colores/button" data-cat="button" role="tab">Button</a>
+        <a class="subtab" href="#colores/foreground" data-cat="foreground" role="tab">Foreground</a>
+        <a class="subtab" href="#colores/blue" data-cat="blue" role="tab">Blue Foregrounds</a>
+      </div>
     
+      <div id="cat-brand" class="cat-section">
       <div class="columns">
         <div class="panel">
           <div class="section-title">LIGHT MODE · BRAND COLORS</div>
@@ -110,7 +120,9 @@
           </div>
         </div>
       </div>
+      </div>
 
+      <div id="cat-button" class="cat-section" style="display:none">
       <div class="columns">
         <div class="panel">
           <div class="section-title">LIGHT MODE · BUTTON COLORS</div>
@@ -125,7 +137,9 @@
           </div>
         </div>
       </div>
+      </div>
 
+      <div id="cat-foreground" class="cat-section" style="display:none">
       <div class="columns">
         <div class="panel">
           <div class="section-title">LIGHT MODE · FOREGROUND COLORS</div>
@@ -153,6 +167,7 @@
             <div class="head"></div><div class="head"></div>
           </div>
         </div>
+      </div>
       </div>
     </div>
 
@@ -184,17 +199,31 @@
 
       // Tabs por hash (#template, #colores)
       function activateTab(tab){
-        const tabs = document.querySelectorAll('.tab');
+        const tabs = document.querySelectorAll('.nav-link');
         tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-tab')===tab));
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         const section = document.getElementById(`section-${tab}`);
         if(section) section.classList.add('active');
       }
       function syncFromHash(){
-        const hash = (location.hash||'#colores').replace('#','');
-        activateTab(hash);
+        const raw = (location.hash||'#colores').replace('#','');
+        const [tab, sub] = raw.split('/');
+        activateTab(tab);
+        if(tab==='colores') activateSubtab(sub||'brand');
       }
       window.addEventListener('hashchange', syncFromHash);
+
+      // Subtabs (categorías dentro de Colores)
+      function activateSubtab(cat){
+        const subTabs = document.querySelectorAll('.subtab');
+        subTabs.forEach(t=> t.classList.toggle('active', t.getAttribute('data-cat')===cat));
+        document.querySelectorAll('#section-colores .cat-section').forEach(s=> s.style.display='none');
+        const el = document.getElementById(`cat-${cat}`);
+        if(el) el.style.display = '';
+        // sincronizar hash
+        const base = 'colores';
+        history.replaceState(null,'',`#${base}/${cat}`);
+      }
 
       function copyToClipboard(text){
         if (navigator.clipboard && navigator.clipboard.writeText) {
