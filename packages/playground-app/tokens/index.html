@@ -90,6 +90,20 @@
           </ul>
         </div>
       </div>
+      <div class="columns">
+        <div class="panel">
+          <div class="section-title">LIGHT MODE · BLUE FOREGROUNDS</div>
+          <div class="grid" id="grid-light-fg-blue">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+        <div class="panel dark">
+          <div class="section-title">DARK MODE · BLUE FOREGROUNDS</div>
+          <div class="grid" id="grid-dark-fg-blue">
+            <div class="head"></div><div class="head"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="section-colores" class="section active">
@@ -311,6 +325,27 @@
         gridDFG.appendChild(cell(token,'dark'));
       }
       FG.forEach(addRowFg);
+
+      // BLUE FOREGROUNDS
+      const BLUE_FG = [
+        '--ubits-fg-blue-subtle',
+        '--ubits-fg-blue-subtle-inverted',
+        '--ubits-fg-blue-subtle-hover',
+        '--ubits-fg-blue-subtle-inverted-hover',
+        '--ubits-fg-blue-subtle-static',
+        '--ubits-fg-blue-subtle-static-inverted',
+        '--ubits-fg-blue-subtle-static-hover',
+        '--ubits-fg-blue-subtle-static-inverted-hover'
+      ];
+      const gridLBlue = document.getElementById('grid-light-fg-blue');
+      const gridDBlue = document.getElementById('grid-dark-fg-blue');
+      function addRowBlue(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLBlue.appendChild(nameL);
+        gridLBlue.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDBlue.appendChild(nameD);
+        gridDBlue.appendChild(cell(token,'dark'));
+      }
+      BLUE_FG.forEach(addRowBlue);
       // restaurar estado por defecto de cálculo si fuese necesario
       html.setAttribute('data-theme','light');
       // activar tab inicial
