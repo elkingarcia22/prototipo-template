@@ -133,6 +133,7 @@
               <a class="side-link" href="#colores/feedback-error" data-cat="feedback-error" role="tab">Feedback · Error</a>
               <a class="side-link" href="#colores/feedback-borders" data-cat="feedback-borders" role="tab">Feedback · Borders</a>
               <a class="side-link" href="#colores/chart" data-cat="chart" role="tab">Chart Colors</a>
+              <a class="side-link" href="#colores/toast" data-cat="toast" role="tab">Toast Colors</a>
               <a class="side-link" href="#colores/pink" data-cat="pink" role="tab">Pink Foregrounds</a>
               <a class="side-link" href="#colores/rose" data-cat="rose" role="tab">Rose Foregrounds</a>
             </nav>
@@ -540,6 +541,23 @@
           <div class="panel dark">
             <div class="section-title">DARK MODE · CHART COLORS</div>
             <div class="grid" id="grid-dark-chart">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cat-toast" class="cat-section" style="display:none">
+        <div class="columns">
+          <div class="panel">
+            <div class="section-title">LIGHT MODE · TOAST COLORS</div>
+            <div class="grid" id="grid-light-toast">
+              <div class="head"></div><div class="head"></div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <div class="section-title">DARK MODE · TOAST COLORS</div>
+            <div class="grid" id="grid-dark-toast">
               <div class="head"></div><div class="head"></div>
             </div>
           </div>
@@ -1089,6 +1107,20 @@
         gridDChart.appendChild(cell(token,'dark'));
       }
       CHART.forEach(addRowChart);
+
+      // TOAST COLORS
+      const TOAST = [
+        '--ubits-toast-feedback-bg'
+      ];
+      const gridLToast = document.getElementById('grid-light-toast');
+      const gridDToast = document.getElementById('grid-dark-toast');
+      function addRowToast(token){
+        const nameL = document.createElement('div'); nameL.className='token-name'; nameL.textContent = token; gridLToast.appendChild(nameL);
+        gridLToast.appendChild(cell(token,'light'));
+        const nameD = document.createElement('div'); nameD.className='token-name'; nameD.textContent = token; gridDToast.appendChild(nameD);
+        gridDToast.appendChild(cell(token,'dark'));
+      }
+      TOAST.forEach(addRowToast);
 
       // YELLOW FOREGROUNDS
       const YELLOW_FG = [
