@@ -641,7 +641,12 @@
         const wrap = document.createElement('div');
         wrap.className = 'copyable';
         wrap.title = `Click para copiar: ${name} = ${value}`;
-        wrap.innerHTML = `<div class="swatch" style="background:${value}"></div><code>${value}</code>`;
+        const vLower = value.toLowerCase();
+        const isWhite = vLower === '#fff' || vLower === '#ffffff' || vLower === 'rgb(255, 255, 255)';
+        const swatchStyle = isWhite
+          ? 'background:repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50%/12px 12px; border:1px solid #9ca3af'
+          : `background:${value}`;
+        wrap.innerHTML = `<div class="swatch" style="${swatchStyle}"></div><code>${value}</code>`;
         wrap.addEventListener('click', async () => {
           await copyToClipboard(`${name}: ${value}`);
           showToast(`Token copiado: ${name} = ${value}`);
