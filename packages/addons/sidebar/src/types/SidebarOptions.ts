@@ -2,7 +2,7 @@
  * Tipos TypeScript para el componente Sidebar
  */
 
-export type SidebarVariant = 'default' | 'admin';
+export type SidebarVariant = 'colaborador' | 'admin';
 
 export type SidebarButtonState = 'default' | 'active' | 'disabled';
 
@@ -80,8 +80,8 @@ export interface SidebarOptions {
   containerId: string;
 
   /**
-   * Variante del sidebar: 'default' (colaborador) o 'admin'
-   * @default 'default'
+   * Variante del sidebar: 'colaborador' o 'admin'
+   * @default 'colaborador'
    */
   variant?: SidebarVariant;
 

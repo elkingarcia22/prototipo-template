@@ -12,7 +12,7 @@ const meta: Meta<SidebarOptions & {
   parameters: {
     docs: {
       description: {
-        component: 'Componente Sidebar UBITS de navegación lateral con 2 variantes (default/colaborador y admin). Incluye tooltips, menú de perfil, dark mode toggle y ajuste dinámico de altura. Ancho fijo 96px, colores fijos (no cambian con tema).',
+        component: 'Componente Sidebar UBITS de navegación lateral con 2 variantes (colaborador y admin). Incluye tooltips, menú de perfil, dark mode toggle y ajuste dinámico de altura. Ancho fijo 96px, colores fijos (no cambian con tema).',
       },
     },
     layout: 'fullscreen',
@@ -20,11 +20,11 @@ const meta: Meta<SidebarOptions & {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['default', 'admin'],
-      description: 'Variante del sidebar: default (colaborador) o admin',
+      options: ['colaborador', 'admin'],
+      description: 'Variante del sidebar: colaborador o admin',
       table: {
-        defaultValue: { summary: 'default' },
-        type: { summary: 'default | admin' },
+        defaultValue: { summary: 'colaborador' },
+        type: { summary: 'colaborador | admin' },
       },
     },
     activeButton: {
@@ -70,30 +70,45 @@ function updateActiveButton(buttons: any[], activeButton: string) {
 export const Default: Story = {
   args: {
     containerId: 'sidebar-story-container',
-    variant: 'default',
+    variant: 'colaborador',
     activeButton: '',
     darkModeEnabled: true,
-    logoImage: '../../../../template-ubits/images/Ubits-logo.svg',
-    avatarImage: '../../../../template-ubits/images/Profile-image.jpg',
+    logoImage: '/images/Ubits-logo.svg',
+    avatarImage: '/images/Profile-image.jpg',
   } as SidebarOptions & { variant?: SidebarVariant; activeButton?: string },
   render: (args) => {
-    // Asegurar que el contenedor existe
-    let container = document.getElementById(args.containerId || 'sidebar-story-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.id = args.containerId || 'sidebar-story-container';
-      container.style.cssText = `
-        position: relative;
-        width: 96px;
-        height: 650px;
-        margin: 20px auto;
+    // Crear un wrapper más amplio para el sidebar y la info (horizontal)
+    let wrapper = document.getElementById('sidebar-story-wrapper');
+    if (!wrapper) {
+      wrapper = document.createElement('div');
+      wrapper.id = 'sidebar-story-wrapper';
+      wrapper.style.cssText = `
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 32px;
+        max-width: 100%;
+        width: 100%;
       `;
-      document.body.appendChild(container);
+      document.body.appendChild(wrapper);
     } else {
-      container.innerHTML = '';
+      wrapper.innerHTML = '';
     }
+    
+    // Contenedor solo para el sidebar
+    const container = document.createElement('div');
+    container.id = args.containerId || 'sidebar-story-container';
+    container.style.cssText = `
+      position: relative;
+      width: 96px;
+      height: 650px;
+      flex-shrink: 0;
+    `;
 
-    const variant = args.variant || 'default';
+    // Agregar el contenedor al wrapper ANTES de crear el sidebar
+    wrapper.appendChild(container);
+
+    const variant = args.variant || 'colaborador';
     const activeButton = args.activeButton || '';
     const config = getSidebarButtons(variant);
     
@@ -108,8 +123,8 @@ export const Default: Story = {
       footerButtons: footerButtons,
       profileMenuItems: config.profileMenuItems,
       logoHref: variant === 'admin' ? 'admin.html' : 'index.html',
-      logoImage: args.logoImage || '../../../../template-ubits/images/Ubits-logo.svg',
-      avatarImage: args.avatarImage || '../../../../template-ubits/images/Profile-image.jpg',
+      logoImage: args.logoImage || '/images/Ubits-logo.svg',
+      avatarImage: args.avatarImage || '/images/Profile-image.jpg',
       darkModeEnabled: args.darkModeEnabled !== false,
       height: 650,
       onActiveButtonChange: (section) => {
@@ -117,8 +132,7 @@ export const Default: Story = {
       },
       onDarkModeToggle: (isDark) => {
         console.log('Dark mode toggled:', isDark);
-        // Actualizar atributo del body
-        document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        // NO actualizar el body/document, solo el contenedor (ya se hace en initDarkModeToggle)
       },
       onAvatarClick: () => {
         console.log('Avatar clicked');
@@ -126,6 +140,7 @@ export const Default: Story = {
     };
 
     try {
+      // El contenedor ya está en el DOM, ahora podemos crear el sidebar
       createSidebar(sidebarOptions);
     } catch (error) {
       console.error('Error creating sidebar:', error);
@@ -134,10 +149,9 @@ export const Default: Story = {
       container.innerHTML = sidebarHTML;
     }
 
-    // Agregar información del sidebar
+    // Agregar información del sidebar (formato horizontal con CSS Grid) - AL LADO del sidebar
     const info = document.createElement('div');
     info.style.cssText = `
-      margin-top: 24px;
       padding: 16px;
       background: var(--ubits-bg-2, #f9fafb);
       border-radius: 8px;
@@ -145,17 +159,44 @@ export const Default: Story = {
       color: var(--ubits-fg-1-medium, #5c646f);
       border: 1px solid var(--ubits-border-1);
       line-height: 1.6;
+      flex: 1;
+      min-width: 400px;
+      max-width: 600px;
+      font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+      margin-top: 80px;
     `;
-    info.innerHTML = `
-      <strong>Variante:</strong> ${variant}<br>
-      <strong>Botón activo:</strong> ${activeButton || 'Ninguno'}<br>
-      <strong>Dark mode:</strong> ${args.darkModeEnabled !== false ? 'Habilitado' : 'Deshabilitado'}<br>
-      <br>
-      <em>Haz hover sobre los botones para ver los tooltips. Haz hover sobre el avatar para ver el menú de perfil. Haz clic en el botón de dark mode para cambiar el tema.</em>
+    
+    // Crear el contenedor de información usando CSS Grid
+    const infoGrid = document.createElement('div');
+    infoGrid.style.cssText = `
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 12px 32px;
+      margin-bottom: 12px;
+      align-items: baseline;
     `;
-    container.appendChild(info);
+    
+    infoGrid.innerHTML = `
+      <div style="white-space: nowrap;"><strong>Variante:</strong> <span style="font-weight: 400;">${variant === 'colaborador' ? 'Colaborador' : 'Admin'}</span></div>
+      <div style="white-space: nowrap;"><strong>Botón activo:</strong> <span style="font-weight: 400;">${activeButton || 'Ninguno'}</span></div>
+      <div style="white-space: nowrap;"><strong>Dark mode:</strong> <span style="font-weight: 400;">${args.darkModeEnabled !== false ? 'Habilitado' : 'Deshabilitado'}</span></div>
+    `;
+    
+    info.appendChild(infoGrid);
+    
+    // Agregar el texto de instrucciones
+    const instructions = document.createElement('div');
+    instructions.style.cssText = `
+      padding-top: 12px;
+      border-top: 1px solid var(--ubits-border-1);
+      font-style: italic;
+    `;
+    instructions.textContent = 'Haz hover sobre los botones para ver los tooltips. Haz hover sobre el avatar para ver el menú de perfil. Haz clic en el botón de dark mode para cambiar el tema.';
+    info.appendChild(instructions);
+    
+    wrapper.appendChild(info);
 
-    return container;
+    return wrapper;
   },
 };
 

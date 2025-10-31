@@ -22,6 +22,16 @@ const config: StorybookConfig = {
     name: getAbsolutePath('@storybook/html-vite'),
     options: {}
   },
+  staticDirs: [
+    { 
+      from: resolve(dirname(fileURLToPath(import.meta.url)), '../stories/assets/images'), 
+      to: '/images' 
+    },
+    { 
+      from: resolve(dirname(fileURLToPath(import.meta.url)), '../stories/assets/webfonts'), 
+      to: '/webfonts' 
+    }
+  ],
   viteFinal: async (config) => {
     // Resolver alias para @ubits/icons
     const currentDir = dirname(fileURLToPath(import.meta.url));

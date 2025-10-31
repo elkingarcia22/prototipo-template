@@ -199,7 +199,7 @@ export const ADMIN_PROFILE_MENU_ITEMS: ProfileMenuItem[] = [
 /**
  * Helper para obtener la configuración según la variante
  */
-export function getSidebarConfig(variant: 'default' | 'admin') {
+export function getSidebarConfig(variant: 'colaborador' | 'admin') {
   if (variant === 'admin') {
     return {
       bodyButtons: ADMIN_BODY_BUTTONS,
@@ -208,6 +208,7 @@ export function getSidebarConfig(variant: 'default' | 'admin') {
     };
   }
   
+  // Variante colaborador (antes default)
   return {
     bodyButtons: DEFAULT_BODY_BUTTONS,
     footerButtons: [],

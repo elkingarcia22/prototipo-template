@@ -2772,17 +2772,17 @@
             },
             {
               name: 'Sidebar',
-              description: 'Componente de navegación lateral con 2 variantes (default/colaborador y admin). Incluye tooltips, menú de perfil, dark mode toggle y ajuste dinámico de altura.',
+              description: 'Componente de navegación lateral con 2 variantes (colaborador y admin). Incluye tooltips, menú de perfil, dark mode toggle y ajuste dinámico de altura.',
               files: {
                 css: 'addons/sidebar/src/styles/sidebar.css',
                 ts: 'addons/sidebar/src/SidebarProvider.ts'
               },
-              variants: ['default', 'admin'],
+              variants: ['colaborador', 'admin'],
               sizes: [],
               states: ['default', 'hover', 'active', 'pressed', 'disabled', 'focus'],
-              features: ['2 variantes (default/admin)', '8 botones body (default) / 6 botones body (admin)', 'Tooltips dinámicos', 'Menú de perfil con hover', 'Dark mode toggle con animación', 'Altura dinámica', 'Avatar de usuario', '6 estados por botón', 'Ancho fijo 96px', 'Colores fijos (no cambian con tema)'],
+              features: ['2 variantes (colaborador/admin)', '8 botones body (colaborador) / 6 botones body (admin)', 'Tooltips dinámicos', 'Menú de perfil con hover', 'Dark mode toggle con animación', 'Altura dinámica', 'Avatar de usuario', '6 estados por botón', 'Ancho fijo 96px', 'Colores fijos (no cambian con tema)'],
               class: 'ubits-sidebar ubits-sidebar-nav-button ubits-sidebar-nav-button--active',
-              example: 'createSidebar({\n  containerId: \'sidebar-container\',\n  variant: \'default\',\n  bodyButtons: [...],\n  footerButtons: [...],\n  profileMenuItems: [...]\n})',
+              example: 'createSidebar({\n  containerId: \'sidebar-container\',\n  variant: \'colaborador\',\n  bodyButtons: [...],\n  footerButtons: [...],\n  profileMenuItems: [...]\n})',
               hasPreview: true
             }
           ]
@@ -3631,8 +3631,8 @@
                               <div style="display: flex; flex-direction: column; gap: 8px;">
                                 <label style="display: block; font-size: 12px; font-weight: 600; color: var(--ubits-fg-1-medium); text-transform: uppercase; letter-spacing: 0.5px;">Variante</label>
                                 <div style="display: flex; gap: 6px;">
-                                  <button class="ubits-button ubits-button--secondary ubits-button--sm preview-control-btn active" data-component="${componentId}" data-option="variant" data-value="default" onclick="setSidebarControl('variant', 'default', '${componentId}')">
-                                    <span>Default</span>
+                                  <button class="ubits-button ubits-button--secondary ubits-button--sm preview-control-btn active" data-component="${componentId}" data-option="variant" data-value="colaborador" onclick="setSidebarControl('variant', 'colaborador', '${componentId}')">
+                                    <span>Colaborador</span>
                                   </button>
                                   <button class="ubits-button ubits-button--secondary ubits-button--sm preview-control-btn" data-component="${componentId}" data-option="variant" data-value="admin" onclick="setSidebarControl('variant', 'admin', '${componentId}')">
                                     <span>Admin</span>
@@ -3640,10 +3640,10 @@
                                 </div>
                               </div>
                               
-                              <!-- Botón Activo (Default) -->
-                              <div id="sidebar-active-default-${componentId}" style="display: flex; flex-direction: column; gap: 8px;">
+                              <!-- Botón Activo (Colaborador) -->
+                              <div id="sidebar-active-colaborador-${componentId}" style="display: flex; flex-direction: column; gap: 8px;">
                                 <label style="display: block; font-size: 12px; font-weight: 600; color: var(--ubits-fg-1-medium); text-transform: uppercase; letter-spacing: 0.5px;">Botón Activo</label>
-                                <select id="sidebar-active-button-default-${componentId}" onchange="setSidebarControl('activeButton', this.value, '${componentId}')" style="width: 100%; padding: 10px 32px 10px 12px; border: 1px solid var(--ubits-border-1); border-radius: 8px; background: var(--ubits-bg-1); color: var(--ubits-fg-1-high); font-size: 14px; font-family: var(--font-sans); cursor: pointer; box-sizing: border-box; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23666%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%226,9 12,15 18,9%22></polyline></svg>'); background-repeat: no-repeat; background-position: right 10px center; background-size: 16px;">
+                                <select id="sidebar-active-button-colaborador-${componentId}" onchange="setSidebarControl('activeButton', this.value, '${componentId}')" style="width: 100%; padding: 10px 32px 10px 12px; border: 1px solid var(--ubits-border-1); border-radius: 8px; background: var(--ubits-bg-1); color: var(--ubits-fg-1-high); font-size: 14px; font-family: var(--font-sans); cursor: pointer; box-sizing: border-box; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23666%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%226,9 12,15 18,9%22></polyline></svg>'); background-repeat: no-repeat; background-position: right 10px center; background-size: 16px;">
                                   <option value="">Ninguno</option>
                                   <option value="admin">Administrador</option>
                                   <option value="aprendizaje">Aprendizaje</option>
@@ -3674,7 +3674,7 @@
                           
                           <!-- PREVIEW EN EL MEDIO -->
                           <div style="background: var(--ubits-bg-1); padding: 48px; border-radius: 8px; border: 1px solid var(--ubits-border-1); margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: center; min-height: 650px; position: relative;">
-                            <div id="sidebar-preview-${componentId}" style="position: relative;">
+                            <div id="sidebar-preview-${componentId}" style="position: relative; overflow: visible !important;">
                               <!-- Se generará dinámicamente -->
                             </div>
                           </div>
@@ -6181,7 +6181,7 @@
       function initSidebarPreviewState(componentId) {
         if (!sidebarPreviewState[componentId]) {
           sidebarPreviewState[componentId] = {
-            variant: 'default',
+            variant: 'colaborador',
             activeButton: ''
           };
         }
@@ -6227,7 +6227,7 @@
       
       // Función para renderizar Sidebar estático (fallback)
       function renderSidebarStatic(container, state, bodyButtons, footerButtons, profileMenuItems) {
-        const variant = state.variant || 'default';
+        const variant = state.variant || 'colaborador';
         
         console.log('🎨 Renderizando Sidebar estático:', {
           variant,
@@ -6239,7 +6239,7 @@
         // Helper para renderizar iconos
         function renderIcon(iconName) {
           const name = iconName.startsWith('fa-') ? iconName : `fa-${iconName}`;
-          return `<i class="far ${name}"></i>`;
+          return `<i class="far ${name}" style="font-size: 16px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; line-height: 1; margin: 0; padding: 0; box-sizing: border-box;"></i>`;
         }
         
         let sidebarHTML = `
@@ -6281,14 +6281,14 @@
               </div>
             </div>
           </aside>
-          <div class="ubits-sidebar-profile-menu" id="ubits-sidebar-profile-menu">
+          <div class="ubits-sidebar-profile-menu" id="ubits-sidebar-profile-menu" style="display: none !important;">
             ${profileMenuItems.map(item => {
               if (item.divider) {
                 return '<div class="ubits-sidebar-profile-menu-divider"></div>';
               }
               return `
                 <div class="ubits-sidebar-profile-menu-item">
-                  ${renderIcon(item.icon)}
+                  ${renderIcon(item.icon).replace('width: 24px; height: 24px', 'width: 16px; height: 16px').replace('font-size: 16px', 'font-size: 14px')}
                   <span>${item.label}</span>
                 </div>
               `;
@@ -6300,14 +6300,21 @@
         container.innerHTML = sidebarHTML;
         
         const sidebarElement = container.querySelector('.ubits-sidebar');
+        const menuElement = container.querySelector('.ubits-sidebar-profile-menu');
+        
+        // Mantener el menú dentro del contenedor del preview pero posicionado absolutamente
+        // El contenedor ya tiene position: relative, así que el menú se posicionará relativo a él
         
         // Inicializar tooltips básicos
         if (sidebarElement) {
           console.log('✅ Sidebar renderizado, inicializando tooltips...');
           initSidebarTooltipsBasic(sidebarElement);
           
-          // Inicializar menú de perfil
+          // Inicializar menú de perfil (usar el contenedor del preview)
           initSidebarProfileMenuBasic(container, sidebarElement);
+          
+          // Inicializar dark mode toggle con cambio de icono
+          initDarkModeToggleBasic(sidebarElement);
         } else {
           console.error('❌ No se encontró el elemento .ubits-sidebar después de renderizar');
         }
@@ -6318,7 +6325,30 @@
         const avatarElement = sidebarElement.querySelector('.ubits-sidebar-user-avatar');
         const menuElement = container.querySelector('.ubits-sidebar-profile-menu');
         
-        if (!avatarElement || !menuElement) return;
+        if (!avatarElement || !menuElement) {
+          console.error('❌ Avatar o menú no encontrado:', { avatarElement, menuElement });
+          return;
+        }
+        
+        // Calcular posición del menú relativa al avatar (pegado al sidebar)
+        const updateMenuPosition = () => {
+          const sidebarRect = sidebarElement.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          
+          // Posicionar el menú justo al lado del sidebar (96px + 0px, completamente pegado)
+          const menuLeft = sidebarRect.left - containerRect.left + 96;
+          // Alinear con el avatar en la parte inferior
+          const menuBottom = 27;
+          
+          menuElement.style.left = `${menuLeft}px`;
+          menuElement.style.bottom = `${menuBottom}px`;
+        };
+        
+        // Configurar estilos del menú para posicionamiento absoluto relativo al contenedor
+        menuElement.style.position = 'absolute';
+        updateMenuPosition(); // Calcular posición inicial
+        menuElement.style.zIndex = '2000';
+        menuElement.style.display = 'none';
         
         let showTimeout = null;
         let hideTimeout = null;
@@ -6329,8 +6359,10 @@
             hideTimeout = null;
           }
           if (showTimeout) clearTimeout(showTimeout);
+          updateMenuPosition(); // Actualizar posición antes de mostrar
           showTimeout = window.setTimeout(() => {
             menuElement.classList.add('show');
+            menuElement.style.display = 'block';
           }, 100);
         };
         
@@ -6341,6 +6373,7 @@
           }
           hideTimeout = window.setTimeout(() => {
             menuElement.classList.remove('show');
+            menuElement.style.display = 'none';
           }, 200);
         };
         
@@ -6348,6 +6381,66 @@
         avatarElement.addEventListener('mouseleave', hideMenu);
         menuElement.addEventListener('mouseenter', showMenu);
         menuElement.addEventListener('mouseleave', hideMenu);
+        
+        console.log('✅ Menú de perfil inicializado correctamente');
+      }
+      
+      // Función básica para inicializar dark mode toggle con cambio de icono (solo en preview)
+      function initDarkModeToggleBasic(sidebarElement) {
+        const darkModeButton = sidebarElement.querySelector('#ubits-darkmode-toggle');
+        if (!darkModeButton) return;
+        
+        // Encontrar el contenedor del preview (el padre del sidebar)
+        const previewContainer = sidebarElement.closest('[id^="sidebar-preview-"]');
+        if (!previewContainer) {
+          console.warn('⚠️ No se encontró el contenedor del preview');
+          return;
+        }
+        
+        // Función para actualizar el icono según el tema con animación
+        const updateIcon = (theme) => {
+          const iconElement = darkModeButton.querySelector('i');
+          if (iconElement) {
+            // Agregar clase de animación
+            iconElement.classList.add('ubits-icon-transition');
+            
+            // Remover clases de iconos anteriores
+            iconElement.classList.remove('fa-moon', 'fa-sun', 'fa-sun-bright', 'fa-solid', 'fa-regular', 'far');
+            
+            // Agregar la clase del icono correspondiente
+            if (theme === 'dark') {
+              iconElement.classList.add('fa-solid', 'fa-sun-bright');
+            } else {
+              iconElement.classList.add('far', 'fa-moon');
+            }
+            
+            // Remover clase de animación después de la transición
+            setTimeout(() => {
+              iconElement.classList.remove('ubits-icon-transition');
+            }, 500);
+          }
+        };
+        
+        darkModeButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const currentTheme = darkModeButton.getAttribute('data-theme') || 'light';
+          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+          
+          // Actualizar atributo del botón
+          darkModeButton.setAttribute('data-theme', newTheme);
+          
+          // Actualizar el icono
+          updateIcon(newTheme);
+          
+          // Actualizar atributo SOLO en el contenedor del preview, no en todo el documento
+          previewContainer.setAttribute('data-theme', newTheme);
+          
+          console.log('🌓 Tema cambiado a:', newTheme, '(solo en preview)');
+        });
+        
+        console.log('✅ Dark mode toggle inicializado correctamente (solo afecta preview)');
       }
       
       // Función básica para inicializar tooltips
@@ -6392,18 +6485,18 @@
           });
           
           // Mostrar/ocultar selects de botón activo según variante
-          const defaultSelect = document.getElementById(`sidebar-active-default-${componentId}`);
+          const colaboradorSelect = document.getElementById(`sidebar-active-colaborador-${componentId}`);
           const adminSelect = document.getElementById(`sidebar-active-admin-${componentId}`);
-          if (defaultSelect) defaultSelect.style.display = value === 'default' ? 'flex' : 'none';
+          if (colaboradorSelect) colaboradorSelect.style.display = value === 'colaborador' ? 'flex' : 'none';
           if (adminSelect) adminSelect.style.display = value === 'admin' ? 'flex' : 'none';
         } else if (option === 'activeButton') {
           state.activeButton = value || '';
           
           // Actualizar selects
           const variant = state.variant;
-          const selectDefault = document.getElementById(`sidebar-active-button-default-${componentId}`);
+          const selectColaborador = document.getElementById(`sidebar-active-button-colaborador-${componentId}`);
           const selectAdmin = document.getElementById(`sidebar-active-button-admin-${componentId}`);
-          if (selectDefault && variant === 'default') selectDefault.value = value || '';
+          if (selectColaborador && variant === 'colaborador') selectColaborador.value = value || '';
           if (selectAdmin && variant === 'admin') selectAdmin.value = value || '';
         }
         

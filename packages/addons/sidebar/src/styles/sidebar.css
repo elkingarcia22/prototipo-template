@@ -161,14 +161,17 @@
 
 /* Asegurar que los iconos FontAwesome estén perfectamente centrados */
 .ubits-sidebar-nav-button i::before {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     text-align: center;
     line-height: 1;
-    margin: auto;
 }
 
-/* Efecto de brillo para todos los nav-button */
-.ubits-sidebar-nav-button::before {
+/* Efecto de brillo deshabilitado - quitado según requerimientos */
+/* .ubits-sidebar-nav-button::before {
     content: '';
     position: absolute;
     top: 0;
@@ -182,7 +185,7 @@
 
 .ubits-sidebar-nav-button:hover::before {
     left: 100%;
-}
+} */
 
 /* ========================================
    BUTTON STATES
@@ -265,28 +268,61 @@
 /* El icono del botón modo oscuro SIEMPRE debe ser visible */
 .ubits-sidebar-nav-button#ubits-darkmode-toggle i {
     color: var(--ubits-sidebar-button-fg-default) !important;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin: 0 auto;
+}
+
+.ubits-sidebar-nav-button#ubits-darkmode-toggle i::before {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Animación de transición de icono - una sola vuelta */
+.ubits-sidebar-nav-button#ubits-darkmode-toggle i.ubits-icon-transition {
+    animation: iconSpinFade 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes iconSpinFade {
+    0% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: rotate(180deg) scale(1.2);
+        opacity: 0.6;
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+        opacity: 1;
+    }
 }
 
 .ubits-sidebar-nav-button#ubits-darkmode-toggle:hover i {
     color: var(--ubits-sidebar-button-fg-hover) !important;
 }
 
-/* Animación de rotación y cambio de icono en modo oscuro */
+/* Cambio de icono en modo oscuro */
 .ubits-sidebar-nav-button#ubits-darkmode-toggle[data-theme="dark"] i {
-    transform: rotate(180deg) scale(1.1);
     color: var(--ubits-fg-yellow-subtle);
 }
 
 .ubits-sidebar-nav-button#ubits-darkmode-toggle[data-theme="light"] i {
-    transform: rotate(0deg) scale(1);
     color: var(--ubits-sidebar-button-fg-default);
 }
 
-/* Efecto de pulso sutil en hover */
+/* Hover normal para dark mode toggle - sin efectos especiales */
 .ubits-sidebar-nav-button#ubits-darkmode-toggle:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    transform: none;
+    box-shadow: none;
 }
 
 /* ========================================
@@ -377,7 +413,7 @@
 .ubits-sidebar-profile-menu {
     display: none;
     position: fixed;
-    left: 120px;
+    left: 96px; /* 96px (sidebar) - completamente pegado, sin espacio - se sobrescribe con position: absolute en el playground */
     bottom: 27px;
     width: 200px;
     background: var(--ubits-sidebar-bg);

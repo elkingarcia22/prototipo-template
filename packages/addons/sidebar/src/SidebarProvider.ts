@@ -32,7 +32,7 @@ function adjustSidebarHeight(sidebarElement: HTMLElement): void {
  */
 export function renderSidebar(options: SidebarOptions): string {
   const {
-    variant = 'default',
+    variant = 'colaborador',
     bodyButtons,
     footerButtons = [],
     logoHref,
@@ -114,7 +114,7 @@ export function renderSidebar(options: SidebarOptions): string {
       data-theme="light"
       data-has-click-handler="true"
     >
-      ${renderIconHelper('fa-moon')}
+      ${renderIconHelper('fa-moon', 'regular')}
     </button>
   ` : '';
 
@@ -211,6 +211,47 @@ function initProfileMenu(sidebarElement: HTMLElement, options: SidebarOptions): 
   
   if (!avatarElement || !menuElement) return;
 
+  // Encontrar el contenedor del sidebar para posicionar el menú relativo a él
+  const containerId = options.containerId;
+  const sidebarContainer = containerId ? document.getElementById(containerId) : sidebarElement.parentElement;
+  
+  // Función para calcular posición del menú relativa al contenedor
+  const updateMenuPosition = () => {
+    if (!sidebarContainer || sidebarContainer === document.body) return;
+    
+    const sidebarRect = sidebarElement.getBoundingClientRect();
+    const containerRect = sidebarContainer.getBoundingClientRect();
+    
+    // Posicionar el menú justo al lado del sidebar (96px, completamente pegado)
+    const menuLeft = sidebarRect.left - containerRect.left + 96;
+    // Alinear con el avatar en la parte inferior
+    const menuBottom = 27;
+    
+    menuElement.style.position = 'absolute';
+    menuElement.style.left = `${menuLeft}px`;
+    menuElement.style.bottom = `${menuBottom}px`;
+  };
+  
+  // Si hay contenedor, usar position absolute y calcular posición relativa
+  if (sidebarContainer && sidebarContainer !== document.body) {
+    // Asegurar que el contenedor tenga position relative
+    const containerStyle = window.getComputedStyle(sidebarContainer);
+    if (containerStyle.position === 'static') {
+      sidebarContainer.style.position = 'relative';
+    }
+    
+    // Calcular y aplicar posición inicial
+    updateMenuPosition();
+    
+    // Actualizar posición en caso de resize
+    window.addEventListener('resize', updateMenuPosition);
+  } else {
+    // Fallback a position fixed para cuando no hay contenedor específico
+    menuElement.style.position = 'fixed';
+    menuElement.style.left = '96px';
+    menuElement.style.bottom = '27px';
+  }
+
   let showTimeout: number | null = null;
   let hideTimeout: number | null = null;
 
@@ -222,8 +263,13 @@ function initProfileMenu(sidebarElement: HTMLElement, options: SidebarOptions): 
     if (showTimeout) {
       clearTimeout(showTimeout);
     }
+    // Actualizar posición antes de mostrar (por si cambió el scroll o resize)
+    if (sidebarContainer && sidebarContainer !== document.body) {
+      updateMenuPosition();
+    }
     showTimeout = window.setTimeout(() => {
       menuElement.classList.add('show');
+      menuElement.style.display = 'block';
     }, 100);
   };
 
@@ -234,6 +280,7 @@ function initProfileMenu(sidebarElement: HTMLElement, options: SidebarOptions): 
     }
     hideTimeout = window.setTimeout(() => {
       menuElement.classList.remove('show');
+      menuElement.style.display = 'none';
     }, 200);
   };
 
@@ -282,6 +329,45 @@ function initDarkModeToggle(sidebarElement: HTMLElement, options: SidebarOptions
   const darkModeButton = sidebarElement.querySelector('#ubits-darkmode-toggle');
   if (!darkModeButton) return;
 
+  // Encontrar el contenedor del sidebar - buscar el contenedor padre que tiene el ID del containerId
+  const containerId = options.containerId;
+  let sidebarContainer: HTMLElement | null = null;
+  
+  if (containerId) {
+    sidebarContainer = document.getElementById(containerId);
+  }
+  
+  // Si no se encuentra por ID, usar el padre del sidebar
+  if (!sidebarContainer) {
+    sidebarContainer = sidebarElement.parentElement;
+  }
+  
+  // Función para actualizar el icono según el tema con animación
+  const updateIcon = (theme: string) => {
+    const iconElement = darkModeButton.querySelector('i');
+    if (iconElement) {
+      // Remover todas las clases de iconos anteriores
+      iconElement.classList.remove('fa-moon', 'fa-sun', 'fa-sun-bright', 'far', 'fas', 'fa-solid', 'fa-regular');
+      
+      // Agregar clase de animación
+      iconElement.classList.add('ubits-icon-transition');
+      
+      // Agregar la clase del icono correspondiente después de un pequeño delay para asegurar que se aplique la animación
+      requestAnimationFrame(() => {
+        if (theme === 'dark') {
+          iconElement.classList.add('fa-solid', 'fa-sun-bright');
+        } else {
+          iconElement.classList.add('far', 'fa-moon');
+        }
+      });
+      
+      // Remover clase de animación después de la transición (ajustado a 400ms para coincidir con la duración de la animación)
+      setTimeout(() => {
+        iconElement.classList.remove('ubits-icon-transition');
+      }, 400);
+    }
+  };
+
   darkModeButton.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -292,9 +378,13 @@ function initDarkModeToggle(sidebarElement: HTMLElement, options: SidebarOptions
     // Actualizar atributo del botón
     darkModeButton.setAttribute('data-theme', newTheme);
     
-    // Actualizar atributo del body/document
-    document.body.setAttribute('data-theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    // Actualizar el icono
+    updateIcon(newTheme);
+    
+    // Actualizar atributo SOLO en el contenedor del sidebar, no en todo el documento
+    if (sidebarContainer) {
+      sidebarContainer.setAttribute('data-theme', newTheme);
+    }
 
     // Llamar callback si existe
     if (options.onDarkModeToggle) {
@@ -318,10 +408,22 @@ export function createSidebar(options: SidebarOptions): HTMLElement {
     throw new Error(`Container with id "${containerId}" not found`);
   }
 
+  // Asegurar que el contenedor tenga position relative para el menú de perfil
+  const containerStyle = window.getComputedStyle(container);
+  if (containerStyle.position === 'static') {
+    container.style.position = 'relative';
+  }
+
   const sidebarHTML = renderSidebar(options);
   container.innerHTML = sidebarHTML;
 
   const sidebarElement = container.querySelector('.ubits-sidebar') as HTMLElement;
+  
+  // Asegurar que el menú de perfil esté dentro del contenedor si existe
+  const menuElement = document.getElementById('ubits-sidebar-profile-menu');
+  if (menuElement && !container.contains(menuElement)) {
+    container.appendChild(menuElement);
+  }
   if (!sidebarElement) {
     throw new Error('Failed to create sidebar element');
   }
