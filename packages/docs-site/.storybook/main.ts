@@ -1,8 +1,6 @@
 import type { StorybookConfig } from '@storybook/html-vite';
-
-import { dirname } from "path"
-
-import { fileURLToPath } from "url"
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 
 /**
 * This function is used to resolve the absolute path of a package.
@@ -11,17 +9,30 @@ import { fileURLToPath } from "url"
 function getAbsolutePath(value: string): any {
   return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)))
 }
+
 const config: StorybookConfig = {
-  "stories": [
+  stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
-  "addons": [
+  addons: [
     getAbsolutePath('@storybook/addon-docs')
   ],
-  "framework": {
-    "name": getAbsolutePath('@storybook/html-vite'),
-    "options": {}
-  }
+  framework: {
+    name: getAbsolutePath('@storybook/html-vite'),
+    options: {}
+  },
+  viteFinal: async (config) => {
+    // Resolver alias para @ubits/icons
+    const currentDir = dirname(fileURLToPath(import.meta.url));
+    const rootDir = resolve(currentDir, '../..');
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@ubits/icons': resolve(rootDir, 'icons/src/index.ts'),
+    };
+    return config;
+  },
 };
+
 export default config;

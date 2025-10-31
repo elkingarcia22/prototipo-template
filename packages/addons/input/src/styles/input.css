@@ -1,0 +1,533 @@
+/* ========================================
+   UBITS INPUT COMPONENT
+   Componente de input con todas las variantes
+   Usando tokens UBITS del nuevo playground
+   ======================================== */
+
+/* ========================================
+   BASE INPUT STYLES
+   ======================================== */
+
+.ubits-input {
+    width: 100%;
+    padding: 12px 8px;
+    font-size: var(--font-body-md-size);
+    font-family: var(--font-sans);
+    color: var(--ubits-fg-1-high);
+    background: var(--ubits-bg-1);
+    border: 1px solid var(--ubits-border-1);
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.ubits-input:hover {
+    border-color: var(--ubits-accent-brand);
+}
+
+.ubits-input:focus {
+    border-color: var(--ubits-accent-brand);
+    box-shadow: 0 0 0 2px rgba(12, 91, 239, 0.1);
+}
+
+.ubits-input:disabled {
+    background: var(--ubits-bg-3);
+    color: var(--ubits-fg-1-low);
+    border-color: var(--ubits-border-2);
+    cursor: not-allowed;
+}
+
+.ubits-input:read-only {
+    background: var(--ubits-bg-1);
+    color: var(--ubits-fg-1-high);
+    border-color: var(--ubits-border-1);
+    cursor: pointer;
+}
+
+.ubits-input::placeholder {
+    color: var(--ubits-fg-1-low);
+}
+
+/* ========================================
+   INPUT SIZES - Matching button heights
+   ======================================== */
+
+.ubits-input--xs {
+    padding: 8px 12px !important;
+    font-size: var(--font-body-xs-size) !important;
+    height: 28px !important; /* Same as ubits-button--xs */
+    min-height: 28px !important;
+}
+
+.ubits-input--sm {
+    padding: 10px 14px !important;
+    font-size: var(--font-body-sm-size) !important;
+    height: 32px !important; /* Same as ubits-button--sm */
+    min-height: 32px !important;
+}
+
+.ubits-input--md {
+    padding: 12px 8px;
+    font-size: var(--font-body-md-size);
+    height: 40px; /* Same as ubits-button--md */
+}
+
+.ubits-input--lg {
+    padding: 16px 8px;
+    font-size: var(--font-body-lg-size);
+    height: 48px; /* Same as ubits-button--lg */
+}
+
+/* ========================================
+   INPUT STATES
+   ======================================== */
+
+.ubits-input--hover {
+    border-color: var(--ubits-accent-brand);
+}
+
+.ubits-input--focus {
+    border-color: var(--ubits-accent-brand);
+    box-shadow: 0 0 0 2px rgba(12, 91, 239, 0.1);
+}
+
+.ubits-input--active {
+    border-color: var(--ubits-accent-brand);
+    background: var(--ubits-bg-2);
+}
+
+.ubits-input--invalid {
+    border-color: var(--ubits-feedback-accent-error);
+}
+
+.ubits-input--invalid.ubits-input--focus {
+    border-color: var(--ubits-feedback-accent-error);
+    box-shadow: 0 0 0 2px rgba(233, 52, 60, 0.1);
+}
+
+.ubits-input--disabled {
+    background: var(--ubits-bg-3) !important;
+    color: var(--ubits-fg-1-low) !important;
+    border-color: var(--ubits-border-2) !important;
+    cursor: not-allowed !important;
+}
+
+/* ========================================
+   INPUT WITH ICONS
+   ======================================== */
+
+.ubits-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.ubits-input-icon-left {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ubits-fg-1-medium);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.ubits-input-icon-right {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ubits-fg-1-medium);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Padding dinámico según iconos - XS */
+.ubits-input-wrapper--left-icon .ubits-input--xs {
+    padding-left: 32px !important;
+}
+
+.ubits-input-wrapper--right-icon .ubits-input--xs {
+    padding-right: 32px !important;
+}
+
+/* Padding dinámico según iconos - SM */
+.ubits-input-wrapper--left-icon .ubits-input--sm {
+    padding-left: 36px !important;
+}
+
+.ubits-input-wrapper--right-icon .ubits-input--sm {
+    padding-right: 36px !important;
+}
+
+/* Padding dinámico según iconos - MD */
+.ubits-input-wrapper--left-icon .ubits-input--md,
+.ubits-input-wrapper--left-icon .ubits-input:not(.ubits-input--xs):not(.ubits-input--sm):not(.ubits-input--lg) {
+    padding-left: 40px;
+}
+
+.ubits-input-wrapper--right-icon .ubits-input--md,
+.ubits-input-wrapper--right-icon .ubits-input:not(.ubits-input--xs):not(.ubits-input--sm):not(.ubits-input--lg) {
+    padding-right: 40px;
+}
+
+/* Padding dinámico según iconos - LG */
+.ubits-input-wrapper--left-icon .ubits-input--lg {
+    padding-left: 44px;
+}
+
+.ubits-input-wrapper--right-icon .ubits-input--lg {
+    padding-right: 44px;
+}
+
+/* ========================================
+   INPUT LABEL
+   ======================================== */
+
+.ubits-input-label {
+    display: block;
+    color: var(--ubits-fg-1-high);
+    margin-bottom: 8px;
+    font-family: var(--font-sans);
+    font-size: var(--font-body-sm-size);
+    font-weight: var(--weight-semibold);
+    line-height: var(--font-body-sm-line);
+}
+
+.ubits-input-mandatory {
+    color: var(--ubits-fg-1-medium);
+    font-family: var(--font-sans);
+    font-size: var(--font-body-xs-size);
+    font-weight: var(--weight-regular);
+    line-height: var(--font-body-xs-line);
+}
+
+/* ========================================
+   INPUT HELPER TEXT
+   ======================================== */
+
+.ubits-input-helper {
+    color: var(--ubits-fg-1-medium);
+    margin-top: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: var(--font-body-sm-size);
+    font-weight: var(--weight-regular);
+    line-height: var(--font-body-sm-line);
+}
+
+.ubits-input-counter {
+    font-family: var(--font-sans);
+    font-size: var(--font-body-sm-size);
+    font-weight: var(--weight-regular);
+    line-height: var(--font-body-sm-line);
+    color: var(--ubits-fg-1-medium);
+}
+
+.ubits-input-counter--limit {
+    color: var(--ubits-feedback-accent-error);
+    font-weight: var(--weight-semibold);
+}
+
+/* ========================================
+   SELECT SPECIFIC STYLES
+   ======================================== */
+
+.ubits-input select {
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.ubits-input select:disabled {
+    cursor: not-allowed;
+}
+
+/* ========================================
+   TEXTAREA
+   ======================================== */
+
+.ubits-input textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.ubits-input-wrapper .ubits-input textarea:disabled,
+.ubits-input-wrapper .ubits-input--disabled textarea {
+    background: var(--ubits-bg-3) !important;
+    color: var(--ubits-fg-1-low) !important;
+    border-color: var(--ubits-border-2) !important;
+    cursor: not-allowed !important;
+}
+
+/* ========================================
+   AUTOCOMPLETE
+   ======================================== */
+
+.ubits-autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--ubits-bg-1);
+    border: 1px solid var(--ubits-border-1);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    margin-top: 4px;
+    width: 100%;
+}
+
+.ubits-autocomplete-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--ubits-fg-1-high);
+    border-bottom: 1px solid var(--ubits-border-1);
+    transition: background-color 0.2s ease;
+}
+
+.ubits-autocomplete-option:last-child {
+    border-bottom: none;
+}
+
+.ubits-autocomplete-option:hover {
+    background-color: var(--ubits-bg-2);
+}
+
+.ubits-autocomplete-option strong {
+    font-weight: var(--weight-semibold);
+    color: var(--ubits-accent-brand);
+}
+
+/* ========================================
+   CALENDAR
+   ======================================== */
+
+.ubits-calendar-picker {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--ubits-bg-1);
+    border: 1px solid var(--ubits-border-1);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+    margin-top: 4px;
+    width: 280px;
+    padding: 16px;
+}
+
+.ubits-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.ubits-calendar-selectors {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ubits-calendar-month-select,
+.ubits-calendar-year-select {
+    background: var(--ubits-bg-1);
+    border: 1px solid var(--ubits-border-1);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 14px;
+    color: var(--ubits-fg-1-high);
+    cursor: pointer;
+    min-width: 80px;
+    font-family: var(--font-sans);
+}
+
+.ubits-calendar-month-select:focus,
+.ubits-calendar-year-select:focus {
+    outline: none;
+    border-color: var(--ubits-accent-brand);
+    box-shadow: 0 0 0 2px rgba(12, 91, 239, 0.1);
+}
+
+.ubits-calendar-prev,
+.ubits-calendar-next {
+    background: none;
+    border: none;
+    color: var(--ubits-fg-1-medium);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-family: var(--font-sans);
+}
+
+.ubits-calendar-prev:hover,
+.ubits-calendar-next:hover {
+    background: var(--ubits-bg-2);
+    color: var(--ubits-fg-1-high);
+}
+
+.ubits-calendar-title {
+    font-weight: var(--weight-semibold);
+    color: var(--ubits-fg-1-high);
+    font-size: 16px;
+    font-family: var(--font-sans);
+}
+
+.ubits-calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.ubits-calendar-weekday {
+    text-align: center;
+    font-size: 12px;
+    font-weight: var(--weight-semibold);
+    color: var(--ubits-fg-1-medium);
+    padding: 8px 4px;
+    font-family: var(--font-sans);
+}
+
+.ubits-calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.ubits-calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--ubits-fg-1-high);
+    transition: all 0.2s ease;
+    font-family: var(--font-sans);
+}
+
+.ubits-calendar-day:hover {
+    background: var(--ubits-bg-2);
+}
+
+.ubits-calendar-day--empty {
+    cursor: default;
+}
+
+.ubits-calendar-day--empty:hover {
+    background: transparent;
+}
+
+.ubits-calendar-day--today {
+    background: var(--ubits-bg-2);
+    font-weight: var(--weight-semibold);
+}
+
+.ubits-calendar-day--selected {
+    background: var(--ubits-accent-brand);
+    color: var(--ubits-button-fg-primary);
+    font-weight: var(--weight-semibold);
+}
+
+.ubits-calendar-day--selected:hover {
+    background: var(--ubits-accent-brand);
+    color: var(--ubits-button-fg-primary);
+}
+
+/* ========================================
+   SELECT DROPDOWN
+   ======================================== */
+
+/* 
+ * CRITICAL: El contenedor padre DEBE tener position: relative
+ * El JavaScript automáticamente lo aplica, pero si usas el CSS manualmente,
+ * asegúrate de que el contenedor tenga position: relative
+ */
+.ubits-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--ubits-bg-1);
+    border: 1px solid var(--ubits-border-1);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 160px;
+    overflow-y: auto;
+    display: none;
+    margin-top: 4px;
+    width: 100%;
+}
+
+.ubits-select-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--ubits-fg-1-high);
+    border-bottom: 1px solid var(--ubits-border-1);
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    transition: background-color 0.2s ease;
+    font-family: var(--font-sans);
+}
+
+.ubits-select-option:hover {
+    background-color: var(--ubits-bg-2);
+}
+
+.ubits-select-option:last-child {
+    border-bottom: none;
+}
+
+.ubits-select-loading {
+    padding: 12px;
+    text-align: center;
+    color: var(--ubits-fg-1-medium);
+    font-size: 14px;
+    font-style: italic;
+    border-bottom: 1px solid var(--ubits-border-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+}
+
+.ubits-select-loading i {
+    color: var(--ubits-accent-brand);
+    font-size: 16px;
+}
+
+.ubits-select-observer {
+    height: 1px;
+    width: 100%;
+    pointer-events: none;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .ubits-input-helper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
